@@ -83,7 +83,7 @@ export class PersonDetailBuilder {
     const rollup = rollups.get(person.id);
     return {
       person,
-      status: statusByPerson.get(person.id) ?? 'unknown',
+      status: statusByPerson.get(person.id) ?? 'not-ready',
       chain: org
         .managerChain(person.id)
         .map((m) => ({ person: m, canOpen: canView(org, input.viewer, m.id) })),

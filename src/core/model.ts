@@ -1,7 +1,7 @@
 import { IsoDate } from './dates';
 
-/** Ranked worst to best: not-ready > expiring > unknown > ready. See STATUS_META in config.ts. */
-export type Status = 'not-ready' | 'expiring' | 'unknown' | 'ready';
+/** Ranked worst to best: not-ready > expiring > ready. See STATUS_META in config.ts. */
+export type Status = 'not-ready' | 'expiring' | 'ready';
 
 /** Category ids are config-driven (config.ts) so categories can be added without code changes. */
 export type CategoryId = string;
@@ -62,7 +62,7 @@ export interface Check {
   /** Days from today to dueDate; 0 is today, negative is overdue. */
   daysRemaining?: number;
   lastSynced?: IsoDate;
-  /** The source hasn't synced within its limit. */
+  /** The source hasn't synced within its limit. Shown as a note; it doesn't change the status. */
   stale: boolean;
   /** Ids of programs that require this item. */
   requiredBy: string[];

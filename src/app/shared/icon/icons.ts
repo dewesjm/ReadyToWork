@@ -21,11 +21,6 @@ export const ICONS: Record<string, readonly IconShape[]> = {
     ['path', 'M12 9v4'],
     ['path', 'M12 17h.01'],
   ],
-  'circle-help': [
-    ['circle', 12, 12, 10],
-    ['path', 'M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'],
-    ['path', 'M12 17h.01'],
-  ],
   'circle-check': [['circle', 12, 12, 10], ['path', 'm9 12 2 2 4-4']],
 
   // Categories (DEFAULT_CONFIG in src/core/config.ts)

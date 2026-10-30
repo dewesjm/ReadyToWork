@@ -25,9 +25,9 @@ describe('default config', () => {
     expect(expiringAfterDays).toBeLessThan(notReadyAfterDays);
   });
 
-  it('ranks red > yellow > grey > green, and STATUSES is worst first', () => {
+  it('ranks red > yellow > green, and STATUSES is worst first', () => {
     const ranks = STATUSES.map((s) => STATUS_META[s].rank);
     expect(ranks).toEqual([...ranks].sort((a, b) => b - a));
-    expect(STATUSES).toEqual(['not-ready', 'expiring', 'unknown', 'ready']);
+    expect(STATUSES).toEqual(['not-ready', 'expiring', 'ready']);
   });
 });

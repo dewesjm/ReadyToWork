@@ -31,7 +31,7 @@ export const DEFAULT_QUERY: ReadinessQuery = {
 };
 
 /** Statuses that can be an issue, worst first. */
-export const ISSUE_STATUSES: readonly Status[] = ['not-ready', 'expiring', 'unknown'];
+export const ISSUE_STATUSES: readonly Status[] = ['not-ready', 'expiring'];
 
 export interface FilterViewer {
   personId: string;
@@ -314,10 +314,10 @@ function hasIssue(
   query: ReadinessQuery,
 ): boolean {
   const checks = checksByPerson.get(personId) ?? [];
-  // Someone with no checks at all is unknown; that only shows when no category is picked.
+  // Someone with no checks at all is not ready; that only shows when no category is picked.
   if (checks.length === 0) {
     const statuses = query.statuses.length > 0 ? query.statuses : ISSUE_STATUSES;
-    return query.categories.length === 0 && statuses.includes(statusByPerson.get(personId) ?? 'unknown');
+    return query.categories.length === 0 && statuses.includes(statusByPerson.get(personId) ?? 'not-ready');
   }
   return checks.some((c) => isIssue(c, query));
 }

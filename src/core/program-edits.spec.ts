@@ -129,7 +129,7 @@ describe('program readiness', () => {
     expect(summary.personIds).toEqual(['dir', 'c1', 'c2']);
     expect(summary.rollup).toEqual({
       total: 3,
-      counts: { 'not-ready': 1, expiring: 1, unknown: 0, ready: 1 },
+      counts: { 'not-ready': 1, expiring: 1, ready: 1 },
       worst: 'not-ready',
     });
   });

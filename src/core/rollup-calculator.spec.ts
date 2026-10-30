@@ -11,7 +11,7 @@ describe('RollupCalculator', () => {
     ['f1', 'ready'],
     ['c1', 'expiring'],
     ['c2', 'not-ready'],
-    ['f2', 'unknown'],
+    ['f2', 'expiring'],
     ['m2', 'ready'],
     ['f3', 'ready'],
   ]);
@@ -20,24 +20,24 @@ describe('RollupCalculator', () => {
   it('counts everyone below, not the manager', () => {
     expect(rollups.get('dir')).toEqual({
       total: 7,
-      counts: { 'not-ready': 1, expiring: 1, unknown: 1, ready: 4 },
+      counts: { 'not-ready': 1, expiring: 2, ready: 4 },
       worst: 'not-ready',
     });
   });
 
   it('rolls up each level of the subtree', () => {
-    expect(rollups.get('m1')?.counts).toEqual({ 'not-ready': 1, expiring: 1, unknown: 1, ready: 1 });
+    expect(rollups.get('m1')?.counts).toEqual({ 'not-ready': 1, expiring: 2, ready: 1 });
     expect(rollups.get('f1')).toEqual({
       total: 2,
-      counts: { 'not-ready': 1, expiring: 1, unknown: 0, ready: 0 },
+      counts: { 'not-ready': 1, expiring: 1, ready: 0 },
       worst: 'not-ready',
     });
   });
 
-  it('takes the worst status, with grey above green', () => {
+  it('takes the worst status', () => {
     expect(rollups.get('m2')?.worst).toBe('ready');
-    const greyOrg = new Map(statuses).set('f3', 'unknown');
-    expect(new RollupCalculator().compute(org, greyOrg).get('m2')?.worst).toBe('unknown');
+    const yellowOrg = new Map(statuses).set('f3', 'expiring');
+    expect(new RollupCalculator().compute(org, yellowOrg).get('m2')?.worst).toBe('expiring');
   });
 
   it('has no roll-up for people with no one below', () => {
@@ -45,8 +45,8 @@ describe('RollupCalculator', () => {
     expect(rollups.has('f3')).toBe(false);
   });
 
-  it('counts a person with no status as unknown', () => {
+  it('counts a person with no status as not ready', () => {
     const partial = new Map<string, Status>([['f3', 'ready']]);
-    expect(new RollupCalculator().compute(org, partial).get('m1')?.counts.unknown).toBe(4);
+    expect(new RollupCalculator().compute(org, partial).get('m1')?.counts['not-ready']).toBe(4);
   });
 });

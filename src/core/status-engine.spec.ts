@@ -134,9 +134,9 @@ describe('StatusEngine', () => {
       expect(evaluate({ problem: 'revoked' }).reason).toBe('Revoked');
     });
 
-    it('is unknown with no data', () => {
+    it('is not ready with no data', () => {
       const c = evaluate({});
-      expect(c.status).toBe('unknown');
+      expect(c.status).toBe('not-ready');
       expect(c.reason).toBe('No data');
     });
   });
@@ -148,15 +148,15 @@ describe('StatusEngine', () => {
       expect(c.status).toBe('ready');
     });
 
-    it('turns ready grey past the limit', () => {
+    it('flags data past the limit but still judges ready by its dates', () => {
       const c = evaluate({ expires: '2027-01-01', lastSynced: '2026-10-28' });
       expect(c.stale).toBe(true);
-      expect(c.status).toBe('unknown');
-      expect(c.reason).toBe('Data out of date (last synced Oct 28, 2026)');
+      expect(c.status).toBe('ready');
+      expect(c.reason).toBe('Valid through Jan 1, 2027');
     });
 
-    it('turns expiring grey', () => {
-      expect(evaluate({ expires: '2026-11-03', lastSynced: '2026-10-01' }).status).toBe('unknown');
+    it('keeps expiring yellow', () => {
+      expect(evaluate({ expires: '2026-11-03', lastSynced: '2026-10-01' }).status).toBe('expiring');
     });
 
     it('keeps expired red', () => {
@@ -174,18 +174,17 @@ describe('StatusEngine', () => {
 });
 
 describe('worstStatus', () => {
-  it('ranks red > yellow > grey > green', () => {
-    expect(worstStatus(['ready', 'unknown'])).toBe('unknown');
-    expect(worstStatus(['unknown', 'expiring', 'ready'])).toBe('expiring');
-    expect(worstStatus(['expiring', 'not-ready', 'unknown'])).toBe('not-ready');
+  it('ranks red > yellow > green', () => {
+    expect(worstStatus(['ready', 'expiring'])).toBe('expiring');
+    expect(worstStatus(['ready', 'expiring', 'ready'])).toBe('expiring');
+    expect(worstStatus(['expiring', 'not-ready', 'ready'])).toBe('not-ready');
     expect(worstStatus([])).toBeNull();
   });
 
   it('sorts worst first with compareStatus', () => {
-    expect(['ready', 'not-ready', 'unknown', 'expiring'].sort(compareStatus as never)).toEqual([
+    expect(['ready', 'not-ready', 'expiring'].sort(compareStatus as never)).toEqual([
       'not-ready',
       'expiring',
-      'unknown',
       'ready',
     ]);
   });

@@ -21,7 +21,6 @@ const checks = [
   check('B expiring', 'expiring', 10),
   check('C overdue', 'not-ready', -3),
   check('D missing', 'not-ready'),
-  check('E unknown', 'unknown'),
   check('F expiring soon', 'expiring', 2),
 ];
 const names = (list: Check[]) => list.map((c) => c.itemName);
@@ -33,7 +32,6 @@ describe('check order', () => {
       'D missing',
       'F expiring soon',
       'B expiring',
-      'E unknown',
       'A ready',
     ]);
   });
@@ -47,7 +45,6 @@ describe('check order', () => {
       'F expiring soon',
       'B expiring',
       'A ready',
-      'E unknown',
       'G completed',
     ]);
   });

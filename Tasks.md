@@ -58,6 +58,7 @@
     390px phone, light and dark; crane candidate turns red in the tree)
 
 - [ ] User checks M6 in the browser
+- [x] Remove the Unknown status: three statuses, judged by dates only (user request; 274 tests)
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)

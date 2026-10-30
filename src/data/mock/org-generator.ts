@@ -34,8 +34,6 @@ export interface PlantedScenarios {
   toolCrewForemanId: string;
   /** Foreman whose crew's SAP passwords expire next week. */
   sapCrewForemanId: string;
-  /** Foreman whose crew's Yubikey data is out of date (grey). */
-  staleCrewForemanId: string;
   /** All green, but lacks the crane qualification: assigning Crane Operations turns them red. */
   craneCandidateId: string;
 }
@@ -172,19 +170,10 @@ class OrgGenerator {
   // Planted scenarios and target statuses
 
   private pickScenarios(): PlantedScenarios {
-    const unknownQuota = Math.round(this.config.statusMix.unknown * this.nodes.length);
     const foremen = this.rng.shuffle([...this.crews.keys()]);
-    // The grey crew should roughly fill the unknown share on its own.
-    const staleCrewForemanId = foremen.reduce((best, id) =>
-      Math.abs(this.crews.get(id)!.length - unknownQuota) <
-      Math.abs(this.crews.get(best)!.length - unknownQuota)
-        ? id
-        : best,
-    );
-    const rest = foremen.filter((id) => id !== staleCrewForemanId);
-    const [toolCrewForemanId, sapCrewForemanId, craneCrewForemanId] = rest;
+    const [toolCrewForemanId, sapCrewForemanId, craneCrewForemanId] = foremen;
     const craneCandidateId = this.crews.get(craneCrewForemanId)![0].person.id;
-    return { toolCrewForemanId, sapCrewForemanId, staleCrewForemanId, craneCandidateId };
+    return { toolCrewForemanId, sapCrewForemanId, craneCandidateId };
   }
 
   private assignTargets(s: PlantedScenarios): Map<string, Status> {
@@ -198,7 +187,6 @@ class OrgGenerator {
       quota[status] = Math.max(0, quota[status] - 1);
     };
 
-    for (const m of this.crews.get(s.staleCrewForemanId)!) plant(m.person.id, 'unknown');
     for (const m of this.crews.get(s.sapCrewForemanId)!) plant(m.person.id, 'expiring');
     for (const m of this.crews.get(s.toolCrewForemanId)!.slice(0, this.config.expiredToolPeople)) {
       plant(m.person.id, 'not-ready');
@@ -211,7 +199,7 @@ class OrgGenerator {
       .map((nd) => ({ id: nd.person.id, key: this.rng.next() ** (1 / nd.crewHealth) }))
       .sort((a, b) => b.key - a.key);
     let i = 0;
-    for (const status of ['not-ready', 'expiring', 'unknown'] as const) {
+    for (const status of ['not-ready', 'expiring'] as const) {
       for (let k = 0; k < quota[status] && i < pool.length; k++) targets.set(pool[i++].id, status);
     }
     for (; i < pool.length; i++) targets.set(pool[i].id, 'ready');
@@ -291,24 +279,12 @@ class OrgGenerator {
     const find = (category: string) => slots.filter((sl) => sl.record.category === category);
     if (target === 'ready') return;
 
-    if (this.inCrew(id, s.staleCrewForemanId)) {
-      const yk = find('yubikey')[0].record;
-      yk.lastSynced = addDays(this.anchor, -this.rng.int(9, 12));
-      return;
-    }
     if (this.inCrew(id, s.sapCrewForemanId)) {
       find('sap-password')[0].record.expires = addDays(this.anchor, this.rng.int(6, 9));
       return;
     }
     if (target === 'not-ready' && this.inCrew(id, s.toolCrewForemanId)) {
       for (const t of find('tool')) t.record.expires = addDays(this.anchor, -this.rng.int(3, 40));
-      return;
-    }
-
-    if (target === 'unknown') {
-      const slot = this.rng.pick(slots);
-      const limit = this.readiness.staleAfterDays[slot.record.source] ?? this.readiness.defaultStaleAfterDays;
-      slot.record.lastSynced = addDays(this.anchor, -(limit + this.rng.int(2, 10)));
       return;
     }
 

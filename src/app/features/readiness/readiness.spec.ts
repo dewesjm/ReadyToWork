@@ -59,14 +59,14 @@ describe('Readiness page and toolbar', () => {
   it('reads every parameter from the URL', async () => {
     const sup = someManager().id;
     const { query, byTestId } = await open(
-      `/readiness?view=list&issues=all&sup=${sup}&prog=${CRANE_PROGRAM_ID}&cat=tool,sap-password&status=unknown,not-ready&direct=1&q=smith`,
+      `/readiness?view=list&issues=all&sup=${sup}&prog=${CRANE_PROGRAM_ID}&cat=tool,sap-password&status=expiring,not-ready&direct=1&q=smith`,
     );
     expect(query.view()).toBe('list');
     expect(query.issuesOnly()).toBe(false);
     expect(query.supervisorId()).toBe(sup);
     expect(query.programId()).toBe(CRANE_PROGRAM_ID);
     expect(query.categories()).toEqual(['tool', 'sap-password']);
-    expect(query.statuses()).toEqual(['not-ready', 'unknown']);
+    expect(query.statuses()).toEqual(['not-ready', 'expiring']);
     expect(query.directOnly()).toBe(true);
     expect(query.keyword()).toBe('smith');
     expect(byTestId<HTMLSelectElement>('supervisor').value).toBe(sup);

@@ -43,7 +43,7 @@ export class OrgTree {
       return {
         ...row,
         id: p.id,
-        status: statusByPerson.get(p.id) ?? 'unknown',
+        status: statusByPerson.get(p.id) ?? 'not-ready',
         chips: this.filter.issueCategories(checksByPerson.get(p.id) ?? []),
         rollup: rollups.get(p.id) ?? null,
         expandable: row.childIds.length > 0,

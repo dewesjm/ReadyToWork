@@ -3,7 +3,7 @@ import { Rollup, Status, StatusCounts } from './model';
 import { OrgIndex } from './org-index';
 
 export function emptyCounts(): StatusCounts {
-  return { 'not-ready': 0, expiring: 0, unknown: 0, ready: 0 };
+  return { 'not-ready': 0, expiring: 0, ready: 0 };
 }
 
 /** Counts per status for everyone below each manager (the manager's own status is separate). */
@@ -19,7 +19,7 @@ export class RollupCalculator {
       if (kids.length === 0) continue;
       const counts = emptyCounts();
       for (const kid of kids) {
-        counts[statusByPerson.get(kid.id) ?? 'unknown']++;
+        counts[statusByPerson.get(kid.id) ?? 'not-ready']++;
         const kidBelow = below.get(kid.id);
         if (kidBelow) for (const s of STATUSES) counts[s] += kidBelow[s];
       }

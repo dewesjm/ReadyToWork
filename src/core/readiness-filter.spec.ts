@@ -19,9 +19,9 @@ import { TEST_ORG } from './test-org';
  *   │  ├─ f1
  *   │  │  ├─ c1   SAP password expiring          "Ana Ruiz", Electrician
  *   │  │  └─ c2   tool not ready                  employee ID E-90210
- *   │  └─ f2      training unknown (stale)
+ *   │  └─ f2      training overdue, data out of date
  *   └─ m2
- *      └─ f3      no checks at all (unknown)      "Crane Foreman"
+ *      └─ f3      no checks at all (not ready)    "Crane Foreman"
  */
 const PEOPLE: Person[] = TEST_ORG.map((p) => {
   if (p.id === 'c1') return { ...p, name: 'Ana Ruiz', title: 'Electrician' };
@@ -40,7 +40,7 @@ function check(personId: string, category: CategoryId, status: Status): Check {
     source: 'test',
     status,
     reason: '',
-    stale: status === 'unknown',
+    stale: personId === 'f2',
     requiredBy: [],
   };
 }
@@ -50,9 +50,9 @@ const checksByPerson = new Map<string, Check[]>(
 );
 checksByPerson.get('c1')!.push(check('c1', 'sap-password', 'expiring'));
 checksByPerson.get('c2')!.push(check('c2', 'tool', 'not-ready'), check('c2', 'sap-password', 'expiring'));
-checksByPerson.get('f2')!.push(check('f2', 'training', 'unknown'));
+checksByPerson.get('f2')!.push(check('f2', 'training', 'not-ready'));
 const statusByPerson = new Map<string, Status>(PEOPLE.map((p) => [p.id, 'ready']));
-statusByPerson.set('c1', 'expiring').set('c2', 'not-ready').set('f2', 'unknown').set('f3', 'unknown');
+statusByPerson.set('c1', 'expiring').set('c2', 'not-ready').set('f2', 'not-ready').set('f3', 'not-ready');
 
 const assignments: Record<string, string[]> = { c1: ['crane'], f3: ['crane'], f2: ['other'] };
 
@@ -137,8 +137,8 @@ describe('ReadinessFilter', () => {
   });
 
   it('counts an issue only in the picked statuses', () => {
-    expect(ids(run({ issuesOnly: true, statuses: ['not-ready'] }))).toEqual(['dir', 'm1', 'f1', 'c2']);
-    expect(ids(run({ issuesOnly: true, statuses: ['unknown'] }))).toEqual(['dir', 'm1', 'f2', 'm2', 'f3']);
+    expect(ids(run({ issuesOnly: true, statuses: ['expiring'] }))).toEqual(['dir', 'm1', 'f1', 'c1', 'c2']);
+    expect(ids(run({ issuesOnly: true, statuses: ['not-ready'] }))).toEqual(['dir', 'm1', 'f1', 'c2', 'f2', 'm2', 'f3']);
     expect(ids(run({ issuesOnly: true, statuses: ['expiring'], categories: ['tool'] }))).toEqual([]);
   });
 
@@ -197,7 +197,7 @@ describe('ReadinessFilter.listChecks', () => {
 
   it('lists only issue checks with Issues only on, red first', () => {
     const r = list({ issuesOnly: true });
-    expect(items(r)).toEqual(['c2:tool', 'c1:sap-password', 'c2:sap-password', 'f2:training']);
+    expect(items(r)).toEqual(['c2:tool', 'f2:training', 'c1:sap-password', 'c2:sap-password']);
     expect(r.personCount).toBe(3);
     expect(r.scopeCount).toBe(8);
   });
@@ -219,7 +219,7 @@ describe('ReadinessFilter.listChecks', () => {
       'c1:sap-password',
       'c2:sap-password',
     ]);
-    expect(items(list({ issuesOnly: true, statuses: ['unknown'] }))).toEqual(['f2:training']);
+    expect(items(list({ issuesOnly: true, statuses: ['not-ready'] }))).toEqual(['c2:tool', 'f2:training']);
     expect(list({ categories: ['tool'], statuses: ['not-ready'] }).rows.length).toBe(list({}).rows.length);
   });
 
@@ -246,14 +246,14 @@ describe('ReadinessFilter.listChecks', () => {
     const queries: Partial<ReadinessQuery>[] = [
       { issuesOnly: true },
       { issuesOnly: true, categories: ['sap-password'] },
-      { issuesOnly: true, statuses: ['expiring', 'unknown'] },
+      { issuesOnly: true, statuses: ['not-ready'] },
       { issuesOnly: true, supervisorId: 'm1', directOnly: true },
       { issuesOnly: true, programId: 'crane' },
       {},
     ];
     for (const q of queries) {
       const treePeople = run(q).rows.filter((r) => !r.context).map((r) => r.person.id);
-      // People with no checks at all show in the tree as unknown but have no list rows.
+      // People with no checks at all show in the tree as not ready but have no list rows.
       const withChecks = treePeople.filter((id) => (checksByPerson.get(id) ?? []).length > 0);
       const listPeople = new Set(list(q).rows.map((r) => r.person.id));
       expect([...listPeople].sort()).toEqual([...withChecks].sort());

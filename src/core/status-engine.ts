@@ -43,16 +43,9 @@ export class StatusEngine {
   }
 
   evaluate(record: SourceRecord, today: IsoDate): Check {
+    // Status comes from the record's dates alone; out-of-date data is only flagged.
     const stale = this.isStale(record, today);
-    let verdict = this.judge(record, today);
-    // Out-of-date data can't vouch for green or yellow, but expired is still expired.
-    if (stale && verdict.status !== 'not-ready') {
-      verdict = {
-        ...verdict,
-        status: 'unknown',
-        reason: `Data out of date (last synced ${formatDate(record.lastSynced)})`,
-      };
-    }
+    const verdict = this.judge(record, today);
     return {
       personId: record.personId,
       category: record.category,
@@ -79,7 +72,8 @@ export class StatusEngine {
     }
     if (record.lastCheckIn) verdicts.push(this.byCheckIn(record.lastCheckIn, today));
 
-    if (verdicts.length === 0) return { status: 'unknown', reason: 'No data' };
+    // Nothing to judge it by never counts as ready.
+    if (verdicts.length === 0) return { status: 'not-ready', reason: 'No data' };
     // Worst wins; on a tie, the one due soonest.
     return verdicts.reduce((a, b) => {
       const byStatus = compareStatus(a.status, b.status);

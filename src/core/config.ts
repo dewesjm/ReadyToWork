@@ -19,7 +19,7 @@ export interface ReadinessConfig {
     /** Days without a check-in before a device turns red. */
     notReadyAfterDays: number;
   };
-  /** Days since a source last synced before its data counts as out of date. */
+  /** Days since a source last synced before its data is marked out of date (a note only). */
   staleAfterDays: Record<SourceId, number>;
   defaultStaleAfterDays: number;
 }
@@ -63,17 +63,15 @@ export interface StatusMeta {
   /** Higher is worse. A person's status is their highest-ranked check. */
   rank: number;
   /** daisyUI color name. */
-  color: 'error' | 'warning' | 'neutral' | 'success';
+  color: 'error' | 'warning' | 'success';
   icon: string;
 }
 
-/** Unknown ranks above ready so missing data never looks like "all good". */
 export const STATUS_META: Record<Status, StatusMeta> = {
-  'not-ready': { label: 'Not ready', rank: 3, color: 'error', icon: 'circle-x' },
-  expiring: { label: 'Expiring', rank: 2, color: 'warning', icon: 'triangle-alert' },
-  unknown: { label: 'Unknown', rank: 1, color: 'neutral', icon: 'circle-help' },
+  'not-ready': { label: 'Not ready', rank: 2, color: 'error', icon: 'circle-x' },
+  expiring: { label: 'Expiring', rank: 1, color: 'warning', icon: 'triangle-alert' },
   ready: { label: 'Ready', rank: 0, color: 'success', icon: 'circle-check' },
 };
 
 /** Worst first. */
-export const STATUSES: readonly Status[] = ['not-ready', 'expiring', 'unknown', 'ready'];
+export const STATUSES: readonly Status[] = ['not-ready', 'expiring', 'ready'];

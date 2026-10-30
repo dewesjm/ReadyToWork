@@ -4,21 +4,18 @@ import { STATUS_META, Status } from '../../../core';
 const BADGE: Record<string, string> = {
   error: 'badge-error',
   warning: 'badge-warning',
-  neutral: 'badge-neutral',
   success: 'badge-success',
 };
 
 const TEXT: Record<string, string> = {
   error: 'text-error',
   warning: 'text-warning',
-  neutral: 'text-neutral',
   success: 'text-success',
 };
 
 const BUTTON: Record<string, string> = {
   error: 'btn-error',
   warning: 'btn-warning',
-  neutral: 'btn-neutral',
   success: 'btn-success',
 };
 
@@ -39,8 +36,7 @@ export function textClass(status: Status): string {
 
 /** Plain-English meaning of each status, for the legend. */
 export const STATUS_MEANING: Record<Status, string> = {
-  'not-ready': 'Expired, overdue, missing, lost or revoked. Not allowed to work on it.',
+  'not-ready': 'Expired, overdue, missing, lost, revoked or no data. Not allowed to work on it.',
   expiring: 'Still valid, but due inside its warning window.',
-  unknown: 'No data, or the source system has not synced recently.',
   ready: 'Valid, with nothing due soon.',
 };

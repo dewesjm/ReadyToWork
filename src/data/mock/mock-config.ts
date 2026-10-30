@@ -27,7 +27,7 @@ export const MOCK_CONFIG: MockConfig = {
     foremenPerGeneralForeman: [2, 3],
     crewPerForeman: [5, 8],
   },
-  statusMix: { ready: 0.7, expiring: 0.18, 'not-ready': 0.09, unknown: 0.03 },
+  statusMix: { ready: 0.73, expiring: 0.18, 'not-ready': 0.09 },
   crewHealthSpread: 1.2,
   programAssignmentRate: 0.3,
   expiredToolPeople: 4,

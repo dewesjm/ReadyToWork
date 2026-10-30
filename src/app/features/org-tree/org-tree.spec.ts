@@ -94,13 +94,12 @@ describe('OrgTree', () => {
     expect(rows().some((r) => r.querySelector('rtw-category-chip [data-category="tool"][data-status="not-ready"]'))).toBe(true);
   });
 
-  it('shows the SAP crew yellow and the stale crew grey for the director', async () => {
+  it('shows the SAP crew yellow for the director', async () => {
     const { row } = await open('/readiness?issues=all');
-    const { sapCrewForemanId, staleCrewForemanId } = fakeOrg().scenarios;
+    const { sapCrewForemanId } = fakeOrg().scenarios;
     const rollups = readiness().rollups;
     expect(rollups.get(sapCrewForemanId)!.worst).toBe('expiring');
     expect(row(sapCrewForemanId)!.querySelector('rtw-rollup-badge [data-status="expiring"]')).not.toBeNull();
-    expect(row(staleCrewForemanId)!.querySelector('rtw-rollup-badge [data-status="unknown"]')).not.toBeNull();
   });
 
   it('expands the path to a keyword match and highlights it', async () => {

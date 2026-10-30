@@ -111,16 +111,6 @@ describe('generateOrg', () => {
       }
     });
 
-    it('has a crew that shows grey because its Yubikey data is out of date', () => {
-      for (const m of crew(s.staleCrewForemanId)) {
-        expect(result.statusByPerson.get(m.id)).toBe('unknown');
-        expect(checks(m.id).find((c) => c.category === 'yubikey')?.stale).toBe(true);
-      }
-      expect(result.rollups.get(s.staleCrewForemanId)?.counts.unknown).toBe(
-        crew(s.staleCrewForemanId).length,
-      );
-    });
-
     it('has a green person who turns red when assigned Crane Operations', () => {
       const id = s.craneCandidateId;
       expect(result.statusByPerson.get(id)).toBe('ready');

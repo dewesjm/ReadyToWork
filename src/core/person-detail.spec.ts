@@ -75,7 +75,7 @@ describe('PersonDetailBuilder', () => {
     expect(tiles.map((t) => t.category.id)).toEqual(DEFAULT_CONFIG.categories.map((c) => c.id));
     const tool = tiles.find((t) => t.category.id === 'tool')!;
     expect(tool).toMatchObject({ status: 'not-ready', total: 3 });
-    expect(tool.counts).toEqual({ 'not-ready': 1, expiring: 1, unknown: 0, ready: 1 });
+    expect(tool.counts).toEqual({ 'not-ready': 1, expiring: 1, ready: 1 });
   });
 
   it('leaves a category with nothing tracked without a status', () => {
@@ -100,7 +100,7 @@ describe('PersonDetailBuilder', () => {
 
   it('shows what a manager is responsible for, and nothing for crew', () => {
     expect(build('m1')!.responsibleFor).toEqual({
-      rollup: { total: 4, counts: { 'not-ready': 1, expiring: 0, unknown: 0, ready: 3 }, worst: 'not-ready' },
+      rollup: { total: 4, counts: { 'not-ready': 1, expiring: 0, ready: 3 }, worst: 'not-ready' },
       directReports: 2,
     });
     expect(build('c1')!.responsibleFor).toBeNull();
@@ -112,7 +112,7 @@ describe('PersonDetailBuilder', () => {
     expect(build('m2', 'm1', true)).not.toBeNull();
   });
 
-  it('treats someone with no checks as unknown with every tile empty', () => {
+  it('treats someone with no checks as not ready with every tile empty', () => {
     const view = build('f3')!;
     expect(view.checks).toEqual([]);
     expect(view.tiles.every((t) => t.status === null)).toBe(true);

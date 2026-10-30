@@ -47,19 +47,19 @@ describe('ReadinessEvaluator', () => {
     new RollupCalculator(),
   );
 
-  it('gives each person their worst check, and unknown with no checks', () => {
+  it('gives each person their worst check, and not ready with no checks', () => {
     const r = evaluator.evaluate(input());
     expect(r.statusByPerson.get('c1')).toBe('expiring');
     expect(r.statusByPerson.get('c2')).toBe('ready');
-    expect(r.statusByPerson.get('f2')).toBe('unknown');
+    expect(r.statusByPerson.get('f2')).toBe('not-ready');
   });
 
   it('rolls statuses up the tree', () => {
     const r = evaluator.evaluate(input());
     expect(r.rollups.get('m1')).toEqual({
       total: 4,
-      counts: { 'not-ready': 0, expiring: 1, unknown: 1, ready: 2 },
-      worst: 'expiring',
+      counts: { 'not-ready': 1, expiring: 1, ready: 2 },
+      worst: 'not-ready',
     });
     expect(r.rollups.get('dir')?.total).toBe(7);
   });
@@ -71,7 +71,8 @@ describe('ReadinessEvaluator', () => {
       'Missing, required by Crane program',
     );
     expect(r.rollups.get('f1')?.worst).toBe('not-ready');
-    expect(r.rollups.get('dir')?.counts['not-ready']).toBe(1);
+    // f2 (no checks) was already red; c2 joins them.
+    expect(r.rollups.get('dir')?.counts['not-ready']).toBe(2);
   });
 
   it('ignores assignments to programs that no longer exist', () => {

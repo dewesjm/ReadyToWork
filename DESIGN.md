@@ -50,14 +50,16 @@ Four statuses, always shown as **color plus icon plus text** (never color alone)
 |---|---|---|
 | Ready | Green | Everything valid |
 | Expiring | Yellow | Something goes bad within its category's warning window |
-| Not ready | Red | Something expired, missing, or overdue |
-| Unknown | Grey | No data, or the data source is stale |
+| Not ready | Red | Something expired, missing, or overdue, or there is no data |
 
 - **Warning windows are set per category** (defaults: SAP password 14 days, network access 30,
   training 30, qualifications 60, tools 30, Yubikey certificate 30, devices 14). Admins can change
   them.
-- **A person's status is their worst check.** Red beats yellow beats grey beats green.
-  (Grey ranks above green on purpose: missing data must never look like "all good.")
+- **A person's status is their worst check.** Red beats yellow beats green. Someone with no
+  data at all is red, so missing data never looks like "all good."
+- **Status comes from dates alone.** When a source hasn't synced within its limit (3 days by
+  default), the check keeps its status and shows an "Out of date" note next to its last-synced
+  time.
 - **Roll-ups**: a manager's row shows their own status plus counts for everyone below them,
   e.g. "23 people: 18 ready, 3 expiring, 2 not ready." The roll-up color is the worst in the
   subtree.
@@ -228,11 +230,11 @@ src/
 - A seeded random generator builds an org of about **200 people, 5 levels deep**: director →
   managers / superintendents → general foremen → foremen → crew.
 - Believable fake names, titles, employee IDs, devices, tools and training. No real people.
-- Default mix: about 70% ready, 18% expiring, 9% not ready, 3% unknown, spread unevenly so
+- Default mix: about 73% ready, 18% expiring, 9% not ready, spread unevenly so
   some crews look clearly worse than others.
 - A few **planted scenarios** for the demo script, for example: one crew with a cluster of
-  expired tool calibrations; one person whose new program assignment makes them red; a source
-  marked stale so a group shows grey; SAP passwords expiring across a team next week.
+  expired tool calibrations; one person whose new program assignment makes them red; SAP passwords expiring across a
+  team next week.
 - 4 to 6 sample programs with requirements, and default assignments.
 
 ## 8. Demo controls

@@ -20,7 +20,7 @@ class Host {
   compact = signal(false);
   rollup = signal<Rollup>({
     total: 23,
-    counts: { 'not-ready': 2, expiring: 3, unknown: 0, ready: 18 },
+    counts: { 'not-ready': 2, expiring: 3, ready: 18 },
     worst: 'not-ready',
   });
 }
@@ -74,18 +74,18 @@ describe('status pieces', () => {
 
   it('keeps the total when everything else is zero, and says "person" for one', async () => {
     const { fixture, text, host } = await setup();
-    host.rollup.set({ total: 1, counts: { 'not-ready': 0, expiring: 0, unknown: 1, ready: 0 }, worst: 'unknown' });
+    host.rollup.set({ total: 1, counts: { 'not-ready': 0, expiring: 1, ready: 0 }, worst: 'expiring' });
     await fixture.whenStable();
-    expect(text('rtw-rollup-badge')).toBe('1 person: 1 unknown');
+    expect(text('rtw-rollup-badge')).toBe('1 person: 1 expiring');
   });
 
-  it('opens the legend with all four statuses and closes it on Escape', async () => {
+  it('opens the legend with all three statuses and closes it on Escape', async () => {
     const fixture = TestBed.createComponent(Legend);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
     el.querySelector('button')!.click();
     await fixture.whenStable();
-    expect(el.querySelectorAll('dt rtw-status-badge').length).toBe(4);
+    expect(el.querySelectorAll('dt rtw-status-badge').length).toBe(3);
     el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     await fixture.whenStable();
     expect(el.querySelector('#status-legend')).toBeNull();

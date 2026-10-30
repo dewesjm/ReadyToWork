@@ -51,8 +51,8 @@ export class ReadinessEvaluator {
         .filter((p): p is Program => p !== undefined);
       const checks = this.programRules.apply(person.id, evaluated, programs);
       checksByPerson.set(person.id, checks);
-      // No checks at all is "unknown", never "ready".
-      statusByPerson.set(person.id, worstStatus(checks.map((c) => c.status)) ?? 'unknown');
+      // No checks at all is "not ready", never "ready".
+      statusByPerson.set(person.id, worstStatus(checks.map((c) => c.status)) ?? 'not-ready');
     }
 
     return { org, checksByPerson, statusByPerson, rollups: this.rollups.compute(org, statusByPerson) };
