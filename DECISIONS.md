@@ -232,3 +232,8 @@
   and explanatory text keep their own narrower widths so fields and lines stay readable.
 - **Fake names are common American first and last names** (user: the earlier mix read as too
   exotic). Pairs are random, so they are not real people; the seed now gives different names.
+- **Tree issue chips line up in a column** (user: the issues weren't horizontally aligned).
+  From the sm breakpoint up, the status badge, name and title sit in a fixed 22rem column
+  (the depth indent is inside it) and the status badge has a fixed width, so category chips
+  start at the same x on every row. When a row is too narrow, the roll-up summary wraps
+  first. Phones keep the stacked layout.

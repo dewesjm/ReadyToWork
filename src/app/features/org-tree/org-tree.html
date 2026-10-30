@@ -5,7 +5,7 @@
     @for (r of rows(); track r.id) {
       <div
         role="treeitem"
-        class="flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 rounded-field py-1.5 pr-2 pl-[calc(0.25rem+var(--depth)*0.75rem)] outline-offset-[-2px] hover:bg-base-200 focus-visible:bg-base-200 focus-visible:outline-2 focus-visible:outline-primary sm:pl-[calc(0.25rem+var(--depth)*1.25rem)]"
+        class="flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 rounded-field py-1.5 pr-2 pl-[calc(0.25rem+var(--depth)*0.75rem)] sm:pl-1 outline-offset-[-2px] hover:bg-base-200 focus-visible:bg-base-200 focus-visible:outline-2 focus-visible:outline-primary"
         [style.--depth]="r.depth"
         [class.opacity-60]="r.context"
         [attr.data-id]="r.id"
@@ -20,7 +20,8 @@
         (focus)="onFocus(r.id)"
         (click)="openPerson(r.id)"
       >
-        <div class="flex min-w-0 items-center gap-2">
+        <!-- Fixed width from sm up so the chips line up across rows and depths. -->
+        <div class="flex min-w-0 items-center gap-2 sm:w-[22rem] sm:shrink-0 sm:pl-[calc(var(--depth)*1.25rem)]">
           @if (r.expandable) {
             <!-- Mouse only; the keyboard uses Right and Left on the row. -->
             <span
@@ -34,7 +35,7 @@
           } @else {
             <span class="w-6 shrink-0" aria-hidden="true"></span>
           }
-          <rtw-status-badge [status]="r.status" [compact]="true" />
+          <rtw-status-badge class="w-24 shrink-0" [status]="r.status" [compact]="true" />
           <span class="min-w-0">
             <rtw-highlight class="font-medium" data-testid="name" [text]="r.person.name" [keyword]="keyword()" />
             <span class="text-sm opacity-70">
