@@ -65,3 +65,9 @@
 - **Dates are 'YYYY-MM-DD' strings with UTC arithmetic**, and "today" is always passed in, so
   time zones and daylight saving can't shift a status and the demo clock can move today.
 - **Device check-in defaults**: 14 days without a check-in is yellow, 30 is red (config).
+- **Program checks live in the required item's category** (e.g. a missing required
+  qualification shows under Qualifications, marked "required by Program XYZ"), rather than
+  in a separate "Program requirements" category. Whether the person view also gets a
+  Programs summary tile is left for M4.
+- **Device check-in uses "valid through" too**: day 29 without a check-in is the last yellow
+  day; day 30 is red with 1 day overdue.

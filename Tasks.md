@@ -6,11 +6,10 @@
 - [x] User checks M0 in the browser; colors approved
 - [x] Merge Org tree and Issues into one Readiness page (Tree / List switch, Issues only toggle)
 - [x] M1 plan reviewed
-- [ ] M1 Core logic
-  - [x] Model types, dates, default config
-  - [x] StatusEngine (one record to one check)
-  - [x] ProgramRules (requirements merge into checks)
-  - [ ] OrgIndex, RollupCalculator, ReadinessEvaluator
+- [x] M1 Core logic (model, dates, config, StatusEngine, ProgramRules, OrgIndex,
+  RollupCalculator, ReadinessEvaluator, check ordering; 73 tests)
+- [ ] Decide: scope picker on the Readiness page (by supervisor, by program, default)
+- [ ] M2 Fake data and storage: plan for review
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
@@ -23,6 +22,9 @@
 - Tools: assigned to individuals, crews, or both?
 
 ## Follow-ups
+- Design table lists "Program requirements" as a category; in the core, program checks live in
+  the required item's own category (with "required by"). Decide in M4 whether the person
+  summary strip also shows a Programs tile.
 - M2: move the saved theme into SettingsStore with the other demo preferences.
 - M2/M7: avatar initials come from a fixed placeholder viewer until view-as exists.
 
