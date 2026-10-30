@@ -1,20 +1,24 @@
 <!doctype html>
 <html lang="en" data-theme="navy">
-<head>
-  <meta charset="utf-8">
-  <title>Ready to Work</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <script>
-    // Apply the saved theme before Angular starts, so there is no flash of the default theme.
-    try {
-      var t = localStorage.getItem('rtw.theme');
-      if (t && /^[a-z-]+$/.test(t)) document.documentElement.setAttribute('data-theme', t);
-    } catch (e) {}
-  </script>
-</head>
-<body>
-  <rtw-root></rtw-root>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Ready to Work</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1b2f5b" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+    <script>
+      // Apply the saved theme before Angular starts, so there is no flash of the default theme.
+      try {
+        var t = localStorage.getItem('rtw.theme');
+        if (t && /^[a-z-]+$/.test(t)) document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
+    <link rel="manifest" href="manifest.webmanifest" />
+  </head>
+  <body>
+    <rtw-root></rtw-root>
+    <noscript>Please enable JavaScript to continue using this application.</noscript>
+  </body>
 </html>

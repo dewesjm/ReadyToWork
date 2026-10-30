@@ -5,11 +5,25 @@ no backend. See DESIGN.md for the spec and build plan.
 
 ## Running
 
-Not scaffolded yet (milestone M0). Planned:
+Requires Node 22.12 or newer (Angular 21).
 
 - `npm install`
-- `npm start` serves the app locally
-- `npm test` runs the unit tests
-- `npm run build` builds the static PWA into `dist/`
+- `npm start` serves the app at http://localhost:4200
+- `npm test` runs the unit tests (Vitest)
+- `npm run build` builds the static PWA into `dist/ready-to-work/browser`
 
-Requires Node 22.12 or newer (Angular 21).
+The service worker only runs in the production build. To try offline/install locally, serve
+the build with an SPA fallback, for example `npx serve -s dist/ready-to-work/browser`.
+
+## Deploying
+
+Vercel, as a static site. `vercel.json` sets the build output folder, rewrites every path to
+`index.html` so deep links work, and stops the service worker files from being cached.
+
+## Layout
+
+- `src/core/`: plain TypeScript domain logic (no Angular), unit tested
+- `src/data/`: `DataSource`, `SettingsStore`, `Clock` and their mock implementations
+- `src/app/features/`: screens (org tree, person detail, issues, admin)
+- `src/app/shared/`: app shell, avatar menu, theme list, shared UI pieces
+- `src/app/services/`: Angular services wrapping core and data

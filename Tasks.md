@@ -2,13 +2,9 @@
 
 ## Now
 - [x] User reviews DESIGN.md
-- [ ] M0 Setup
-  - [x] Scaffold Angular 21 with Tailwind and Vitest
-  - [x] daisyUI, brand theme, avatar theme menu
-  - [x] Folder layout, app shell, routes, placeholder pages
-  - [ ] PWA (service worker, manifest, icons)
-  - [ ] Vercel rewrite config
-  - [ ] Check "Done when"
+- [x] M0 Setup (scaffold, brand themes + avatar menu, shell and routes, PWA, Vercel config)
+- [ ] User checks M0 in the browser (`npm start`), including the avatar theme menu
+- [ ] M1 Core logic: plan for review
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
