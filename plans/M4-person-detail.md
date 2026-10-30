@@ -1,6 +1,6 @@
 # M4 plan: Person detail and both layouts
 
-Status: **planned, waiting for user review** of the questions at the end. Spec: DESIGN.md
+Status: **in progress**. Questions answered 2026-10-30 (all recommended options). Spec: DESIGN.md
 sections 5.2 and 5.4. Acceptance ("Done when", DESIGN.md section 10):
 
 > Any person can be opened in both layouts, with manager chain and "responsible for" working.
@@ -115,7 +115,7 @@ unknown id or someone outside the viewer's view shows a short message with a lin
   data is out of date.
 - Update Tasks.md, DECISIONS.md, README.md, DESIGN.md (5.2 and 5.4 details).
 
-## Questions for the user (answer before step 1)
+## Questions for the user (answered: the recommended option each time)
 
 1. **Where should the Layout switch live until the demo controls exist (M7)?**
    - (Recommended) In the avatar menu's Preferences, next to the default scope, from M4. It is

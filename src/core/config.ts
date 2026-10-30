@@ -41,6 +41,23 @@ export const DEFAULT_CONFIG: ReadinessConfig = {
   defaultStaleAfterDays: 3,
 };
 
+/** Display names for source systems. 'program' marks a required item the person doesn't hold. */
+export const SOURCE_LABELS: Record<SourceId, string> = {
+  ad: 'Active Directory',
+  sap: 'SAP',
+  mdm: 'Device management',
+  lms: 'Learning system',
+  quals: 'Qualifications register',
+  yubikey: 'Yubikey register',
+  assets: 'Asset management',
+  program: 'Program requirement',
+};
+
+/** A source's display name, or its id when it isn't in the table. */
+export function sourceLabel(id: SourceId): string {
+  return SOURCE_LABELS[id] ?? id;
+}
+
 export interface StatusMeta {
   label: string;
   /** Higher is worse. A person's status is their highest-ranked check. */

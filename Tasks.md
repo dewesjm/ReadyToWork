@@ -26,8 +26,14 @@
 
 - [x] User checks M3 in the browser
 - [x] M4 plan written: [plans/M4-person-detail.md](plans/M4-person-detail.md)
-- [ ] User answers the 5 questions at the end of the M4 plan
+- [x] User answers the 5 questions at the end of the M4 plan (all recommended options)
 - [ ] M4 Person detail and both layouts, steps 1-6 in the plan
+  - [x] 1. Core: person detail and display wording
+  - [ ] 2. Person detail components
+  - [ ] 3. Drill-down: the person page
+  - [ ] 4. Dashboard: the side panel
+  - [ ] 5. Layout switch in Preferences
+  - [ ] 6. Check and document
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
@@ -40,9 +46,6 @@
 - Tools: assigned to individuals, crews, or both?
 
 ## Follow-ups
-- Design table lists "Program requirements" as a category; in the core, program checks live in
-  the required item's own category (with "required by"). Decide in M4 whether the person
-  summary strip also shows a Programs tile.
 - M8: the "Ready to Work" brand wraps onto two lines in the header at phone width.
 - M8: context rows are dimmed with opacity; check their contrast in the accessibility pass.
 - M7: the persona can only change in code/settings until the View-as control exists (default

@@ -132,3 +132,13 @@
   default open state.
 - **Context rows** (managers kept only to show the path) are dimmed and say "shown for
   context" to screen readers. A matched employee ID is shown on the row only while searching.
+- **M4: the Layout switch lives in the avatar menu's Preferences** (user) from M4, next to the
+  default scope. M7's presenter panel will reuse it.
+- **M4: the Dashboard acts like Drill-down on narrow screens** (user): tapping a person opens
+  the full page, since side by side doesn't fit.
+- **M4: picking a person in the Dashboard replaces the history entry** (user), so Back leaves
+  the Readiness page instead of stepping back through every person looked at.
+- **M4: programs are header badges with their own status** (user), e.g. "Crane Operations: Not
+  ready". No Programs tile; problem checks stay in their categories, marked "required by".
+- **M4: categories with nothing tracked show a greyed "Nothing tracked" tile** (user), with no
+  status color, so all 8 tiles line up and it's never read as Unknown.

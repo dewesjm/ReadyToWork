@@ -187,9 +187,13 @@ export function resolveSupervisor(
   viewer: FilterViewer,
   supervisorId: string | null,
 ): string {
-  if (supervisorId === null || !org.get(supervisorId)) return viewer.personId;
-  if (viewer.isAdmin || org.isInSubtree(viewer.personId, supervisorId)) return supervisorId;
-  return viewer.personId;
+  return supervisorId !== null && canView(org, viewer, supervisorId) ? supervisorId : viewer.personId;
+}
+
+/** Viewers see their own subtree; admins see everyone. Unknown ids are never viewable. */
+export function canView(org: OrgIndex, viewer: FilterViewer, personId: string): boolean {
+  if (!org.get(personId)) return false;
+  return viewer.isAdmin || org.isInSubtree(viewer.personId, personId);
 }
 
 /**
