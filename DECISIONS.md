@@ -251,3 +251,12 @@
   hides it until the next new version. The app checks every 15 minutes (`UPDATE_CONFIG`) and
   when its tab comes back into view. A toast at the bottom right (centered on phones), not a
   banner, so it doesn't compete with the coming announcements banner.
+- **Announcements: answers to the plan's questions** (user, 2026-10-30; all recommended
+  options). Three types, Outage (red), Delayed (amber) and Info (blue), on a full-width strip
+  that looks unlike the status badges. Viewers can close Info and Delayed notices (remembered in
+  their preferences, back again after an admin edit); outages can't be closed. Optional start
+  and end dates, no times. Edits go live with a Publish button, unlike the rest of Admin. The
+  demo starts with one live Delayed notice.
+- **Announcements don't change the settings schema version.** Saved settings with no
+  `announcements` section already fall back to the defaults, so older saved settings pick up the
+  sample notice and no migration is needed (the plan had assumed version 2).

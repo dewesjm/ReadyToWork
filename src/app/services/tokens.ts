@@ -29,7 +29,7 @@ export const DEFAULT_SETTINGS = new InjectionToken<() => Settings>('DefaultSetti
     }
     return () => {
       const org = source.fakeOrg();
-      return createDefaultSettings(org.programs, org.assignments);
+      return createDefaultSettings(org.programs, org.assignments, org.announcements);
     };
   },
 });

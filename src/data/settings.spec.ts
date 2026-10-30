@@ -1,5 +1,5 @@
 import { DEFAULT_CONFIG } from '../core';
-import { DEFAULT_PROGRAMS } from './mock/fake-catalog';
+import { DEFAULT_ANNOUNCEMENTS, DEFAULT_PROGRAMS } from './mock/fake-catalog';
 import {
   Settings,
   SettingsError,
@@ -17,7 +17,7 @@ import {
 } from './settings';
 import { LocalSettingsStore } from './settings-store';
 
-const defaults = () => createDefaultSettings(DEFAULT_PROGRAMS, { p010: ['prog-crane'] });
+const defaults = () => createDefaultSettings(DEFAULT_PROGRAMS, { p010: ['prog-crane'] }, DEFAULT_ANNOUNCEMENTS);
 
 function edited(): Settings {
   const s = defaults();
@@ -25,6 +25,9 @@ function edited(): Settings {
   s.programs[0].requirements.push({ category: 'qualification', itemId: 'qual:forklift', itemName: 'Forklift' });
   s.assignments['p020'] = ['prog-export', 'prog-electrical'];
   s.warningDays['sap-password'] = 21;
+  s.announcements.unshift({
+    id: 'a2', type: 'outage', message: 'SAP down', startsOn: '2026-11-07', endsOn: '2026-11-07', on: true, revision: 3,
+  });
   s.preferences = { ...s.preferences, theme: 'dracula', layout: 'drilldown', demoToday: '2026-12-01' };
   return s;
 }
@@ -102,7 +105,7 @@ describe('export and import', () => {
 
   it('leaves preferences out of the file and keeps the viewer\'s own on import', () => {
     const file = JSON.parse(exportSettings(edited()));
-    expect(Object.keys(file)).toEqual(['schemaVersion', 'programs', 'assignments', 'warningDays']);
+    expect(Object.keys(file)).toEqual(['schemaVersion', 'programs', 'assignments', 'warningDays', 'announcements']);
     const withPrefs = JSON.stringify({ ...file, preferences: { theme: 'dracula', layout: 'sideways' } });
     expect(importSettings(withPrefs, defaults(), mine).preferences).toEqual(mine);
   });
@@ -133,6 +136,18 @@ describe('export and import', () => {
     bad('{"schemaVersion": 99}', 'These settings are from a newer version (99); this app reads up to 1.');
     bad('{"schemaVersion": 1, "programs": [{"id": "x", "name": 5, "requirements": []}]}', 'programs[0].name must be text.');
     bad('{"schemaVersion": 1, "warningDays": {"tool": -5}}', 'warningDays.tool must be a whole number of days (0 to 3650).');
+    const note = (over: object) =>
+      JSON.stringify({ schemaVersion: 1, announcements: [{ ...DEFAULT_ANNOUNCEMENTS[0], ...over }] });
+    bad('{"schemaVersion": 1, "announcements": {}}', '"announcements" must be a list.');
+    bad(note({ type: 'panic' }), 'announcements[0].type must be one of "outage", "delayed", "info".');
+    bad(note({ on: 'yes' }), 'announcements[0].on must be true or false.');
+    bad(note({ revision: 0 }), 'announcements[0].revision must be a whole number from 1.');
+    bad(note({ message: ' ' }), 'announcements[0]: Enter a message.');
+    bad(note({ startsOn: '2026-11-05', endsOn: '2026-11-01' }), 'announcements[0]: The end date is before the start date.');
+    bad(
+      JSON.stringify({ schemaVersion: 1, announcements: [DEFAULT_ANNOUNCEMENTS[0], DEFAULT_ANNOUNCEMENTS[0]] }),
+      'announcements[1].id "a1" is used twice.',
+    );
   });
 
   it('fills missing sections from the defaults', () => {
@@ -140,10 +155,18 @@ describe('export and import', () => {
     expect(s.programs).toEqual(defaults().programs);
     expect(s.assignments).toEqual(defaults().assignments);
     expect(s.warningDays).toEqual({ tool: 7 });
+    expect(s.announcements).toEqual(DEFAULT_ANNOUNCEMENTS);
+  });
+
+  it('gives settings saved before announcements existed the sample notice', () => {
+    const saved = { schemaVersion: 1, programs: [], preferences: { theme: 'nord' } };
+    const s = parseSettings(saved, defaults());
+    expect(s.announcements).toEqual(DEFAULT_ANNOUNCEMENTS);
+    expect(s.preferences.dismissedAnnouncements).toEqual([]);
   });
 
   it('describes what a file holds', () => {
-    expect(describeSettings(edited())).toBe('5 programs, 3 assignments, 1 warning window');
+    expect(describeSettings(edited())).toBe('5 programs, 3 assignments, 1 warning window, 2 announcements');
   });
 });
 
@@ -157,6 +180,7 @@ describe('saved preferences', () => {
       );
     bad({ layout: 'sideways' }, 'preferences.layout must be "dashboard" or "drilldown".');
     bad({ demoToday: 'next week' }, 'preferences.demoToday must be a date like 2026-10-30.');
+    bad({ dismissedAnnouncements: 'a1#1' }, 'preferences.dismissedAnnouncements must be a list.');
   });
 });
 

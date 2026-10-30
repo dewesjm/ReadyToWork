@@ -1,6 +1,6 @@
 # Plan: Announcements (admin banner messages)
 
-Status: **plan, waiting for the user's answers** (2026-10-30). User request: "a banner message
+Status: **building** (2026-10-30). Questions answered the same day (all recommended options). User request: "a banner message
 admin capability, to announce outages or things that are delayed."
 Comes before M7 (demo controls); not in DESIGN.md yet (step 4 adds it).
 
@@ -14,8 +14,9 @@ Acceptance ("Done when"):
 - Admin has three tabs (Programs, Thresholds, Settings file), each its own URL, and edits save
   at once through `SettingsService`, so anything stored in `Settings` shows across the app
   immediately.
-- `Settings` is schema version 1 with an empty `MIGRATIONS` table. Adding notices is the first
-  schema change: version 2, with a migration that adds an empty list to saved version 1 data.
+- `Settings` is schema version 1, and a section missing from saved settings already falls back
+  to the defaults. So notices are a new optional section and the schema stays at version 1:
+  saved settings from before pick up the sample notice, and no migration is needed.
 - Settings live in each viewer's browser. In the mockup, a notice an admin posts shows in that
   browser only (and in an exported settings file). The real app would store notices on a server
   so everyone sees them; the screens would be the same.
@@ -48,10 +49,12 @@ Acceptance ("Done when"):
   dates, ordered as above), `announcementState` (Live, Scheduled, Ended, Off), and
   `validateAnnouncement` (message present and not too long, end not before start).
 - The three types, their labels, icons and colors in a config table.
-- `src/data/settings.ts`: schema version 2 with the migration, `announcements` checked field by
-  field on import, counted in `describeSettings`, covered by Reset.
+- `src/data/settings.ts`: `announcements` checked field by field on import, counted in
+  `describeSettings`, covered by Reset. The viewer's dismissed notices are a preference
+  (`dismissedAnnouncements`), so they stay out of the settings file.
+- The sample Delayed notice comes with the fake org.
 - Tests: ordering, every date edge (the start day, the end day, the day after), states,
-  validation, migration from a saved version 1, import errors.
+  validation, saved settings without the section, import errors.
 
 ### 2. The banner
 - `src/app/shared/announcement-banner/`: reads active notices from settings and the clock, sits
@@ -68,7 +71,7 @@ Acceptance ("Done when"):
   light and dark; the admin tab.
 - DESIGN.md (5.3 and a short banner section), README, DECISIONS.md, Tasks.md.
 
-## Questions for the user
+## Questions for the user (answered: the recommended option each time)
 
 1. **What kinds of notice, and how do they look?** Readiness already uses red, amber and green
    for people's status, so banner colors could be mistaken for it.

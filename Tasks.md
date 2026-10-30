@@ -62,8 +62,12 @@
 - [x] Full-width pages; common American fake names (user requests)
 - [x] Tree: aligned issue chips; row click expands, Details opens the person; "new version available" notice with Refresh (user requests; 281 tests)
 - [x] Announcements plan written (user request: admin banner for outages and delays): [plans/announcements.md](plans/announcements.md)
-- [ ] User answers the 5 questions at the end of the announcements plan
+- [x] User answers the 5 questions at the end of the announcements plan (all recommended options)
 - [ ] Announcements, steps 1-4 in the plan
+  - [x] 1. Core: notices (292 tests)
+  - [ ] 2. The banner
+  - [ ] 3. Admin › Announcements tab
+  - [ ] 4. Check and document
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)

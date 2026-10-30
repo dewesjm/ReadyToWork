@@ -1,4 +1,5 @@
 // Public API of the core: plain TypeScript, no Angular. Services take config in their constructors.
+export * from './announcements';
 export * from './check-order';
 export * from './config';
 export * from './dates';

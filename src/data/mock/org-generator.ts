@@ -1,4 +1,5 @@
 import {
+  Announcement,
   DEFAULT_CONFIG,
   IsoDate,
   Person,
@@ -14,6 +15,7 @@ import { SeededRandom } from '../random';
 import {
   CATALOG,
   CRANE_PROGRAM_ID,
+  DEFAULT_ANNOUNCEMENTS,
   DEFAULT_PROGRAMS,
   FIRST_NAMES,
   LAST_NAMES,
@@ -46,6 +48,8 @@ export interface FakeOrg {
   programs: Program[];
   /** Program ids per person id. */
   assignments: Record<string, string[]>;
+  /** Banner notices the demo starts with. */
+  announcements: Announcement[];
   /** The status each person was generated to have, on the anchor date. */
   targets: Map<string, Status>;
   scenarios: PlantedScenarios;
@@ -109,6 +113,7 @@ class OrgGenerator {
       personas: this.personas(scenarios),
       programs: DEFAULT_PROGRAMS,
       assignments,
+      announcements: DEFAULT_ANNOUNCEMENTS,
       targets,
       scenarios,
     };

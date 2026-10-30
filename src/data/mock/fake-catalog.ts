@@ -1,4 +1,4 @@
-import { Program } from '../../core';
+import { Announcement, Program } from '../../core';
 import { CatalogItem } from '../data-source';
 
 // Invented names and items only. No real people.
@@ -122,5 +122,19 @@ export const DEFAULT_PROGRAMS: Program[] = [
     id: 'prog-electrical',
     name: 'Electrical Work',
     requirements: [req('qual:electrical'), req('trn:loto')],
+  },
+];
+
+/** The demo starts with one live notice so users see the banner. No dates: always live. */
+export const DEFAULT_ANNOUNCEMENTS: Announcement[] = [
+  {
+    id: 'a1',
+    type: 'delayed',
+    message:
+      'Training records from the learning system are 2 days behind. Courses completed in the last 2 days may not show yet.',
+    startsOn: null,
+    endsOn: null,
+    on: true,
+    revision: 1,
   },
 ];

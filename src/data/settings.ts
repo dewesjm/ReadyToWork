@@ -1,10 +1,14 @@
 import {
+  ANNOUNCEMENT_CONFIG,
+  Announcement,
   CategoryId,
   DEFAULT_CONFIG,
   IsoDate,
   Program,
   ProgramSetup,
   ReadinessConfig,
+  announcementProblems,
+  isAnnouncementType,
   isIsoDate,
   pruneAssignments,
 } from '../core';
@@ -25,6 +29,8 @@ export interface Preferences {
   layout: Layout;
   /** Demo date override; null means the real date. */
   demoToday: IsoDate | null;
+  /** Notices this viewer closed, as `dismissKey`s. An edited notice has a new key. */
+  dismissedAnnouncements: string[];
 }
 
 /** Everything admins and viewers can change. Saved in the browser and exportable as JSON. */
@@ -35,6 +41,8 @@ export interface Settings {
   assignments: Record<string, string[]>;
   /** Warning window overrides per category; categories not listed use the config default. */
   warningDays: Record<CategoryId, number>;
+  /** Banner notices, newest first. */
+  announcements: Announcement[];
   preferences: Preferences;
 }
 
@@ -45,18 +53,21 @@ export const DEFAULT_PREFERENCES: Preferences = {
   defaultProgramId: null,
   layout: 'dashboard',
   demoToday: null,
+  dismissedAnnouncements: [],
 };
 
 export function createDefaultSettings(
   programs: Program[],
   assignments: Record<string, string[]>,
+  announcements: Announcement[] = [],
 ): Settings {
   return {
     schemaVersion: SETTINGS_SCHEMA_VERSION,
     programs: structuredClone(programs),
     assignments: structuredClone(assignments),
     warningDays: {},
-    preferences: { ...DEFAULT_PREFERENCES },
+    announcements: structuredClone(announcements),
+    preferences: { ...DEFAULT_PREFERENCES, dismissedAnnouncements: [] },
   };
 }
 
@@ -81,12 +92,12 @@ export const MIGRATIONS: Record<number, Migration> = {};
 export class SettingsError extends Error {}
 
 /**
- * The settings file: admin settings only (programs, assignments, warning windows). Preferences
- * belong to each viewer and stay out of it.
+ * The settings file: admin settings only (programs, assignments, warning windows,
+ * announcements). Preferences belong to each viewer and stay out of it.
  */
 export function exportSettings(settings: Settings): string {
-  const { schemaVersion, programs, assignments, warningDays } = settings;
-  return JSON.stringify({ schemaVersion, programs, assignments, warningDays }, null, 2);
+  const { schemaVersion, programs, assignments, warningDays, announcements } = settings;
+  return JSON.stringify({ schemaVersion, programs, assignments, warningDays, announcements }, null, 2);
 }
 
 /**
@@ -153,13 +164,14 @@ export function clearWarningDays(settings: Settings, category: CategoryId): Sett
   return { ...settings, warningDays: rest };
 }
 
-/** What a settings file holds, e.g. "5 programs, 61 assignments, 2 warning windows". */
+/** What a settings file holds, e.g. "5 programs, 61 assignments, 2 warning windows, 1 announcement". */
 export function describeSettings(settings: Settings): string {
   const assignments = Object.values(settings.assignments).reduce((n, ids) => n + ids.length, 0);
   return [
     count(settings.programs.length, 'program'),
     count(assignments, 'assignment'),
     count(Object.keys(settings.warningDays).length, 'warning window'),
+    count(settings.announcements.length, 'announcement'),
   ].join(', ');
 }
 
@@ -205,6 +217,10 @@ export function parseSettings(
       data['assignments'] === undefined ? defaults.assignments : assignments(data['assignments']),
     warningDays:
       data['warningDays'] === undefined ? defaults.warningDays : warningDays(data['warningDays']),
+    announcements:
+      data['announcements'] === undefined
+        ? structuredClone(defaults.announcements)
+        : announcements(data['announcements']),
     preferences: preferences(prefs, defaults.preferences),
   };
 }
@@ -255,6 +271,42 @@ function warningDays(value: unknown): Record<string, number> {
   return out;
 }
 
+function announcements(value: unknown): Announcement[] {
+  if (!Array.isArray(value)) throw new SettingsError('"announcements" must be a list.');
+  const ids = new Set<string>();
+  return value.map((a, i) => {
+    const at = `announcements[${i}]`;
+    if (!isObject(a)) throw new SettingsError(`${at} must be an object.`);
+    const id = str(a['id'], `${at}.id`);
+    if (ids.has(id)) throw new SettingsError(`${at}.id "${id}" is used twice.`);
+    ids.add(id);
+    const type = a['type'];
+    if (!isAnnouncementType(type)) {
+      const names = ANNOUNCEMENT_CONFIG.typeOrder.map((t) => `"${t}"`).join(', ');
+      throw new SettingsError(`${at}.type must be one of ${names}.`);
+    }
+    const date = (key: 'startsOn' | 'endsOn') => (a[key] == null ? null : str(a[key], `${at}.${key}`));
+    if (typeof a['on'] !== 'boolean') throw new SettingsError(`${at}.on must be true or false.`);
+    const revision = a['revision'];
+    if (typeof revision !== 'number' || !Number.isInteger(revision) || revision < 1) {
+      throw new SettingsError(`${at}.revision must be a whole number from 1.`);
+    }
+    const out: Announcement = {
+      id,
+      type,
+      message: str(a['message'], `${at}.message`),
+      startsOn: date('startsOn'),
+      endsOn: date('endsOn'),
+      on: a['on'],
+      revision,
+    };
+    const problems = announcementProblems(out);
+    const problem = problems.message ?? problems.dates;
+    if (problem) throw new SettingsError(`${at}: ${problem}`);
+    return out;
+  });
+}
+
 function preferences(raw: Record<string, unknown>, defaults: Preferences): Preferences {
   const optional = (key: keyof Preferences) => {
     const v = raw[key];
@@ -277,11 +329,20 @@ function preferences(raw: Record<string, unknown>, defaults: Preferences): Prefe
     defaultProgramId: optional('defaultProgramId'),
     layout,
     demoToday,
+    dismissedAnnouncements: stringList(
+      raw['dismissedAnnouncements'] ?? defaults.dismissedAnnouncements,
+      'preferences.dismissedAnnouncements',
+    ),
   };
 }
 
 function isObject(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
+}
+
+function stringList(v: unknown, at: string): string[] {
+  if (!Array.isArray(v)) throw new SettingsError(`${at} must be a list.`);
+  return v.map((x, i) => str(x, `${at}[${i}]`));
 }
 
 function str(v: unknown, at: string): string {
