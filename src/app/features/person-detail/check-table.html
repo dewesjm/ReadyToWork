@@ -1,0 +1,67 @@
+@if (rows().length === 0) {
+  <p class="py-4 text-sm opacity-70" data-testid="no-checks">No checks to show.</p>
+} @else {
+  @if (wide()) {
+    <div class="hidden md:block">
+      <table class="table table-sm" data-testid="check-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Reason</th>
+            <th>Due</th>
+            <th>Days left</th>
+            <th>Source</th>
+            <th>Last synced</th>
+            <th>Required by</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of rows(); track r.check.itemId) {
+            <tr [attr.data-item]="r.check.itemId">
+              <td class="font-medium">{{ r.check.itemName }}</td>
+              <td>{{ r.category }}</td>
+              <td><rtw-status-badge [status]="r.check.status" [compact]="true" /></td>
+              <td>{{ r.check.reason }}</td>
+              <td class="whitespace-nowrap">{{ r.due }}</td>
+              <td class="whitespace-nowrap">{{ r.days }}</td>
+              <td>{{ r.source }}</td>
+              <td class="whitespace-nowrap" [attr.title]="r.syncedDate">
+                {{ r.synced }}
+                @if (r.check.stale) {
+                  <span class="badge badge-sm badge-neutral">Out of date</span>
+                }
+              </td>
+              <td>{{ r.requiredBy }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <ul class="flex flex-col gap-2" [class]="wide() ? 'md:hidden' : ''" data-testid="check-cards">
+    @for (r of rows(); track r.check.itemId) {
+      <li class="rounded-box border border-base-300 p-3 text-sm" [attr.data-item]="r.check.itemId">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span class="font-medium">{{ r.check.itemName }}</span>
+          <rtw-status-badge [status]="r.check.status" [compact]="true" />
+        </div>
+        <div class="mt-1">{{ r.check.reason }}</div>
+        @if (r.check.dueDate) {
+          <div class="mt-1 opacity-80">Due {{ r.due }} · {{ r.days }}</div>
+        }
+        <div class="mt-1 opacity-70">
+          {{ r.category }} · {{ r.source }} · synced {{ r.synced.toLowerCase() }}
+          @if (r.check.stale) {
+            <span class="badge badge-sm badge-neutral">Out of date</span>
+          }
+        </div>
+        @if (r.requiredBy) {
+          <div class="mt-1 opacity-80">Required by {{ r.requiredBy }}</div>
+        }
+      </li>
+    }
+  </ul>
+}

@@ -142,3 +142,8 @@
   ready". No Programs tile; problem checks stay in their categories, marked "required by".
 - **M4: categories with nothing tracked show a greyed "Nothing tracked" tile** (user), with no
   status color, so all 8 tiles line up and it's never read as Unknown.
+- **Checks show as a table only on the wide person page.** The dashboard panel and phones get
+  stacked cards with the same facts, since nine columns don't fit in a narrow column.
+- **Dates read "Dec 1, 2026"**, days left as "12 days" / "Today" / "3 days overdue", and last
+  sync as "Today" / "Yesterday" / "9 days ago" (relative to the demo date). Source systems get
+  display names from a config table (`SOURCE_LABELS`).

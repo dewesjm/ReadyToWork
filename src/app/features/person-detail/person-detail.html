@@ -1,0 +1,104 @@
+@if (view(); as v) {
+  <article class="flex flex-col gap-4" [attr.data-person]="v.person.id">
+    <header class="flex flex-col gap-2">
+      @if (v.chain.length > 0) {
+        <nav class="breadcrumbs py-0 text-sm" aria-label="Manager chain">
+          <ul>
+            @for (link of v.chain; track link.person.id) {
+              <li>
+                @if (link.canOpen) {
+                  @let target = personLink(link.person.id);
+                  <a
+                    [routerLink]="target.commands"
+                    [queryParams]="target.queryParams"
+                    [queryParamsHandling]="target.merge ? 'merge' : ''"
+                    [replaceUrl]="target.merge"
+                    [attr.data-chain]="link.person.id"
+                  >
+                    {{ link.person.name }}
+                  </a>
+                } @else {
+                  <span class="opacity-70" [attr.data-chain]="link.person.id">{{ link.person.name }}</span>
+                }
+              </li>
+            }
+          </ul>
+        </nav>
+      }
+
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <div
+          role="heading"
+          [attr.aria-level]="mode() === 'page' ? 1 : 2"
+          class="font-semibold"
+          [class]="mode() === 'page' ? 'text-2xl' : 'text-xl'"
+          data-testid="person-name"
+        >
+          {{ v.person.name }}
+        </div>
+        <rtw-status-badge [status]="v.status" />
+      </div>
+      <div class="text-sm opacity-80">{{ v.person.title }} · {{ v.person.employeeId }}</div>
+
+      @if (v.programs.length > 0) {
+        <ul class="flex flex-wrap gap-1" aria-label="Programs">
+          @for (p of v.programs; track p.program.id) {
+            <li class="badge gap-1" [class]="badgeClass(p.status)" [attr.data-program]="p.program.id">
+              <rtw-icon [name]="statusMeta[p.status].icon" class="size-3" />
+              {{ p.program.name }}: {{ statusMeta[p.status].label }}
+            </li>
+          }
+        </ul>
+      }
+    </header>
+
+    <section aria-label="Categories">
+      <rtw-category-tiles [tiles]="v.tiles" [(selected)]="category" />
+    </section>
+
+    <section class="flex flex-col gap-2">
+      <div class="flex flex-wrap items-center gap-2">
+        <div role="heading" [attr.aria-level]="mode() === 'page' ? 2 : 3" class="font-semibold">
+          {{ category() ? categoryLabel() + ' checks' : 'All checks' }}
+          <span class="font-normal opacity-70">({{ checks().length }})</span>
+        </div>
+        @if (category()) {
+          <button type="button" class="btn btn-ghost btn-xs" (click)="category.set(null)">
+            <rtw-icon name="x" />
+            Show all
+          </button>
+        }
+      </div>
+      <rtw-check-table
+        [checks]="checks()"
+        [today]="today()"
+        [programNames]="programNames()"
+        [wide]="mode() === 'page'"
+      />
+    </section>
+
+    @if (v.responsibleFor; as r) {
+      <section class="flex flex-col gap-2 rounded-box border border-base-300 p-3" data-testid="responsible-for">
+        <div role="heading" [attr.aria-level]="mode() === 'page' ? 2 : 3" class="font-semibold">Responsible for</div>
+        <p class="text-sm">
+          {{ r.directReports }} direct {{ r.directReports === 1 ? 'report' : 'reports' }},
+          {{ r.rollup.total }} {{ r.rollup.total === 1 ? 'person' : 'people' }} in total.
+        </p>
+        <rtw-rollup-badge [rollup]="r.rollup" />
+        <a
+          class="link text-sm"
+          data-testid="view-tree"
+          [routerLink]="['/readiness']"
+          [queryParams]="{ sup: v.person.id }"
+          [queryParamsHandling]="mode() === 'panel' ? 'merge' : ''"
+        >
+          View the tree from {{ firstName(v.person.name) }}
+        </a>
+      </section>
+    }
+  </article>
+} @else {
+  <div class="py-8 text-center" data-testid="not-available">
+    <p>This person isn't in your view, or doesn't exist.</p>
+  </div>
+}
