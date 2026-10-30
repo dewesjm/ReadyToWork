@@ -18,3 +18,18 @@
 - **Both layouts in the demo** (Dashboard and Drill-down), switchable, so users can choose.
 - **Grey (unknown) ranks above green** when picking a person's worst status, so missing data
   never looks like "all good."
+- **Hosted on Vercel** (user). Static site with clean URLs; `vercel.json` rewrites every path
+  to `index.html` so deep links work.
+- **Brand colors navy, white and gold** (user). Custom daisyUI theme as the default, plus a
+  dark navy variant. Gold stays distinct from the amber "Expiring" color so status is never
+  confused with branding.
+- **Theme picker in an avatar menu** (user). Top-right button showing the viewer's initials;
+  the menu lists the brand themes and all daisyUI built-in themes.
+- **Code is a reference, not a starting point for the team's pipeline** (user). The mockup is
+  for validating with business users; the team is not expected to reuse the code directly, so
+  stock Angular CLI defaults are kept rather than matching the team's pipeline templates.
+- **Angular 21 instead of 22.** Every Angular 22 release needs Node 24.15 or newer; the dev
+  machine has 24.14.1. The user left the choice to Claude. Angular 21 runs on the current Node
+  with no system change, and the version difference doesn't show in a mockup.
+- **Scaffold defaults**: Angular CLI's Tailwind option (PostCSS), Vitest, zoneless, no SSR,
+  component prefix `rtw`, 2025 file naming (`app.ts`, not `app.component.ts`).

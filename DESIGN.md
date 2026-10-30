@@ -162,9 +162,17 @@ src/
 
 ### Stack
 
-- **Angular 22** (current CLI), standalone components, signals for state.
+- **Angular 21**, standalone components, zoneless, signals for state. (Angular 22 needs a
+  newer Node than the dev machine has; 21 is fine for a mockup.)
 - **Tailwind CSS 4 + daisyUI 5** for styling. daisyUI's `success` / `warning` / `error` /
-  `neutral` colors map to the four statuses. Light and dark themes.
+  `neutral` colors map to the four statuses.
+- **Themes**: a custom brand theme (navy, white, gold) is the default, with a dark navy
+  variant. An avatar button at the top right shows the current viewer's initials; clicking it
+  opens a menu to pick the brand themes or any of daisyUI's built-in themes. The choice is
+  saved in the browser. Brand gold is kept clearly different from the yellow/amber "Expiring"
+  status color.
+- **Hosting**: Vercel, as a static site. Clean URLs, with a `vercel.json` rewrite sending every
+  path to `index.html` so deep links and refreshes work.
 - **PWA**: `@angular/pwa` (service worker plus manifest). The app is fully static, so it works
   offline and can be installed.
 - **Tests**: Angular's default Vitest runner. The core logic is tested; screens get a few
@@ -191,7 +199,7 @@ A small panel (toggle with a button or keyboard shortcut) for the presenter:
 - **View as**: switch between a sample foreman, superintendent, director and admin. Shows
   subtree scoping and the admin screens without a real login.
 - **Layout**: Dashboard or Drill-down.
-- **Theme**: light or dark.
+- **Theme**: lives in the avatar menu at the top right (see section 6, Stack), not here.
 - **Reset**: restores default settings and the default date.
 
 ## 9. Out of scope for the mockup
@@ -209,7 +217,8 @@ One milestone at a time. Each has a "Done when" line as its acceptance check.
 
 **M0. Setup.** Angular project, Tailwind + daisyUI, PWA, Vitest, folder layout, app shell
 with routing and empty pages.
-Done when: `npm start` serves an installable app shell with themed placeholder pages, and
+Done when: `npm start` serves an installable app shell with themed placeholder pages and the
+avatar theme menu, and
 `npm test` and `npm run build` pass.
 
 **M1. Core logic.** Model types, status engine, worst-status rule, roll-ups, program-rule
@@ -239,7 +248,7 @@ Done when: the list matches the checks behind the tree, for every view-as person
 Done when: adding a requirement to a program turns the right people red immediately, and the
 settings survive a reload and an export/import round trip.
 
-**M7. Demo controls.** Today, view-as, layout, theme, reset.
+**M7. Demo controls.** Today, view-as, layout, reset.
 Done when: moving the date forward turns statuses yellow then red as expected, and each
 persona sees only their own subtree.
 

@@ -12,4 +12,4 @@ Not scaffolded yet (milestone M0). Planned:
 - `npm test` runs the unit tests
 - `npm run build` builds the static PWA into `dist/`
 
-Requires Node 22 or newer.
+Requires Node 22.12 or newer (Angular 21).
