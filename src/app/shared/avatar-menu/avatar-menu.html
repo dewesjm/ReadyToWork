@@ -1,0 +1,63 @@
+<button
+  type="button"
+  class="btn btn-circle btn-accent font-semibold"
+  [attr.aria-expanded]="open()"
+  aria-haspopup="true"
+  aria-controls="avatar-menu-panel"
+  [attr.aria-label]="'Account and theme for ' + viewer.viewer().name"
+  (click)="toggle()"
+>
+  {{ viewer.initials() }}
+</button>
+
+@if (open()) {
+  <div
+    id="avatar-menu-panel"
+    class="absolute right-0 z-50 mt-2 w-72 rounded-box border border-base-300 bg-base-100 text-base-content shadow-lg"
+  >
+    <div class="border-b border-base-300 px-4 py-3">
+      <div class="font-semibold">{{ viewer.viewer().name }}</div>
+      <div class="text-sm opacity-70">{{ viewer.viewer().title }}</div>
+    </div>
+
+    <div class="max-h-96 overflow-y-auto p-2" role="radiogroup" aria-label="Theme">
+      <div class="px-2 pt-1 pb-2 text-xs font-semibold uppercase opacity-60">Brand</div>
+      @for (t of brandThemes; track t.id) {
+        <ng-container *ngTemplateOutlet="option; context: { $implicit: t }" />
+      }
+      <div class="px-2 pt-3 pb-2 text-xs font-semibold uppercase opacity-60">More themes</div>
+      @for (t of builtInThemes; track t.id) {
+        <ng-container *ngTemplateOutlet="option; context: { $implicit: t }" />
+      }
+    </div>
+  </div>
+}
+
+<ng-template #option let-t>
+  <button
+    type="button"
+    role="radio"
+    class="flex w-full items-center gap-3 rounded-field px-2 py-1.5 text-left text-sm hover:bg-base-200 focus-visible:bg-base-200"
+    [attr.aria-checked]="themes.theme() === t.id"
+    [attr.data-theme-option]="t.id"
+    (click)="pick(t.id)"
+  >
+    <span
+      [attr.data-theme]="t.id"
+      class="flex shrink-0 gap-0.5 rounded-selector border border-base-300 bg-base-100 p-1"
+      aria-hidden="true"
+    >
+      <span class="size-2.5 rounded-full bg-primary"></span>
+      <span class="size-2.5 rounded-full bg-secondary"></span>
+      <span class="size-2.5 rounded-full bg-accent"></span>
+      <span class="size-2.5 rounded-full bg-neutral"></span>
+    </span>
+    <span class="grow">{{ t.label }}</span>
+    @if (themes.theme() === t.id) {
+      <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20 6 9 17l-5-5" />
+      </svg>
+    }
+  </button>
+</ng-template>

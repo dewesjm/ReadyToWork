@@ -33,3 +33,8 @@
   with no system change, and the version difference doesn't show in a mockup.
 - **Scaffold defaults**: Angular CLI's Tailwind option (PostCSS), Vitest, zoneless, no SSR,
   component prefix `rtw`, 2025 file naming (`app.ts`, not `app.component.ts`).
+- **Theme stored under `rtw.theme`** in browser storage, applied as `data-theme` on `<html>`.
+  An inline script in `index.html` applies it before Angular starts to avoid a flash of the
+  default theme. Unknown saved values fall back to the brand theme.
+- **Neutral is slate grey in the brand themes** because it doubles as the "Unknown" status
+  color; navy is the primary color instead.

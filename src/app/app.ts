@@ -1,12 +1,9 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { AppShell } from './shared/app-shell/app-shell';
 
 @Component({
   selector: 'rtw-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  imports: [AppShell],
+  template: '<rtw-app-shell />',
 })
-export class App {
-  protected readonly title = signal('ready-to-work');
-}
+export class App {}

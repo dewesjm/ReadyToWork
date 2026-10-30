@@ -4,8 +4,8 @@
 - [x] User reviews DESIGN.md
 - [ ] M0 Setup
   - [x] Scaffold Angular 21 with Tailwind and Vitest
-  - [ ] daisyUI, brand theme, avatar theme menu
-  - [ ] Folder layout, app shell, routes, placeholder pages
+  - [x] daisyUI, brand theme, avatar theme menu
+  - [x] Folder layout, app shell, routes, placeholder pages
   - [ ] PWA (service worker, manifest, icons)
   - [ ] Vercel rewrite config
   - [ ] Check "Done when"
@@ -19,6 +19,10 @@
 - Access and roles: is the concern only missing or expiring roles, or also people holding
   roles they shouldn't (excess access)?
 - Tools: assigned to individuals, crews, or both?
+
+## Follow-ups
+- M2: move the saved theme into SettingsStore with the other demo preferences.
+- M2/M7: avatar initials come from a fixed placeholder viewer until view-as exists.
 
 ## Later (real app, not this mockup)
 - Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)
