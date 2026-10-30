@@ -1,0 +1,103 @@
+import { TestBed } from '@angular/core/testing';
+import { Announcement, createAnnouncement, updateAnnouncement } from '../../../core';
+import { MockDataSource } from '../../../data';
+import { ClockService } from '../../services/clock-service';
+import { SettingsService } from '../../services/settings-service';
+import { DATA_SOURCE } from '../../services/tokens';
+import { loadAppState, reloadAppState } from '../../testing';
+import { AnnouncementBanner } from './announcement-banner';
+
+describe('AnnouncementBanner', () => {
+  beforeEach(loadAppState);
+
+  const settings = () => TestBed.inject(SettingsService);
+  const sample = () => (TestBed.inject(DATA_SOURCE) as MockDataSource).fakeOrg().announcements[0];
+
+  async function render() {
+    const fixture = TestBed.createComponent(AnnouncementBanner);
+    const el = fixture.nativeElement as HTMLElement;
+    const notices = () => [...el.querySelectorAll<HTMLElement>('[data-testid="announcement"]')];
+    const types = () => notices().map((n) => n.dataset['type']);
+    const stable = () => fixture.whenStable();
+    await stable();
+    return { el, notices, types, stable };
+  }
+
+  function post(over: Partial<Announcement>): string {
+    let id = '';
+    settings().update((s) => {
+      const created = createAnnouncement(s.announcements, {
+        type: 'outage', message: 'SAP is down', startsOn: null, endsOn: null, on: true, ...over,
+      });
+      id = created.id;
+      return { ...s, announcements: created.list };
+    });
+    return id;
+  }
+
+  it('shows the sample Delayed notice with its icon, type word and message', async () => {
+    const { notices } = await render();
+    expect(notices().length).toBe(1);
+    expect(notices()[0].textContent).toContain('Delayed');
+    expect(notices()[0].textContent).toContain(sample().message);
+    expect(notices()[0].querySelector('rtw-icon')!.getAttribute('data-icon')).toBe('clock');
+  });
+
+  it('shows outages first, then delays, then info, as soon as they are posted', async () => {
+    const { types, stable } = await render();
+    post({ type: 'info', message: 'New badge readers next week' });
+    post({ type: 'outage' });
+    await stable();
+    expect(types()).toEqual(['outage', 'delayed', 'info']);
+  });
+
+  it('shows a dated notice only from its start day through its end day', async () => {
+    const { types, stable } = await render();
+    const today = TestBed.inject(ClockService).today();
+    post({ startsOn: '2099-01-02', endsOn: '2099-01-03' });
+    await stable();
+    expect(types()).toEqual(['delayed']);
+    TestBed.inject(ClockService).set('2099-01-02');
+    await stable();
+    expect(types()).toEqual(['outage', 'delayed']);
+    TestBed.inject(ClockService).set('2099-01-04');
+    await stable();
+    expect(types()).toEqual(['delayed']);
+    expect(today < '2099-01-02').toBe(true);
+  });
+
+  it('lets the viewer close a Delayed notice, remembers it, and shows it again after an edit', async () => {
+    const { el, notices, stable } = await render();
+    el.querySelector<HTMLButtonElement>('[data-testid="dismiss"]')!.click();
+    await stable();
+    expect(notices().length).toBe(0);
+
+    await reloadAppState();
+    await stable();
+    expect(notices().length).toBe(0);
+
+    settings().update((s) => ({
+      ...s,
+      announcements: updateAnnouncement(s.announcements, sample().id, { ...sample(), message: 'Now 3 days behind.' }),
+    }));
+    await stable();
+    expect(notices().length).toBe(1);
+    expect(notices()[0].textContent).toContain('Now 3 days behind.');
+  });
+
+  it('has no close button on an outage', async () => {
+    const { notices, stable } = await render();
+    post({ type: 'outage' });
+    await stable();
+    const outage = notices().find((n) => n.dataset['type'] === 'outage')!;
+    expect(outage.querySelector('[data-testid="dismiss"]')).toBeNull();
+    expect(notices().find((n) => n.dataset['type'] === 'delayed')!.querySelector('[data-testid="dismiss"]')).not.toBeNull();
+  });
+
+  it('hides notices that are turned off', async () => {
+    const { notices, stable } = await render();
+    settings().update((s) => ({ ...s, announcements: s.announcements.map((a) => ({ ...a, on: false })) }));
+    await stable();
+    expect(notices().length).toBe(0);
+  });
+});

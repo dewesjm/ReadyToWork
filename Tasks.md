@@ -65,7 +65,7 @@
 - [x] User answers the 5 questions at the end of the announcements plan (all recommended options)
 - [ ] Announcements, steps 1-4 in the plan
   - [x] 1. Core: notices (292 tests)
-  - [ ] 2. The banner
+  - [x] 2. The banner (298 tests)
   - [ ] 3. Admin › Announcements tab
   - [ ] 4. Check and document
 - [ ] M7 plan: demo controls
