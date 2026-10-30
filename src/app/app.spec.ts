@@ -2,6 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { App } from './app';
 import { routes } from './app.routes';
+import { ViewerService } from './services/viewer-service';
+import { loadAppState } from './testing';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -9,6 +11,7 @@ describe('App', () => {
       imports: [App],
       providers: [provideRouter(routes)],
     }).compileComponents();
+    await loadAppState();
   });
 
   it('renders the brand, main navigation and the viewer initials', async () => {
@@ -21,6 +24,9 @@ describe('App', () => {
       a.textContent?.trim(),
     );
     expect(links).toEqual(['Readiness', 'Admin']);
-    expect(el.querySelector('rtw-avatar-menu button')?.textContent?.trim()).toBe('DA');
+    expect(el.querySelector('rtw-avatar-menu button')?.textContent?.trim()).toBe(
+      TestBed.inject(ViewerService).initials(),
+    );
+    expect(TestBed.inject(ViewerService).initials()).not.toBe('?');
   });
 });

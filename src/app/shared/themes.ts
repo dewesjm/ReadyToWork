@@ -7,9 +7,6 @@ export interface ThemeOption {
 
 export const DEFAULT_THEME = 'navy';
 
-/** Key used in browser storage. Also read by the inline script in index.html. */
-export const THEME_STORAGE_KEY = 'rtw.theme';
-
 export const BRAND_THEMES: readonly ThemeOption[] = [
   { id: 'navy', label: 'Navy & Gold' },
   { id: 'navy-dark', label: 'Navy & Gold (dark)' },

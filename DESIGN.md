@@ -158,6 +158,11 @@ data/             DataSource interface      → MockDataSource (seeded fake org)
 - **`SettingsStore`** loads and saves admin settings (programs, requirements, assignments,
   thresholds) and demo preferences. The mockup uses browser storage with a `schemaVersion`
   field so later builds can upgrade older saved settings. The real app swaps it for an API.
+- **Wiring**: `DATA_SOURCE`, `SETTINGS_STORE` and `CLOCK` are Angular injection tokens in
+  `src/app/services/tokens.ts` that default to the mock implementations. App services
+  (`SettingsService`, `ClockService`, `ReadinessService`, `ViewerService`, `ThemeService`) expose
+  everything as signals; `ReadinessService.result` recalculates whenever data, settings or the
+  demo date change. Data and settings load before the first screen renders.
 - **Settings live in each viewer's own browser.** Someone opening the link sees the shipped
   defaults, not the presenter's edits. That is what export/import is for.
 - **The fake people and checks are generated, not stored**: the same seed always gives the

@@ -97,3 +97,11 @@
   Imports are checked field by field with readable errors; missing sections fall back to
   defaults; older files are upgraded one version at a time through a migrations table.
   Unreadable saved data falls back to defaults rather than breaking the app.
+- **Swappable seams are injection tokens with mock defaults** (`DATA_SOURCE`, `SETTINGS_STORE`,
+  `CLOCK`, `DEFAULT_SETTINGS`). The real app overrides them in `app.config.ts`; services and
+  screens don't change.
+- **The demo date override is a saved preference** (`demoToday`), so a presenter's moved date
+  survives a reload; Reset clears it. The theme is now a saved preference too (the separate
+  `rtw.theme` key is gone).
+- **Default persona is the Foreman** (first in the list), so the app opens as a foreman would
+  see it.

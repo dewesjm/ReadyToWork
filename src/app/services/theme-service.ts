@@ -1,44 +1,24 @@
-import { DOCUMENT, Injectable, inject, signal } from '@angular/core';
-import { ALL_THEMES, DEFAULT_THEME, THEME_STORAGE_KEY } from '../shared/themes';
+import { DOCUMENT, Injectable, computed, effect, inject } from '@angular/core';
+import { ALL_THEMES, DEFAULT_THEME } from '../shared/themes';
+import { SettingsService } from './settings-service';
 
-/**
- * Current daisyUI theme, applied as `data-theme` on <html> and remembered in browser storage.
- * TODO(M2): store through SettingsStore with the other demo preferences.
- */
+/** Current daisyUI theme, kept in settings and applied as `data-theme` on <html>. */
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly document = inject(DOCUMENT);
-  private readonly current = signal(this.load());
+  private readonly settings = inject(SettingsService);
 
-  readonly theme = this.current.asReadonly();
+  readonly theme = computed(() => {
+    const saved = this.settings.preferences().theme;
+    return isKnownTheme(saved) ? saved : DEFAULT_THEME;
+  });
 
   constructor() {
-    this.apply(this.current());
+    effect(() => this.document.documentElement.setAttribute('data-theme', this.theme()));
   }
 
   set(id: string): void {
-    if (!isKnownTheme(id)) return;
-    this.current.set(id);
-    this.apply(id);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, id);
-    } catch {
-      // Storage blocked (private mode, policy): the theme still applies for this visit.
-    }
-  }
-
-  private load(): string {
-    try {
-      const saved = localStorage.getItem(THEME_STORAGE_KEY);
-      if (saved && isKnownTheme(saved)) return saved;
-    } catch {
-      // Fall through to the default.
-    }
-    return DEFAULT_THEME;
-  }
-
-  private apply(id: string): void {
-    this.document.documentElement.setAttribute('data-theme', id);
+    if (isKnownTheme(id)) this.settings.updatePreferences({ theme: id });
   }
 }
 

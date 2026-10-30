@@ -11,8 +11,8 @@
     <script>
       // Apply the saved theme before Angular starts, so there is no flash of the default theme.
       try {
-        var t = localStorage.getItem('rtw.theme');
-        if (t && /^[a-z-]+$/.test(t)) document.documentElement.setAttribute('data-theme', t);
+        var t = JSON.parse(localStorage.getItem('rtw.settings')).preferences.theme;
+        if (/^[a-z-]+$/.test(t)) document.documentElement.setAttribute('data-theme', t);
       } catch (e) {}
     </script>
     <link rel="manifest" href="manifest.webmanifest" />

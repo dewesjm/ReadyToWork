@@ -11,11 +11,9 @@
 - [x] Decide scope picker: supervisor + program pick lists (trial), keyword search, defaults in
   avatar menu Preferences
 - [x] M2 plan reviewed (fake dates relative to the real date)
-- [ ] M2 Fake data and storage
-  - [x] DataSource and Clock interfaces, DemoClock, seeded random
-  - [x] Fake org generator, catalog, programs, planted scenarios, MockDataSource
-  - [x] Settings, LocalSettingsStore (schema version, export/import, reset)
-  - [ ] Angular wiring: providers, ReadinessService, theme and persona via settings
+- [x] M2 Fake data and storage (seeded org, MockDataSource, settings store, Angular wiring;
+  110 tests)
+- [ ] M3 Readiness page (toolbar + tree view): plan for review
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
@@ -31,8 +29,8 @@
 - Design table lists "Program requirements" as a category; in the core, program checks live in
   the required item's own category (with "required by"). Decide in M4 whether the person
   summary strip also shows a Programs tile.
-- M2: move the saved theme into SettingsStore with the other demo preferences.
-- M2/M7: avatar initials come from a fixed placeholder viewer until view-as exists.
+- M7: the persona can only change in code/settings until the View-as control exists (default
+  is the Foreman persona).
 
 ## Later (real app, not this mockup)
 - Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)

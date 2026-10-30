@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { ThemeService } from '../../services/theme-service';
+import { ViewerService } from '../../services/viewer-service';
+import { loadAppState } from '../../testing';
 import { ALL_THEMES } from '../themes';
 import { AvatarMenu } from './avatar-menu';
 
 describe('AvatarMenu', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(loadAppState);
 
   async function setup() {
     const fixture = TestBed.createComponent(AvatarMenu);
@@ -16,14 +18,16 @@ describe('AvatarMenu', () => {
 
   it('shows initials and opens the theme list on click', async () => {
     const { fixture, el, toggle } = await setup();
-    expect(toggle.textContent?.trim()).toBe('DA');
+    const viewer = TestBed.inject(ViewerService).viewer()!;
+    expect(toggle.textContent?.trim()).toBe(TestBed.inject(ViewerService).initials());
+    expect(toggle.textContent?.trim()).toMatch(/^[A-Z]{2}$/);
     expect(el.querySelector('[role="radiogroup"]')).toBeNull();
 
     toggle.click();
     await fixture.whenStable();
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
     expect(el.querySelectorAll('[role="radio"]').length).toBe(ALL_THEMES.length);
-    expect(el.textContent).toContain('Demo Admin');
+    expect(el.textContent).toContain(viewer.name);
   });
 
   it('picks a theme and marks it checked', async () => {
