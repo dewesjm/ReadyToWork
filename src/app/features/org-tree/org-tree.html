@@ -10,7 +10,7 @@
     }
   </div>
 } @else {
-  <div role="tree" aria-label="Reporting tree" class="flex flex-col gap-0.5">
+  <div role="tree" aria-label="Reporting tree" class="flex flex-col gap-0.5" (keydown)="onKeydown($event)">
     @for (r of rows(); track r.id) {
       <div
         role="treeitem"

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injector, afterNextRender, computed, inject } from '@angular/core';
+import { Component, ElementRef, afterNextRender, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DEFAULT_CONFIG, ReadinessFilter } from '../../../core';
 import { ReadinessService } from '../../services/readiness-service';
@@ -28,7 +28,6 @@ export class OrgTree {
   private readonly readiness = inject(ReadinessService);
   private readonly router = inject(Router);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly injector = inject(Injector);
   private readonly filter = new ReadinessFilter(DEFAULT_CONFIG.categories);
 
   protected readonly keyword = computed(() => this.query.keyword().trim());
@@ -81,11 +80,51 @@ export class OrgTree {
     void this.router.navigate(['/person', id]);
   }
 
+  /** WAI-ARIA tree keys. Every move lands on a row that is already rendered. */
+  protected onKeydown(event: KeyboardEvent): void {
+    const rows = this.rows();
+    const id = (event.target as HTMLElement).closest<HTMLElement>('[role="treeitem"]')?.dataset['id'];
+    const i = rows.findIndex((r) => r.id === id);
+    if (i < 0) return;
+    const row = rows[i];
+
+    switch (event.key) {
+      case 'ArrowDown':
+        if (i + 1 < rows.length) this.focusRow(rows[i + 1].id);
+        break;
+      case 'ArrowUp':
+        if (i > 0) this.focusRow(rows[i - 1].id);
+        break;
+      case 'ArrowRight':
+        if (row.expandable && !row.expanded) this.tree.setExpanded([row.id], true);
+        else if (row.expandable) this.focusRow(rows[i + 1].id);
+        break;
+      case 'ArrowLeft':
+        if (row.expandable && row.expanded) this.tree.setExpanded([row.id], false);
+        else if (row.parentId !== null) this.focusRow(row.parentId);
+        break;
+      case 'Home':
+        this.focusRow(rows[0].id);
+        break;
+      case 'End':
+        this.focusRow(rows[rows.length - 1].id);
+        break;
+      case 'Enter':
+        this.openPerson(row.id);
+        break;
+      case '*': {
+        const siblings = rows.filter((r) => r.parentId === row.parentId && r.expandable);
+        this.tree.setExpanded(siblings.map((r) => r.id), true);
+        break;
+      }
+      default:
+        return;
+    }
+    event.preventDefault();
+  }
+
   private focusRow(id: string): void {
     this.state.focusedId.set(id);
-    afterNextRender(
-      () => this.host.nativeElement.querySelector<HTMLElement>(`[data-id="${id}"]`)?.focus(),
-      { injector: this.injector },
-    );
+    this.host.nativeElement.querySelector<HTMLElement>(`[role="treeitem"][data-id="${id}"]`)?.focus();
   }
 }

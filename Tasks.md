@@ -20,7 +20,7 @@
   - [x] 2. Core filtering (`ReadinessFilter`, supervisor options, keyword highlight)
   - [x] 3. Query state in the URL and the toolbar
   - [x] 4. Tree view
-  - [ ] 5. Keyboard navigation
+  - [x] 5. Keyboard navigation
   - [ ] 6. Preferences in the avatar menu
   - [ ] 7. Check and document
 
