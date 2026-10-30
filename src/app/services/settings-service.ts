@@ -41,9 +41,11 @@ export class SettingsService {
     return exportSettings(this.current());
   }
 
-  /** Replaces the admin settings from a file. Throws SettingsError on a bad file. */
-  importJson(text: string): void {
-    const imported = importSettings(text, this.defaults(), this.current().preferences);
-    this.update(() => imported);
+  /**
+   * Reads a settings file without applying it: the admin settings from the file with the current
+   * preferences. Throws SettingsError on a bad file.
+   */
+  readFile(text: string): Settings {
+    return importSettings(text, this.defaults(), this.current().preferences);
   }
 }

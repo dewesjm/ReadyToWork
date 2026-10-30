@@ -209,3 +209,9 @@
 - **A warning window applies 400 ms after typing stops**, or at once on Enter or leaving the
   field. A value outside 0 to 3650 whole days shows its reason on the row and changes nothing.
   Typing the default value removes the override, so the settings file only lists real changes.
+- **Import reads the file first, then asks**: "mine.json has 5 programs, 61 assignments, 1
+  warning window. It replaces the current ...". A bad file shows its readable error and changes
+  nothing. Reset also asks, and suggests exporting first.
+- **The exported file is named with the (demo) date**, `ready-to-work-settings-2026-10-30.json`.
+- **A default program that an import or reset removes is cleared** back to All programs, the
+  same as deleting a program.

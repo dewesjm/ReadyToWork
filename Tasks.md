@@ -53,7 +53,7 @@
   - [x] 3. Programs and requirements
   - [x] 4. Program assignments
   - [x] 5. Thresholds
-  - [ ] 6. Settings file
+  - [x] 6. Settings file
   - [ ] 7. Check and document
 
 ## Open questions (user's to decide)

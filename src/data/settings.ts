@@ -90,9 +90,9 @@ export function exportSettings(settings: Settings): string {
 }
 
 /**
- * Parses a settings file. The viewer keeps `preferences` (any in the file are ignored); missing
- * sections come from `defaults`; assignments to programs not in the file are dropped. Throws
- * SettingsError with a readable message.
+ * Parses a settings file. The viewer keeps `preferences` (any in the file are ignored), except a
+ * default program the file doesn't have; missing sections come from `defaults`; assignments to
+ * programs not in the file are dropped. Throws SettingsError with a readable message.
  */
 export function importSettings(text: string, defaults: Settings, preferences: Preferences): Settings {
   let raw: unknown;
@@ -107,16 +107,19 @@ export function importSettings(text: string, defaults: Settings, preferences: Pr
   }
   const parsed = parseSettings(raw, defaults);
   const ids = new Set(parsed.programs.map((p) => p.id));
-  return {
-    ...parsed,
-    assignments: pruneAssignments(parsed.assignments, (id) => ids.has(id)),
-    preferences: { ...preferences },
-  };
+  return withProgramSetup(
+    { ...parsed, preferences: { ...preferences } },
+    { programs: parsed.programs, assignments: pruneAssignments(parsed.assignments, (id) => ids.has(id)) },
+  );
 }
 
-/** Admin settings back to the defaults; the viewer's preferences are kept. */
+/**
+ * Admin settings back to the defaults; the viewer's preferences are kept (a default program
+ * that is gone is cleared, as on import).
+ */
 export function resetAdminSettings(settings: Settings, defaults: Settings): Settings {
-  return { ...structuredClone(defaults), preferences: { ...settings.preferences } };
+  const reset = { ...structuredClone(defaults), preferences: { ...settings.preferences } };
+  return withProgramSetup(reset, reset);
 }
 
 /** Applies edited programs and assignments. A default program that no longer exists is cleared. */

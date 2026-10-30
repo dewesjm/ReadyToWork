@@ -116,6 +116,14 @@ describe('export and import', () => {
     expect(importSettings(text, defaults(), mine).assignments).toEqual({ p1: ['a'] });
   });
 
+  it('clears a default program the file does not have, on import and on reset', () => {
+    const prefs = { ...mine, defaultProgramId: 'prog-night' };
+    const text = JSON.stringify({ schemaVersion: 1, programs: [] });
+    expect(importSettings(text, defaults(), prefs).preferences.defaultProgramId).toBeNull();
+    const withNight = { ...defaults(), preferences: prefs };
+    expect(resetAdminSettings(withNight, defaults()).preferences.defaultProgramId).toBeNull();
+  });
+
   it('rejects files that are not settings, with a readable message', () => {
     const bad = (text: string, message: string) =>
       expect(() => importSettings(text, defaults(), mine)).toThrowError(new SettingsError(message));

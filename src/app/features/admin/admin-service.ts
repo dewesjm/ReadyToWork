@@ -40,6 +40,21 @@ export class AdminService {
 
   edit(change: (settings: Settings) => Settings): void {
     this.settings.update(change);
+    this.markSaved();
+  }
+
+  /** Replaces the admin settings with ones read from a file (`SettingsService.readFile`). */
+  replace(settings: Settings): void {
+    this.edit(() => settings);
+  }
+
+  /** Programs, assignments and warning windows back to the defaults; preferences are kept. */
+  resetAdmin(): void {
+    this.settings.resetAdmin();
+    this.markSaved();
+  }
+
+  private markSaved(): void {
     this.saved.set(true);
     clearTimeout(this.savedTimer);
     this.savedTimer = setTimeout(() => this.saved.set(false), SAVED_NOTE_MS);
