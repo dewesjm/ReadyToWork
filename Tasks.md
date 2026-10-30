@@ -45,7 +45,8 @@
   - [x] 4. Check and document (parity test for all personas; screenshots desktop, panel, 390px phone, light and dark)
 
 - [ ] User checks M5 in the browser
-- [ ] M6 plan: admin
+- [x] M6 plan written: [plans/M6-admin.md](plans/M6-admin.md)
+- [ ] User answers the 5 questions at the end of the M6 plan
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
