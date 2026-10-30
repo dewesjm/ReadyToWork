@@ -1,6 +1,6 @@
 # M3 plan: Readiness page toolbar and tree view
 
-Status: **in progress**. Questions answered 2026-10-30 (all recommended options). Spec: DESIGN.md
+Status: **done** 2026-10-30. Questions answered the same day (all recommended options). Spec: DESIGN.md
 section 5.1. Acceptance ("Done when", DESIGN.md section 10):
 
 > The whole fake org renders, scope pickers, Issues only and keyword search behave as in 5.1,

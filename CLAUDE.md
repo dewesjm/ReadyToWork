@@ -39,4 +39,11 @@ feedback. Read DESIGN.md first; it is the spec and the build plan.
   `"/c/Program Files/Google/Chrome/Application/chrome.exe" --headless=new --disable-gpu
   --window-size=1200,800 --virtual-time-budget=5000 --screenshot=<scratchpad>/x.png <url>`
   and read the PNG.
+- Headless Chrome windows can't go below about 500px wide, so `--window-size=390,...` crops
+  rather than testing phone width. For a real phone viewport, start Chrome with
+  `--remote-debugging-port` and use the DevTools `Emulation.setDeviceMetricsOverride` command
+  (Node 24 has a built-in WebSocket). Run parallel screenshots with separate `--user-data-dir`s.
+- Persona and theme are saved preferences in localStorage (`rtw.settings`), not URL params. To
+  screenshot another persona, serve a copy of the build whose index.html sets that key in a
+  script before the app boots.
 - Git warns "LF will be replaced by CRLF" on every commit; harmless.

@@ -100,7 +100,10 @@ toolbar, so filters carry over when switching.
   be bookmarked or shared, and Back returns to it.
 
 **Tree view**
-- Collapsible, indented reporting tree, scoped to the current viewer.
+- Collapsible, indented reporting tree, scoped to the current viewer. Opens down to the crew
+  leads (crews collapsed) unless Issues only or a search narrows it, which opens every path.
+- Keyboard: the WAI-ARIA tree pattern (arrows, Home / End, Enter opens the person, `*` opens
+  siblings). Focus returns to the same row after Back.
 - Each row: status icon, name, title, small chips for the categories with issues, and for
   managers, a roll-up badge with counts.
 - **Issues only keeps the path**: managers above a person with an issue stay visible so the

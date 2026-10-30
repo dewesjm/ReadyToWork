@@ -14,8 +14,8 @@
     @for (r of rows(); track r.id) {
       <div
         role="treeitem"
-        class="flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 rounded-field py-1.5 pr-2 outline-offset-[-2px] hover:bg-base-200 focus-visible:bg-base-200 focus-visible:outline-2 focus-visible:outline-primary"
-        [style.padding-left.rem]="0.25 + r.depth * 1.25"
+        class="flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 rounded-field py-1.5 pr-2 pl-[calc(0.25rem+var(--depth)*0.75rem)] outline-offset-[-2px] hover:bg-base-200 focus-visible:bg-base-200 focus-visible:outline-2 focus-visible:outline-primary sm:pl-[calc(0.25rem+var(--depth)*1.25rem)]"
+        [style.--depth]="r.depth"
         [class.opacity-60]="r.context"
         [attr.data-id]="r.id"
         [attr.data-context]="r.context || null"
@@ -60,7 +60,7 @@
         </div>
 
         @if (r.chips.length > 0) {
-          <span class="flex flex-wrap gap-1">
+          <span class="flex flex-wrap gap-1 max-sm:ml-8">
             @for (c of r.chips; track c.category) {
               <rtw-category-chip [category]="c.category" [status]="c.status" />
             }
@@ -68,7 +68,7 @@
         }
 
         @if (r.rollup) {
-          <rtw-rollup-badge class="sm:ml-auto" [rollup]="r.rollup" />
+          <rtw-rollup-badge class="max-sm:ml-8 sm:ml-auto" [rollup]="r.rollup" />
         }
       </div>
     }

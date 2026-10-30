@@ -15,14 +15,17 @@
   110 tests)
 - [x] M3 plan written: [plans/M3-readiness-tree.md](plans/M3-readiness-tree.md)
 - [x] User answers the 3 questions at the end of the M3 plan (all recommended options)
-- [ ] M3 Readiness page (toolbar + tree view), steps 1-7 in the plan
+- [x] M3 Readiness page (toolbar + tree view), steps 1-7 in the plan (164 tests)
   - [x] 1. Icons and shared status pieces
   - [x] 2. Core filtering (`ReadinessFilter`, supervisor options, keyword highlight)
   - [x] 3. Query state in the URL and the toolbar
   - [x] 4. Tree view
   - [x] 5. Keyboard navigation
   - [x] 6. Preferences in the avatar menu
-  - [ ] 7. Check and document
+  - [x] 7. Check and document (screenshots: desktop and 390px phone, light and dark)
+
+- [ ] User checks M3 in the browser
+- [ ] M4 plan: person detail and both layouts
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
@@ -38,6 +41,8 @@
 - Design table lists "Program requirements" as a category; in the core, program checks live in
   the required item's own category (with "required by"). Decide in M4 whether the person
   summary strip also shows a Programs tile.
+- M8: the "Ready to Work" brand wraps onto two lines in the header at phone width.
+- M8: context rows are dimmed with opacity; check their contrast in the accessibility pass.
 - M7: the persona can only change in code/settings until the View-as control exists (default
   is the Foreman persona).
 
