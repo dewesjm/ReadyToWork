@@ -184,4 +184,24 @@ describe('Readiness page and toolbar', () => {
     const { shownCount, scopeCount } = query.result();
     expect(byTestId('shown-count').textContent).toBe(`${shownCount} of ${scopeCount} people shown`);
   });
+
+  it('counts checks and people in the list view, and mentions items in the search box', async () => {
+    const { byTestId, query } = await open('/readiness?view=list');
+    const { rows, personCount } = query.listResult();
+    expect(byTestId('shown-count').textContent).toBe(`${rows.length} checks for ${personCount} people`);
+    expect(byTestId<HTMLInputElement>('keyword').placeholder).toBe('Name, title, employee ID or item');
+  });
+
+  it('keeps every parameter when switching between Tree and List', async () => {
+    const sup = someManager().id;
+    const url = `/readiness?issues=all&sup=${sup}&prog=${CRANE_PROGRAM_ID}&cat=tool&status=expiring&direct=1&q=a`;
+    const { button, stable, params } = await open(url);
+    const before = params();
+    button('List').click();
+    await stable();
+    expect(params()).toEqual({ ...before, view: 'list' });
+    button('Tree').click();
+    await stable();
+    expect(params()).toEqual(before);
+  });
 });

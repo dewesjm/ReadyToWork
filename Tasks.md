@@ -41,7 +41,7 @@
 - [ ] M5 List view, steps 1-4 in the plan
   - [x] 1. Core: list rows (shared scope and issue rule, `listChecks`)
   - [x] 2. List component (with focus restore and Show more)
-  - [ ] 3. Toolbar and focus
+  - [x] 3. Toolbar and focus
   - [ ] 4. Check and document
 
 ## Open questions (user's to decide)
