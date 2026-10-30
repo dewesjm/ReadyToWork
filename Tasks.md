@@ -60,6 +60,9 @@
 - [ ] User checks M6 in the browser
 - [x] Remove the Unknown status: three statuses, judged by dates only (user request; 274 tests)
 - [x] Full-width pages; common American fake names (user requests)
+- [x] Announcements plan written (user request: admin banner for outages and delays): [plans/announcements.md](plans/announcements.md)
+- [ ] User answers the 5 questions at the end of the announcements plan
+- [ ] Announcements, steps 1-4 in the plan
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)
