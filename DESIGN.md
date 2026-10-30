@@ -229,7 +229,7 @@ src/
 
 - A seeded random generator builds an org of about **200 people, 5 levels deep**: director →
   managers / superintendents → general foremen → foremen → crew.
-- Believable fake names, titles, employee IDs, devices, tools and training. No real people.
+- Believable fake names (common American first and last names, randomly paired), titles, employee IDs, devices, tools and training. No real people.
 - Default mix: about 73% ready, 18% expiring, 9% not ready, spread unevenly so
   some crews look clearly worse than others.
 - A few **planted scenarios** for the demo script, for example: one crew with a cluster of

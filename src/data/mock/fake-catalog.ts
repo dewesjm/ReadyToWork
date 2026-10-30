@@ -4,22 +4,23 @@ import { CatalogItem } from '../data-source';
 // Invented names and items only. No real people.
 
 export const FIRST_NAMES = [
-  'Alex', 'Avery', 'Bailey', 'Blake', 'Cameron', 'Carmen', 'Casey', 'Dakota', 'Dana', 'Devon',
-  'Drew', 'Elena', 'Emery', 'Finley', 'Gabriel', 'Harper', 'Hayden', 'Imani', 'Jamie', 'Jordan',
-  'Jules', 'Kai', 'Kendall', 'Lane', 'Leslie', 'Logan', 'Marisol', 'Morgan', 'Nico', 'Noel',
-  'Oakley', 'Parker', 'Peyton', 'Quinn', 'Reese', 'Riley', 'Rowan', 'Sage', 'Sam', 'Sasha',
-  'Skyler', 'Taylor', 'Teagan', 'Toby', 'Val', 'Wren', 'Yuki', 'Zion', 'Arjun', 'Bo', 'Chen',
-  'Desmond', 'Farah', 'Ines', 'Kofi', 'Lior', 'Mateo', 'Nadia', 'Omar', 'Priya', 'Ravi', 'Tomas',
+  'James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Joseph', 'Thomas',
+  'Charles', 'Daniel', 'Matthew', 'Anthony', 'Mark', 'Steven', 'Paul', 'Andrew', 'Joshua',
+  'Kevin', 'Brian', 'Ryan', 'Jason', 'Eric', 'Jeffrey', 'Scott', 'Brandon', 'Gregory', 'Tyler',
+  'Kyle', 'Aaron', 'Jacob', 'Nathan', 'Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth',
+  'Susan', 'Jessica', 'Sarah', 'Karen', 'Lisa', 'Nancy', 'Ashley', 'Emily', 'Michelle',
+  'Amanda', 'Melissa', 'Rebecca', 'Laura', 'Amy', 'Angela', 'Megan', 'Rachel', 'Heather',
+  'Nicole', 'Katie', 'Brittany', 'Danielle', 'Kelly', 'Christina', 'Rose', 'Hannah', 'Lauren',
 ];
 
 export const LAST_NAMES = [
-  'Abbott', 'Alvarez', 'Archer', 'Barnes', 'Bell', 'Brennan', 'Calloway', 'Castillo', 'Chandler',
-  'Coleman', 'Dalton', 'Delgado', 'Dunn', 'Ellison', 'Farris', 'Fletcher', 'Garner', 'Hale',
-  'Hartley', 'Holt', 'Ibarra', 'Jansen', 'Keller', 'Kimura', 'Lambert', 'Lowell', 'Maddox',
-  'Marsh', 'Mercer', 'Nakamura', 'Navarro', 'Novak', 'Okafor', 'Osei', 'Pacheco', 'Pruitt',
-  'Quintero', 'Ramsey', 'Reyes', 'Rhodes', 'Salazar', 'Sato', 'Sheridan', 'Sloane', 'Soto',
-  'Strand', 'Tanaka', 'Thorne', 'Underwood', 'Vance', 'Vargas', 'Voss', 'Wade', 'Whitaker',
-  'Winslow', 'Yates', 'Zamora', 'Ziegler', 'Kowalski', 'Lindqvist', 'Mbeki', 'Petrov',
+  'Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Wilson', 'Anderson',
+  'Taylor', 'Thomas', 'Moore', 'Martin', 'Jackson', 'Thompson', 'White', 'Harris', 'Clark',
+  'Lewis', 'Robinson', 'Walker', 'Young', 'Allen', 'King', 'Wright', 'Scott', 'Hill', 'Green',
+  'Adams', 'Baker', 'Nelson', 'Carter', 'Mitchell', 'Roberts', 'Turner', 'Phillips', 'Campbell',
+  'Parker', 'Evans', 'Edwards', 'Collins', 'Stewart', 'Morris', 'Murphy', 'Cook', 'Rogers',
+  'Morgan', 'Cooper', 'Peterson', 'Reed', 'Bailey', 'Kelly', 'Howard', 'Ward', 'Cox', 'Garcia',
+  'Martinez', 'Rodriguez', 'Lopez', 'Hernandez', 'Gonzalez', 'Sullivan', 'Russell', 'Hayes',
 ];
 
 export const TITLES = {

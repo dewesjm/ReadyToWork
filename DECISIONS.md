@@ -227,3 +227,8 @@
   unknown share (now 73% ready) and the grey Yubikey crew scenario, so the demo has no
   out-of-date data; an old `status=unknown` in a URL is ignored. The unused help-circle icon
   went with it.
+- **Pages use the full window width** (user: the grids didn't fill the screen). The main area
+  no longer stops at 1280px; the tree, list and dashboard stretch with the window. Admin forms
+  and explanatory text keep their own narrower widths so fields and lines stay readable.
+- **Fake names are common American first and last names** (user: the earlier mix read as too
+  exotic). Pairs are random, so they are not real people; the seed now gives different names.

@@ -59,6 +59,7 @@
 
 - [ ] User checks M6 in the browser
 - [x] Remove the Unknown status: three statuses, judged by dates only (user request; 274 tests)
+- [x] Full-width pages; common American fake names (user requests)
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)
