@@ -1,6 +1,7 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { Component, ElementRef, computed, inject, signal } from '@angular/core';
 import { supervisorOptions } from '../../../core';
+import { Layout } from '../../../data';
 import { ReadinessService } from '../../services/readiness-service';
 import { SettingsService } from '../../services/settings-service';
 import { ThemeService } from '../../services/theme-service';
@@ -31,6 +32,7 @@ export class AvatarMenu {
 
   private readonly settings = inject(SettingsService);
   private readonly readiness = inject(ReadinessService);
+  protected readonly layout = computed(() => this.settings.preferences().layout);
   protected readonly programs = computed(() => this.settings.settings().programs);
   protected readonly supervisors = computed(() => {
     const v = this.viewer.viewer();
@@ -66,6 +68,10 @@ export class AvatarMenu {
     this.settings.updatePreferences({
       defaultSupervisorId: id === this.viewer.viewer()?.personId ? null : id,
     });
+  }
+
+  setLayout(layout: Layout): void {
+    this.settings.updatePreferences({ layout });
   }
 
   setDefaultProgram(id: string): void {

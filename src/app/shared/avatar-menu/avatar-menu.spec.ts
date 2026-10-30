@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { MockDataSource } from '../../../data';
 import { CRANE_PROGRAM_ID } from '../../../data/mock/fake-catalog';
@@ -109,5 +109,33 @@ describe('AvatarMenu', () => {
     const query = harness.routeDebugElement!.injector.get(ReadinessQueryService);
     expect(query.supervisorId()).toBe(sapForeman);
     expect(query.result().rows[0].person.id).toBe(sapForeman);
+  });
+
+  it('switches the layout, which changes what a tree row click does and survives a reload', async () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([
+          { path: 'readiness', component: Readiness },
+          { path: 'person/:id', component: AvatarMenu },
+        ]),
+      ],
+    });
+    await loadAppState();
+    const { select, choose } = await openPreferences();
+    expect(select('layout').value).toBe('dashboard');
+    await choose('layout', 'drilldown');
+    expect(TestBed.inject(SettingsService).preferences().layout).toBe('drilldown');
+
+    const harness = await RouterTestingHarness.create('/readiness');
+    const row = (harness.routeNativeElement as HTMLElement).querySelector<HTMLElement>('[role="treeitem"]')!;
+    row.click();
+    await harness.fixture.whenStable();
+    expect(TestBed.inject(Router).url).toBe(`/person/${row.dataset['id']}`);
+
+    // The choice is saved: a fresh app load reads it back.
+    TestBed.resetTestingModule();
+    await TestBed.inject(SettingsService).load();
+    expect(TestBed.inject(SettingsService).preferences().layout).toBe('drilldown');
   });
 });

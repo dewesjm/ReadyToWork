@@ -32,7 +32,7 @@
   - [x] 2. Person detail components
   - [x] 3. Drill-down: the person page
   - [x] 4. Dashboard: the side panel
-  - [ ] 5. Layout switch in Preferences
+  - [x] 5. Layout switch in Preferences
   - [ ] 6. Check and document
 
 ## Open questions (user's to decide)

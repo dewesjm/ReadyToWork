@@ -35,6 +35,17 @@
         </select>
       </label>
       <label class="flex flex-col gap-1 text-xs font-medium">
+        Layout
+        <select
+          class="select select-sm w-full"
+          data-testid="layout"
+          (change)="setLayout($any($event.target).value)"
+        >
+          <option value="dashboard" [selected]="layout() === 'dashboard'">Dashboard: person opens beside the tree</option>
+          <option value="drilldown" [selected]="layout() === 'drilldown'">Drill-down: person opens as its own page</option>
+        </select>
+      </label>
+      <label class="flex flex-col gap-1 text-xs font-medium">
         Default program
         <select
           class="select select-sm w-full"
