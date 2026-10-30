@@ -87,8 +87,8 @@ One table of checks, soonest first (overdue at the top), using the same toolbar 
    (a required qualification someone doesn't hold, a lost Yubikey, a revoked role), and grey
    ones often don't either. Today they would sort to the very bottom, below green items.
    - (Recommended) Not ready with no date goes to the top with the overdue items (it blocks
-     work today); unknown with no date goes after everything dated, still above nothing.
-     Within each, worst status first, then item name.
+     work today); unknown with no date goes after everything dated. Within each group, worst
+     status first, then item name.
    - Or: keep every undated check at the bottom.
 2. **With a program picked, which checks should the list show?**
    - (Recommended) The same people as the tree (people on that program) and all of their
