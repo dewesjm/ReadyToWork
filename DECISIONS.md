@@ -48,3 +48,20 @@
   views. View and filters are kept in the URL (`/readiness?view=list&issues=all`).
 - **Issues only defaults to on** (Claude's choice; easy to flip). Opening the page shows only
   what needs attention.
+- **Service-based architecture** (user). Core logic is a set of small service classes
+  (`StatusEngine`, `ProgramRules`, `RollupCalculator`, `OrgIndex`, `ReadinessEvaluator`) that
+  take their config through the constructor and have no Angular imports. Angular wires them
+  up with dependency injection next to `DataSource`, `SettingsStore` and `Clock`. Screens only
+  talk to services.
+- **An item is valid through its expiry date** (user). "Expires Dec 1" is yellow (if inside
+  its warning window) through Dec 1 and red from Dec 2. The warning window is set per
+  category and adjustable.
+- **Expired stays red even when the source data is out of date** (user). Out-of-date data only
+  turns would-be green or yellow items grey, so a known problem never hides as grey.
+- **Program requirements merge into the existing check** (user). If a program requires an item
+  the person already has a check for, that check gets an "also required by" note instead of a
+  second row, so one problem is counted once. A required item the person doesn't hold becomes
+  a red "missing" check in the item's own category.
+- **Dates are 'YYYY-MM-DD' strings with UTC arithmetic**, and "today" is always passed in, so
+  time zones and daylight saving can't shift a status and the demo clock can move today.
+- **Device check-in defaults**: 14 days without a check-in is yellow, 30 is red (config).

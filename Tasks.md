@@ -5,14 +5,19 @@
 - [x] M0 Setup (scaffold, brand themes + avatar menu, shell and routes, PWA, Vercel config)
 - [x] User checks M0 in the browser; colors approved
 - [x] Merge Org tree and Issues into one Readiness page (Tree / List switch, Issues only toggle)
-- [ ] M1 Core logic: plan for review
+- [x] M1 plan reviewed
+- [ ] M1 Core logic
+  - [x] Model types, dates, default config
+  - [ ] StatusEngine (one record to one check)
+  - [ ] ProgramRules (requirements merge into checks)
+  - [ ] OrgIndex, RollupCalculator, ReadinessEvaluator
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
 - Will the demo be presented live, or sent as a link for users to try alone? (A link needs
   more on-screen guidance.)
 - Devices: what makes a device "not ready" for your users (access expiring, not checked in,
-  compliance)? Mockup assumes access expiry plus last check-in.
+  compliance)? Mockup assumes access expiry plus last check-in (14 days yellow, 30 red).
 - Access and roles: is the concern only missing or expiring roles, or also people holding
   roles they shouldn't (excess access)?
 - Tools: assigned to individuals, crews, or both?
