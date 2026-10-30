@@ -1,5 +1,4 @@
 import { Component, ElementRef, afterNextRender, computed, inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { DEFAULT_CONFIG, ReadinessFilter } from '../../../core';
 import { ReadinessService } from '../../services/readiness-service';
 import { Highlight } from '../../shared/highlight';
@@ -7,6 +6,7 @@ import { Icon } from '../../shared/icon/icon';
 import { CategoryChip } from '../../shared/status/category-chip';
 import { RollupBadge } from '../../shared/status/rollup-badge';
 import { StatusBadge } from '../../shared/status/status-badge';
+import { PersonNavigator } from '../readiness/person-navigator';
 import { ReadinessQueryService } from '../readiness/readiness-query-service';
 import { TreeModel } from '../readiness/tree-model';
 import { TreeStateService } from '../readiness/tree-state-service';
@@ -26,7 +26,9 @@ export class OrgTree {
   protected readonly tree = inject(TreeModel);
   private readonly state = inject(TreeStateService);
   private readonly readiness = inject(ReadinessService);
-  private readonly router = inject(Router);
+  private readonly navigator = inject(PersonNavigator);
+  /** The person open in the dashboard panel; that row is the selected one. */
+  protected readonly selectedId = this.navigator.panelPersonId;
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly filter = new ReadinessFilter(DEFAULT_CONFIG.categories);
 
@@ -77,7 +79,7 @@ export class OrgTree {
 
   protected openPerson(id: string): void {
     this.state.focusedId.set(id);
-    void this.router.navigate(['/person', id]);
+    this.navigator.open(id);
   }
 
   /** WAI-ARIA tree keys. Every move lands on a row that is already rendered. */

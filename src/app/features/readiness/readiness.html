@@ -1,9 +1,35 @@
 <rtw-readiness-toolbar class="mb-4 block" />
 
-<div class="rounded-box border border-base-300 bg-base-100 p-2 sm:p-4">
-  @if (query.view() === 'tree') {
-    <rtw-org-tree />
-  } @else {
-    <rtw-issues-list />
+<div class="grid items-start gap-4" [class]="panelId() ? 'lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' : ''">
+  <div class="rounded-box border border-base-300 bg-base-100 p-2 sm:p-4">
+    @if (query.view() === 'tree') {
+      <rtw-org-tree />
+    } @else {
+      <rtw-issues-list />
+    }
+  </div>
+
+  @if (panelId(); as id) {
+    <aside
+      #panel
+      class="sticky top-4 max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-box border border-base-300 bg-base-100 p-4"
+      aria-label="Person detail"
+      data-testid="person-panel"
+      (keydown.escape)="closePanel()"
+    >
+      <div class="mb-2 flex items-center justify-end gap-1">
+        <a class="btn btn-ghost btn-xs" data-testid="open-full-page" [routerLink]="['/person', id]">Open full page</a>
+        <button
+          type="button"
+          class="btn btn-ghost btn-xs btn-square"
+          aria-label="Close person detail"
+          data-testid="close-panel"
+          (click)="closePanel()"
+        >
+          <rtw-icon name="x" />
+        </button>
+      </div>
+      <rtw-person-detail [personId]="id" mode="panel" />
+    </aside>
   }
 </div>

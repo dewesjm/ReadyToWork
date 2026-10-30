@@ -4,6 +4,7 @@ import { Router, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { MockDataSource } from '../../../data';
 import { ReadinessService } from '../../services/readiness-service';
+import { SettingsService } from '../../services/settings-service';
 import { DATA_SOURCE } from '../../services/tokens';
 import { ViewerService } from '../../services/viewer-service';
 import { loadAppState } from '../../testing';
@@ -25,6 +26,7 @@ describe('OrgTree', () => {
       ],
     });
     await loadAppState();
+    TestBed.inject(SettingsService).updatePreferences({ layout: 'drilldown' });
   });
 
   const fakeOrg = () => (TestBed.inject(DATA_SOURCE) as MockDataSource).fakeOrg();

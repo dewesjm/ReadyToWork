@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { ReadinessService } from '../../services/readiness-service';
+import { SettingsService } from '../../services/settings-service';
 import { ViewerService } from '../../services/viewer-service';
 import { loadAppState } from '../../testing';
 import { Readiness } from '../readiness/readiness';
@@ -24,6 +25,7 @@ describe('OrgTree keyboard', () => {
       ],
     });
     await loadAppState();
+    TestBed.inject(SettingsService).updatePreferences({ layout: 'drilldown' });
     TestBed.inject(ViewerService).setPersona('director');
   });
 

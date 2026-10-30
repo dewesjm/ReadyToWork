@@ -147,3 +147,9 @@
 - **Dates read "Dec 1, 2026"**, days left as "12 days" / "Today" / "3 days overdue", and last
   sync as "Today" / "Yesterday" / "9 days ago" (relative to the demo date). Source systems get
   display names from a config table (`SOURCE_LABELS`).
+- **The dashboard's open person is the `person` URL parameter** on the Readiness page, so a
+  link can open someone directly. Someone the viewer can't see is ignored. Clear filters keeps
+  it. Side by side starts at 1024px wide (`DASHBOARD_MIN_WIDTH_PX`).
+- **In the dashboard, arrow keys only move focus; Enter or a click opens the person**, so the
+  panel doesn't change while moving through the tree. Close (or Escape) puts focus back on the
+  person's row.

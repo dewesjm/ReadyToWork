@@ -31,7 +31,7 @@
   - [x] 1. Core: person detail and display wording
   - [x] 2. Person detail components
   - [x] 3. Drill-down: the person page
-  - [ ] 4. Dashboard: the side panel
+  - [x] 4. Dashboard: the side panel
   - [ ] 5. Layout switch in Preferences
   - [ ] 6. Check and document
 

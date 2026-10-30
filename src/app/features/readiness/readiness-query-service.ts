@@ -9,6 +9,7 @@ import {
   ReadinessFilter,
   ReadinessQuery,
   Status,
+  canView,
   supervisorOptions,
 } from '../../../core';
 import { ReadinessService } from '../../services/readiness-service';
@@ -19,7 +20,7 @@ import { READINESS_PAGE_CONFIG } from './readiness-page-config';
 export type ReadinessView = 'tree' | 'list';
 
 /** URL parameters. Defaults are left out so links stay short. */
-type Param = 'view' | 'issues' | 'sup' | 'prog' | 'cat' | 'status' | 'direct' | 'q';
+type Param = 'view' | 'issues' | 'sup' | 'prog' | 'cat' | 'status' | 'direct' | 'q' | 'person';
 
 /**
  * The Readiness page's query, read from and written to the URL so a view can be bookmarked,
@@ -124,6 +125,13 @@ export class ReadinessQueryService {
     });
   });
 
+  /** The person open in the dashboard panel, if the viewer may see them. */
+  readonly personId = computed(() => {
+    const id = this.param('person');
+    const viewer = this.viewer();
+    return id && viewer && canView(this.readiness.result().org, viewer, id) ? id : null;
+  });
+
   /** Any filter Clear filters would reset (scope, view and Issues only are not filters). */
   readonly hasFilters = computed(
     () =>
@@ -181,6 +189,15 @@ export class ReadinessQueryService {
       this.keywordTimer = null;
       this.navigate({ q: text.trim() || null }, true);
     }, READINESS_PAGE_CONFIG.keywordUrlDelayMs);
+  }
+
+  /** Opens a person in the dashboard panel. Replaces the history entry (no Back per person). */
+  openPerson(id: string): void {
+    this.navigate({ person: id }, true);
+  }
+
+  closePerson(): void {
+    this.navigate({ person: null }, true);
   }
 
   clearFilters(): void {
