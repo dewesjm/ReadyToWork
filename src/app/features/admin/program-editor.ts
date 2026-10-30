@@ -25,11 +25,12 @@ import { ConfirmDialog } from '../../shared/confirm-dialog';
 import { Icon } from '../../shared/icon/icon';
 import { RollupBadge } from '../../shared/status/rollup-badge';
 import { AdminService } from './admin-service';
+import { ProgramPeople } from './program-people';
 
-/** One program: rename, requirements (with the picker), live summary, delete. */
+/** One program: rename, requirements (with the picker), people, live summary, delete. */
 @Component({
   selector: 'rtw-program-editor',
-  imports: [RouterLink, ConfirmDialog, Icon, RollupBadge],
+  imports: [RouterLink, ConfirmDialog, Icon, ProgramPeople, RollupBadge],
   template: `
     <a routerLink="/admin/programs" class="btn btn-ghost btn-sm mb-3 -ml-2">
       <rtw-icon name="arrow-left" /> All programs
@@ -141,6 +142,8 @@ import { AdminService } from './admin-service';
             </button>
           }
         </section>
+
+        <rtw-program-people [programId]="p.id" />
 
         <section aria-labelledby="danger-heading" class="border-t border-base-300 pt-4">
           <h2 id="danger-heading" class="sr-only">Delete program</h2>

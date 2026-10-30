@@ -51,7 +51,7 @@
   - [x] 1. Core: admin edits
   - [x] 2. Admin page shell and access (View as in Preferences)
   - [x] 3. Programs and requirements
-  - [ ] 4. Program assignments
+  - [x] 4. Program assignments
   - [ ] 5. Thresholds
   - [ ] 6. Settings file
   - [ ] 7. Check and document

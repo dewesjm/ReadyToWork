@@ -200,3 +200,9 @@
   `src/app/testing.ts`) since jsdom has none.
 - **Admin screens edit settings only through `AdminService`**, which also drives the "Saved"
   note next to the Admin heading.
+- **"Add everyone under" leaves the supervisor off** and adds only people not already on the
+  program; the button says how many ("Add 9 people"). The supervisor can be added by search.
+- **People search on a program shows at most 8 matches** ("Showing 8 of 23 matches. Keep typing
+  to narrow it."), over the whole org since admins see everyone.
+- **Pick lists that are rebuilt on every edit keep their selection** (`linkedSignal` with the
+  previous value) while it is still a choice; otherwise each assignment reset the supervisor.
