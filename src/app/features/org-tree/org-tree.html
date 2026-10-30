@@ -1,0 +1,76 @@
+@if (rows().length === 0) {
+  <div class="flex flex-col items-center gap-3 py-10 text-center" data-testid="empty">
+    @if (query.hasFilters()) {
+      <p>No one matches these filters.</p>
+      <button type="button" class="btn btn-sm" (click)="query.clearFilters()">Clear filters</button>
+    } @else if (query.issuesOnly()) {
+      <p>No issues: everyone here is ready.</p>
+    } @else {
+      <p>No one in this scope.</p>
+    }
+  </div>
+} @else {
+  <div role="tree" aria-label="Reporting tree" class="flex flex-col gap-0.5">
+    @for (r of rows(); track r.id) {
+      <div
+        role="treeitem"
+        class="flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 rounded-field py-1.5 pr-2 outline-offset-[-2px] hover:bg-base-200 focus-visible:bg-base-200 focus-visible:outline-2 focus-visible:outline-primary"
+        [style.padding-left.rem]="0.25 + r.depth * 1.25"
+        [class.opacity-60]="r.context"
+        [attr.data-id]="r.id"
+        [attr.data-context]="r.context || null"
+        [attr.aria-level]="r.depth + 1"
+        [attr.aria-setsize]="r.setSize"
+        [attr.aria-posinset]="r.posInSet"
+        [attr.aria-expanded]="r.expandable ? r.expanded : null"
+        [attr.aria-selected]="r.id === focusId()"
+        [attr.tabindex]="r.id === focusId() ? 0 : -1"
+        (focus)="onFocus(r.id)"
+        (click)="openPerson(r.id)"
+      >
+        <div class="flex min-w-0 items-center gap-2">
+          @if (r.expandable) {
+            <!-- Mouse only; the keyboard uses Right and Left on the row. -->
+            <span
+              class="btn btn-ghost btn-xs btn-square"
+              aria-hidden="true"
+              data-testid="chevron"
+              (click)="toggle(r.id, $event)"
+            >
+              <rtw-icon [name]="r.expanded ? 'chevron-down' : 'chevron-right'" />
+            </span>
+          } @else {
+            <span class="w-6 shrink-0" aria-hidden="true"></span>
+          }
+          <rtw-status-badge [status]="r.status" [compact]="true" />
+          <span class="min-w-0">
+            <rtw-highlight class="font-medium" data-testid="name" [text]="r.person.name" [keyword]="keyword()" />
+            <span class="text-sm opacity-70">
+              · <rtw-highlight [text]="r.person.title" [keyword]="keyword()" />
+            </span>
+            @if (r.showEmployeeId) {
+              <span class="text-sm opacity-70" data-testid="employee-id">
+                · <rtw-highlight [text]="r.person.employeeId" [keyword]="keyword()" />
+              </span>
+            }
+            @if (r.context) {
+              <span class="sr-only">(shown for context)</span>
+            }
+          </span>
+        </div>
+
+        @if (r.chips.length > 0) {
+          <span class="flex flex-wrap gap-1">
+            @for (c of r.chips; track c.category) {
+              <rtw-category-chip [category]="c.category" [status]="c.status" />
+            }
+          </span>
+        }
+
+        @if (r.rollup) {
+          <rtw-rollup-badge class="sm:ml-auto" [rollup]="r.rollup" />
+        }
+      </div>
+    }
+  </div>
+}

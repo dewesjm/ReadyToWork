@@ -125,3 +125,10 @@
   the history entry, so Back doesn't step through every keystroke).
 - **Clear filters** resets categories, statuses, Direct reports only and the keyword. Scope,
   view and Issues only are kept: they are choices of what to look at, not filters.
+- **The tree is a flat list of indented rows** rather than nested components: simpler, and 200
+  rows need no virtual scrolling. A much bigger real org would want virtual scrolling.
+- **Tree expand state is remembered per query** (root-provided `TreeStateService`, not the
+  URL): it survives opening a person and pressing Back, and a new filter starts from the
+  default open state.
+- **Context rows** (managers kept only to show the path) are dimmed and say "shown for
+  context" to screen readers. A matched employee ID is shown on the row only while searching.

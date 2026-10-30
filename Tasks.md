@@ -19,7 +19,7 @@
   - [x] 1. Icons and shared status pieces
   - [x] 2. Core filtering (`ReadinessFilter`, supervisor options, keyword highlight)
   - [x] 3. Query state in the URL and the toolbar
-  - [ ] 4. Tree view
+  - [x] 4. Tree view
   - [ ] 5. Keyboard navigation
   - [ ] 6. Preferences in the avatar menu
   - [ ] 7. Check and document
