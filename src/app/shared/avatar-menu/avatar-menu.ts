@@ -11,7 +11,7 @@ import { BRAND_THEMES, BUILT_IN_THEMES } from '../themes';
 
 /**
  * Top-right button with the viewer's initials; opens a menu with who you are, Preferences
- * (default scope for the Readiness page) and the theme list.
+ * (View as, default scope for the Readiness page, layout) and the theme list.
  */
 @Component({
   selector: 'rtw-avatar-menu',
@@ -32,6 +32,7 @@ export class AvatarMenu {
 
   private readonly settings = inject(SettingsService);
   private readonly readiness = inject(ReadinessService);
+  protected readonly personas = this.readiness.personas;
   protected readonly layout = computed(() => this.settings.preferences().layout);
   protected readonly programs = computed(() => this.settings.settings().programs);
   protected readonly supervisors = computed(() => {
@@ -68,6 +69,10 @@ export class AvatarMenu {
     this.settings.updatePreferences({
       defaultSupervisorId: id === this.viewer.viewer()?.personId ? null : id,
     });
+  }
+
+  setPersona(id: string): void {
+    this.viewer.setPersona(id);
   }
 
   setLayout(layout: Layout): void {

@@ -23,10 +23,18 @@ describe('App', () => {
     const links = [...el.querySelectorAll('nav[aria-label="Main"] a')].map((a) =>
       a.textContent?.trim(),
     );
-    expect(links).toEqual(['Readiness', 'Admin']);
+    expect(links).toEqual(['Readiness']);
     expect(el.querySelector('rtw-avatar-menu button')?.textContent?.trim()).toBe(
       TestBed.inject(ViewerService).initials(),
     );
     expect(TestBed.inject(ViewerService).initials()).not.toBe('?');
+  });
+
+  it('shows the Admin link only to the admin persona', async () => {
+    TestBed.inject(ViewerService).setPersona('admin');
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const links = [...(fixture.nativeElement as HTMLElement).querySelectorAll('nav[aria-label="Main"] a')];
+    expect(links.map((a) => a.textContent?.trim())).toEqual(['Readiness', 'Admin']);
   });
 });

@@ -9,7 +9,7 @@ import { SettingsService } from '../../services/settings-service';
 import { DATA_SOURCE } from '../../services/tokens';
 import { ThemeService } from '../../services/theme-service';
 import { ViewerService } from '../../services/viewer-service';
-import { loadAppState } from '../../testing';
+import { loadAppState, reloadAppState } from '../../testing';
 import { ALL_THEMES } from '../themes';
 import { AvatarMenu } from './avatar-menu';
 
@@ -64,6 +64,26 @@ describe('AvatarMenu', () => {
     document.body.click();
     await fixture.whenStable();
     expect(el.querySelector('[role="radiogroup"]')).toBeNull();
+  });
+
+  it('switches the persona with View as, and the saved choice survives a reload', async () => {
+    const { fixture, el, toggle } = await setup();
+    toggle.click();
+    await fixture.whenStable();
+    const select = el.querySelector<HTMLSelectElement>('[data-testid="persona"]')!;
+    const personas = TestBed.inject(ViewerService);
+    expect(select.value).toBe('foreman');
+    expect([...select.options].map((o) => o.value)).toEqual(['foreman', 'superintendent', 'director', 'admin']);
+
+    select.value = 'admin';
+    select.dispatchEvent(new Event('change'));
+    await fixture.whenStable();
+    expect(personas.isAdmin()).toBe(true);
+    expect(toggle.textContent?.trim()).toBe(personas.initials());
+
+    TestBed.resetTestingModule();
+    await reloadAppState();
+    expect(TestBed.inject(ViewerService).persona()?.id).toBe('admin');
   });
 
   async function openPreferences() {

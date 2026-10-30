@@ -23,6 +23,18 @@
     <div class="space-y-2 border-b border-base-300 px-4 py-3" data-testid="preferences">
       <div class="text-xs font-semibold uppercase opacity-60">Preferences</div>
       <label class="flex flex-col gap-1 text-xs font-medium">
+        View as (demo)
+        <select
+          class="select select-sm w-full"
+          data-testid="persona"
+          (change)="setPersona($any($event.target).value)"
+        >
+          @for (p of personas(); track p.id) {
+            <option [value]="p.id" [selected]="p.id === viewer.persona()?.id">{{ p.label }}</option>
+          }
+        </select>
+      </label>
+      <label class="flex flex-col gap-1 text-xs font-medium">
         Readiness page opens on people under
         <select
           class="select select-sm w-full"

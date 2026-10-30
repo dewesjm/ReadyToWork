@@ -26,7 +26,7 @@ Acceptance ("Done when", DESIGN.md section 10):
 
 ## What the user sees
 
-The Admin page has four tabs, each its own URL (`/admin/programs`, `/admin/thresholds`,
+The Admin page has three tabs, each its own URL (`/admin/programs`, `/admin/thresholds`,
 `/admin/file`; the program editor is `/admin/programs/:id`), so Back and bookmarks work.
 
 - **Programs**: one card per program: name, its requirements, how many people are on it, and

@@ -133,10 +133,14 @@ toolbar, so filters carry over when switching.
 
 ### 5.3 Admin (admin view only)
 
+Three tabs, each its own URL: Programs (`/admin/programs`, each program at
+`/admin/programs/:id`), Thresholds and Settings file. The Admin link shows only for the admin
+persona; anyone else opening `/admin` is told it is for admins.
+
 - **Programs**: create, rename, delete programs; add and remove requirements from a picker of
   known items per category.
-- **Program assignments**: assign people to programs (search and pick, or assign a whole
-  subtree).
+- **Program assignments**: on each program's page, assign people (search and pick, or add
+  everyone under a supervisor in one go) and remove them one by one.
 - **Thresholds**: warning window in days per category.
 - **Settings file**: export the admin settings (programs, assignments, warning windows) as JSON,
   import a JSON file, reset them to defaults. Each viewer's own preferences (theme, layout,
@@ -235,7 +239,7 @@ A small panel (toggle with a button or keyboard shortcut) for the presenter:
 
 - **Today**: date picker plus "+1 week / +1 month" buttons. Statuses update live.
 - **View as**: switch between a sample foreman, superintendent, director and admin. Shows
-  subtree scoping and the admin screens without a real login.
+  subtree scoping and the admin screens without a real login. Also under Preferences in the avatar menu (from M6).
 - **Layout**: Dashboard or Drill-down.
 - **Theme**: lives in the avatar menu at the top right (see section 6, Stack), not here.
 - **Reset**: restores default settings and the default date.

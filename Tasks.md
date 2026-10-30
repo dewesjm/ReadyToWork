@@ -49,7 +49,7 @@
 - [x] User answers the 5 questions at the end of the M6 plan (all recommended options)
 - [ ] M6 Admin, steps 1-7 in the plan
   - [x] 1. Core: admin edits
-  - [ ] 2. Admin page shell and access (View as in Preferences)
+  - [x] 2. Admin page shell and access (View as in Preferences)
   - [ ] 3. Programs and requirements
   - [ ] 4. Program assignments
   - [ ] 5. Thresholds

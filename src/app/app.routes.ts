@@ -16,7 +16,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     title: 'Admin · Ready to Work',
-    loadComponent: () => import('./features/admin/admin').then((m) => m.Admin),
+    loadChildren: () => import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   {
     path: '**',

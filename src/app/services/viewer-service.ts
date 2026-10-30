@@ -30,6 +30,8 @@ export class ViewerService {
     return { name: person.name, title: person.title, personId: person.id, isAdmin: persona.isAdmin };
   });
 
+  readonly isAdmin = computed(() => this.viewer()?.isAdmin ?? false);
+
   readonly initials = computed(() => {
     const v = this.viewer();
     return v ? initials(v.name) : '?';

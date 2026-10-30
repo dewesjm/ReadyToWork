@@ -9,7 +9,7 @@
   </a>
 
   <nav class="ml-4 flex grow gap-1" aria-label="Main">
-    @for (link of links; track link.path) {
+    @for (link of links(); track link.path) {
       <a
         [routerLink]="link.path"
         routerLinkActive="border-accent!"
