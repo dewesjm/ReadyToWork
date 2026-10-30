@@ -1,6 +1,6 @@
 # M3 plan: Readiness page toolbar and tree view
 
-Status: **planned, waiting for user review** of the questions at the end. Spec: DESIGN.md
+Status: **in progress**. Questions answered 2026-10-30 (all recommended options). Spec: DESIGN.md
 section 5.1. Acceptance ("Done when", DESIGN.md section 10):
 
 > The whole fake org renders, scope pickers, Issues only and keyword search behave as in 5.1,
@@ -108,7 +108,7 @@ A pure `ReadinessFilter` service: given the `ReadinessResult`, assignments, view
   the director (SAP crew yellow, stale crew grey).
 - Update Tasks.md, DECISIONS.md, README.md, DESIGN.md.
 
-## Questions for the user (answer before step 2)
+## Questions for the user (answered: the recommended option each time)
 
 1. **What do the category and status filters do when Issues only is off?**
    - (Recommended) Issues only off shows everyone in scope; the category and status filters

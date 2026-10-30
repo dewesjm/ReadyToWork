@@ -14,8 +14,15 @@
 - [x] M2 Fake data and storage (seeded org, MockDataSource, settings store, Angular wiring;
   110 tests)
 - [x] M3 plan written: [plans/M3-readiness-tree.md](plans/M3-readiness-tree.md)
-- [ ] User answers the 3 questions at the end of the M3 plan
+- [x] User answers the 3 questions at the end of the M3 plan (all recommended options)
 - [ ] M3 Readiness page (toolbar + tree view), steps 1-7 in the plan
+  - [x] 1. Icons and shared status pieces
+  - [ ] 2. Core filtering
+  - [ ] 3. Query state in the URL and the toolbar
+  - [ ] 4. Tree view
+  - [ ] 5. Keyboard navigation
+  - [ ] 6. Preferences in the avatar menu
+  - [ ] 7. Check and document
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)

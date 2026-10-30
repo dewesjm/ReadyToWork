@@ -105,3 +105,16 @@
   `rtw.theme` key is gone).
 - **Default persona is the Foreman** (first in the list), so the app opens as a foreman would
   see it.
+- **M3: category and status filters only apply with Issues only on** (user). They define what
+  counts as an issue ("Issues only, for SAP, not ready"); with Issues only off everyone in scope
+  is shown and the filters are disabled.
+- **M3: manager roll-ups always count everyone below** (user), whatever is filtered, so the
+  numbers are always true. Filters only change which rows show.
+- **M3: the tree opens down to foremen** (user) when Issues only is off and there is no search:
+  managers of managers start expanded, crews start collapsed. Issues only and keyword search
+  open every path to what they show.
+- **Icons are inline SVG copied from Lucide** (ISC), kept as data in
+  `src/app/shared/icon/icons.ts`. No icon package dependency.
+- **Category chips and roll-ups keep color + icon + text**: a chip shows the category icon and
+  label plus the status icon, with the status as screen-reader text and tooltip. Roll-ups list
+  counts worst first ("2 not ready, 3 expiring, 18 ready") and hide zero counts.
