@@ -22,6 +22,8 @@ Vercel, as a static site. `vercel.json` sets the build output folder, rewrites e
 
 ## Layout
 
+- `plans/`: one plan per milestone, written before it is built
+
 - `src/core/`: plain TypeScript domain logic (no Angular), unit tested
 - `src/data/`: `DataSource`, `SettingsStore`, `Clock` and their mock implementations
 - `src/app/features/`: screens (readiness page with tree and list views, person detail, admin)

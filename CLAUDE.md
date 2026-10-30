@@ -25,3 +25,18 @@ feedback. Read DESIGN.md first; it is the spec and the build plan.
 - Tasks.md is the one task list.
 - Write tests alongside the code. Typecheck with `npm run build`.
 - After every change, summarize: files touched, behavior changed, anything unverified.
+
+## Working notes (for a fresh session)
+- Start here: Tasks.md "Now" shows where things stand; milestone plans live in `plans/`.
+- Angular 21 (not 22: the dev machine's Node 24.14 is too old for 22). Tailwind 4 + daisyUI 5.
+- `npm start` (dev server), `npm test -- --watch=false` (Vitest), `npm run build` (typecheck).
+- Run one spec file: `npx ng test --watch=false --include src/path/to/file.spec.ts`.
+- Component and service tests that need data call `loadAppState()` from `src/app/testing.ts`.
+- Fake org facts for tests come from `MockDataSource.fakeOrg()` (`scenarios`, `targets`);
+  don't hard-code generated names.
+- Visual check without a browser tool: `npm run build`, serve with
+  `npx serve -s dist/ready-to-work/browser -l 4321` (background), then
+  `"/c/Program Files/Google/Chrome/Application/chrome.exe" --headless=new --disable-gpu
+  --window-size=1200,800 --virtual-time-budget=5000 --screenshot=<scratchpad>/x.png <url>`
+  and read the PNG.
+- Git warns "LF will be replaced by CRLF" on every commit; harmless.

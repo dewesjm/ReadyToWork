@@ -13,7 +13,9 @@
 - [x] M2 plan reviewed (fake dates relative to the real date)
 - [x] M2 Fake data and storage (seeded org, MockDataSource, settings store, Angular wiring;
   110 tests)
-- [ ] M3 Readiness page (toolbar + tree view): plan for review
+- [x] M3 plan written: [plans/M3-readiness-tree.md](plans/M3-readiness-tree.md)
+- [ ] User answers the 3 questions at the end of the M3 plan
+- [ ] M3 Readiness page (toolbar + tree view), steps 1-7 in the plan
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
