@@ -222,7 +222,9 @@ src/
 - **Hosting**: Vercel, as a static site. Clean URLs, with a `vercel.json` rewrite sending every
   path to `index.html` so deep links and refreshes work.
 - **PWA**: `@angular/pwa` (service worker plus manifest). The app is fully static, so it works
-  offline and can be installed.
+  offline and can be installed. When a newer build has downloaded, a notice at the bottom of
+  every page says "A new version of Ready to Work is available" with Refresh and Later. The
+  app checks for a new build every 15 minutes while open and when its tab comes back into view.
 - **Tests**: Angular's default Vitest runner. The core logic is tested; screens get a few
   smoke tests.
 - No backend, no external calls at runtime.

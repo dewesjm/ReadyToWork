@@ -243,3 +243,11 @@
   the tab order because the row is the tree's one tab stop and Enter on it still opens the
   person. A row with no one under it has nothing to toggle, so clicking it opens the person
   (our default; easy to change to "Details only").
+- **A "new version is available" notice with Refresh** (user request). With the service worker,
+  a plain refresh first shows the cached old build and only downloads the new one in the
+  background, so people think nothing changed; open dashboards may never refresh at all. The
+  notice appears when Angular's service worker reports the new build ready (`VERSION_READY`),
+  so one Refresh loads it. Also shown if the cached app is broken (`unrecoverable`). Later
+  hides it until the next new version. The app checks every 15 minutes (`UPDATE_CONFIG`) and
+  when its tab comes back into view. A toast at the bottom right (centered on phones), not a
+  banner, so it doesn't compete with the coming announcements banner.

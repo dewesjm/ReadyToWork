@@ -60,6 +60,7 @@
 - [ ] User checks M6 in the browser
 - [x] Remove the Unknown status: three statuses, judged by dates only (user request; 274 tests)
 - [x] Full-width pages; common American fake names (user requests)
+- [x] Tree: aligned issue chips; row click expands, Details opens the person; "new version available" notice with Refresh (user requests; 281 tests)
 - [x] Announcements plan written (user request: admin banner for outages and delays): [plans/announcements.md](plans/announcements.md)
 - [ ] User answers the 5 questions at the end of the announcements plan
 - [ ] Announcements, steps 1-4 in the plan
@@ -77,6 +78,8 @@
 
 ## Follow-ups
 - M8: the "Ready to Work" brand wraps onto two lines in the header at phone width.
+- M8: below 640px wide, a tree row's Details button drops onto a line of its own; check it in
+  the phone pass.
 - Demo: ask users whether they miss sorting the list by column (M5 shipped one fixed order).
 - M8: context rows are dimmed with opacity; check their contrast in the accessibility pass.
 - M8: inactive Admin tabs are pale grey, faint in the dark theme; check their contrast.

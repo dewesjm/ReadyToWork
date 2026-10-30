@@ -14,6 +14,8 @@ Requires Node 22.12 or newer (Angular 21).
 
 The service worker only runs in the production build. To try offline/install locally, serve
 the build with an SPA fallback, for example `npx serve -s dist/ready-to-work/browser`.
+After a new deploy, open copies of the app show a "new version is available" notice; Refresh
+loads it.
 
 ## Deploying
 
