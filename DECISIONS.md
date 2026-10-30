@@ -215,3 +215,8 @@
 - **The exported file is named with the (demo) date**, `ready-to-work-settings-2026-10-30.json`.
 - **A default program that an import or reset removes is cleared** back to All programs, the
   same as deleting a program.
+- **"Add everyone under" starts on "Choose a supervisor"** with the button disabled, so one
+  click can't put the whole org on a program (found in the M6 screenshots: it started on the
+  admin, offering "Add 186 people").
+- **On phones, a program's people rows keep one line**: the title truncates and Remove is an
+  icon button (its label stays for screen readers and as a tooltip).

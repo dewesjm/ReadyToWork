@@ -47,14 +47,18 @@
 - [ ] User checks M5 in the browser
 - [x] M6 plan written: [plans/M6-admin.md](plans/M6-admin.md)
 - [x] User answers the 5 questions at the end of the M6 plan (all recommended options)
-- [ ] M6 Admin, steps 1-7 in the plan
+- [x] M6 Admin, steps 1-7 in the plan (276 tests)
   - [x] 1. Core: admin edits
   - [x] 2. Admin page shell and access (View as in Preferences)
   - [x] 3. Programs and requirements
   - [x] 4. Program assignments
   - [x] 5. Thresholds
   - [x] 6. Settings file
-  - [ ] 7. Check and document
+  - [x] 7. Check and document (acceptance test with the fake org; screenshots desktop and
+    390px phone, light and dark; crane candidate turns red in the tree)
+
+- [ ] User checks M6 in the browser
+- [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
@@ -70,6 +74,9 @@
 - M8: the "Ready to Work" brand wraps onto two lines in the header at phone width.
 - Demo: ask users whether they miss sorting the list by column (M5 shipped one fixed order).
 - M8: context rows are dimmed with opacity; check their contrast in the accessibility pass.
+- M8: inactive Admin tabs are pale grey, faint in the dark theme; check their contrast.
+- Demo: ask admins whether "Add everyone under" should be a standing rule (new people under that
+  supervisor join the program) rather than a one-time add.
 
 ## Later (real app, not this mockup)
 - Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)

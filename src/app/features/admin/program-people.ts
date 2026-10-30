@@ -81,6 +81,7 @@ export const PEOPLE_SEARCH_LIMIT = 8;
               data-testid="people-supervisor"
               (change)="supervisorId.set($any($event.target).value)"
             >
+              <option value="" [selected]="supervisorId() === ''">Choose a supervisor</option>
               @for (s of supervisors(); track s.id) {
                 <option [value]="s.id" [selected]="s.id === supervisorId()">{{ s.label }}</option>
               }
@@ -93,7 +94,7 @@ export const PEOPLE_SEARCH_LIMIT = 8;
               (click)="addSubtree()"
             >
               <rtw-icon name="plus" />
-              {{ toAddUnder().length === 0 ? 'All on it' : 'Add ' + countLabel(toAddUnder().length) }}
+              {{ subtreeButtonLabel() }}
             </button>
           </div>
           <p class="text-xs opacity-70">Adds the people there now. Anyone can be removed afterwards.</p>
@@ -104,19 +105,20 @@ export const PEOPLE_SEARCH_LIMIT = 8;
       @if (people().length > 0) {
         <ul class="divide-y divide-base-300 rounded-box border border-base-300 bg-base-100" data-testid="people-list">
           @for (row of people(); track row.person.id) {
-            <li class="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2" [attr.data-person]="row.person.id">
+            <li class="flex items-center gap-2 px-3 py-2 sm:gap-3" [attr.data-person]="row.person.id">
               <span class="min-w-0 grow">
                 <a class="link link-hover font-medium" [routerLink]="['/person', row.person.id]">{{ row.person.name }}</a>
-                <span class="block text-xs opacity-70">{{ row.person.title }} · {{ row.person.employeeId }}</span>
+                <span class="block truncate text-xs opacity-70">{{ row.person.title }} · {{ row.person.employeeId }}</span>
               </span>
-              <rtw-status-badge [status]="row.status" [compact]="true" />
+              <rtw-status-badge class="shrink-0" [status]="row.status" [compact]="true" />
               <button
                 type="button"
-                class="btn btn-ghost btn-xs"
+                class="btn btn-ghost btn-xs shrink-0"
                 [attr.aria-label]="'Remove ' + row.person.name + ' from the program'"
+                [attr.title]="'Remove ' + row.person.name"
                 (click)="remove(row.person)"
               >
-                <rtw-icon name="x" class="size-3" /> Remove
+                <rtw-icon name="x" class="size-3" /><span class="hidden sm:inline">Remove</span>
               </button>
             </li>
           }
@@ -162,11 +164,14 @@ export class ProgramPeople {
     const v = this.viewer.viewer();
     return v ? supervisorChoices(supervisorOptions(this.org(), v), v.personId) : [];
   });
-  /** Kept across edits (each one rebuilds the choices) while it is still one of them. */
+  /**
+   * Starts on "Choose a supervisor" so one click can't add the whole org. Kept across edits
+   * (each one rebuilds the choices) while it is still one of them.
+   */
   protected readonly supervisorId = linkedSignal<{ id: string }[], string>({
     source: this.supervisors,
     computation: (choices, previous) =>
-      previous && choices.some((c) => c.id === previous.value) ? previous.value : (choices[0]?.id ?? ''),
+      previous && choices.some((c) => c.id === previous.value) ? previous.value : '',
   });
 
   /** Everyone below the chosen supervisor (not the supervisor) who isn't on the program yet. */
@@ -175,6 +180,11 @@ export class ProgramPeople {
       .subtree(this.supervisorId(), false)
       .filter((p) => !this.onProgram().has(p.id)),
   );
+  protected readonly subtreeButtonLabel = computed(() => {
+    if (!this.supervisorId()) return 'Add';
+    const n = this.toAddUnder().length;
+    return n === 0 ? 'All on it' : `Add ${this.countLabel(n)}`;
+  });
 
   protected countLabel(n: number): string {
     return `${n.toLocaleString('en-US')} ${n === 1 ? 'person' : 'people'}`;

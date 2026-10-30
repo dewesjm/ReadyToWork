@@ -141,7 +141,9 @@ persona; anyone else opening `/admin` is told it is for admins.
   known items per category.
 - **Program assignments**: on each program's page, assign people (search and pick, or add
   everyone under a supervisor in one go) and remove them one by one.
-- **Thresholds**: warning window in days per category.
+- **Thresholds**: warning window in days per category, applied as you type.
+- Every admin change saves and applies at once (no Save button); a "Saved" note confirms it.
+  Each program shows how many people are on it and how ready they are for it, updating live.
 - **Settings file**: export the admin settings (programs, assignments, warning windows) as JSON,
   import a JSON file, reset them to defaults. Each viewer's own preferences (theme, layout,
   default scope, persona, demo date) stay out of the file and are kept on import and reset.
@@ -239,7 +241,8 @@ A small panel (toggle with a button or keyboard shortcut) for the presenter:
 
 - **Today**: date picker plus "+1 week / +1 month" buttons. Statuses update live.
 - **View as**: switch between a sample foreman, superintendent, director and admin. Shows
-  subtree scoping and the admin screens without a real login. Also under Preferences in the avatar menu (from M6).
+  subtree scoping and the admin screens without a real login. Also under Preferences in the
+  avatar menu (from M6).
 - **Layout**: Dashboard or Drill-down.
 - **Theme**: lives in the avatar menu at the top right (see section 6, Stack), not here.
 - **Reset**: restores default settings and the default date.

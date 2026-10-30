@@ -80,6 +80,9 @@ describe('Program people', () => {
     const { $, stable } = await open();
     const foreman = fake().scenarios.toolCrewForemanId;
     const select = $<HTMLSelectElement>('[data-testid="people-supervisor"]');
+    // Nothing chosen at first, so one click can't add the whole org.
+    expect(select.value).toBe('');
+    expect($<HTMLButtonElement>('[data-testid="add-subtree"]').disabled).toBe(true);
     select.value = foreman;
     select.dispatchEvent(new Event('change'));
     await stable();
