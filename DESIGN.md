@@ -93,7 +93,9 @@ toolbar, so filters carry over when switching.
 - **Keyword search** filters the results already on the page as you type: person name, title
   and employee ID, plus item names in the list view. In the tree, matches keep their manager
   path visible.
-- **Issues only** is on by default. Off shows everyone (tree) or every check (list).
+- **Issues only** is on by default. Off shows everyone (tree) or every check (list). The
+  category and status filters only apply while it is on: they define what counts as an issue.
+- Manager roll-ups always count everyone below them, whatever is filtered.
 - The chosen view and filters are kept in the URL (`/readiness?view=list&...`), so a view can
   be bookmarked or shared, and Back returns to it.
 

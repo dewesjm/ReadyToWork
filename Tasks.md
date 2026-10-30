@@ -17,7 +17,7 @@
 - [x] User answers the 3 questions at the end of the M3 plan (all recommended options)
 - [ ] M3 Readiness page (toolbar + tree view), steps 1-7 in the plan
   - [x] 1. Icons and shared status pieces
-  - [ ] 2. Core filtering
+  - [x] 2. Core filtering (`ReadinessFilter`, supervisor options, keyword highlight)
   - [ ] 3. Query state in the URL and the toolbar
   - [ ] 4. Tree view
   - [ ] 5. Keyboard navigation
