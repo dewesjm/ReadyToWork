@@ -1,0 +1,29 @@
+import { CategoryId, Person, SourceRecord } from '../core';
+
+/** An item admins can pick when adding a program requirement. */
+export interface CatalogItem {
+  category: CategoryId;
+  itemId: string;
+  itemName: string;
+}
+
+/** A sample viewer for the demo's "View as" control. */
+export interface Persona {
+  id: string;
+  label: string;
+  /** The person they are; they see this person's subtree. */
+  personId: string;
+  isAdmin: boolean;
+}
+
+/**
+ * The seam to the real systems. Screens get people and records only through this. The mockup
+ * uses MockDataSource; the real app provides an API-backed one through dependency injection.
+ */
+export interface DataSource {
+  getPeople(): Promise<Person[]>;
+  getRecords(): Promise<SourceRecord[]>;
+  /** Known items per category, for the program requirement picker. */
+  getCatalog(): Promise<CatalogItem[]>;
+  getPersonas(): Promise<Persona[]>;
+}

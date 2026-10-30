@@ -10,7 +10,12 @@
   RollupCalculator, ReadinessEvaluator, check ordering; 73 tests)
 - [x] Decide scope picker: supervisor + program pick lists (trial), keyword search, defaults in
   avatar menu Preferences
-- [ ] M2 Fake data and storage: plan for review
+- [x] M2 plan reviewed (fake dates relative to the real date)
+- [ ] M2 Fake data and storage
+  - [x] DataSource and Clock interfaces, DemoClock, seeded random
+  - [ ] Fake org generator, catalog, programs, planted scenarios, MockDataSource
+  - [ ] Settings, LocalSettingsStore (schema version, export/import, reset)
+  - [ ] Angular wiring: providers, ReadinessService, theme and persona via settings
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)

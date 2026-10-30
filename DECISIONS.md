@@ -77,3 +77,9 @@
 - **Keyword search filters the page's results** (user) instead of jumping to one person:
   names, titles, employee IDs, and item names in the list view.
 - **Default scope lives under Preferences in the avatar menu** (user), next to the theme.
+- **Fake dates are relative to the real date** (user). The generator builds every date from
+  the day the demo is opened, so it looks the same whenever it's shown; the demo clock starts
+  on the real date.
+- **People carry an employee ID** so keyword search can match it.
+- **DataSource and SettingsStore are asynchronous** (Promises), like a real API, so screens
+  don't change when the mock is swapped out.

@@ -11,6 +11,7 @@ export type SourceId = string;
 
 export interface Person {
   id: string;
+  employeeId: string;
   name: string;
   title: string;
   /** Null for the top of the org. */

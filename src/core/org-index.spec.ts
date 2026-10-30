@@ -30,14 +30,14 @@ describe('OrgIndex', () => {
   });
 
   it('treats an unknown manager as a root', () => {
-    const o = new OrgIndex([{ id: 'x', name: 'X', title: '', managerId: 'gone' }]);
+    const o = new OrgIndex([{ id: 'x', employeeId: 'x', name: 'X', title: '', managerId: 'gone' }]);
     expect(ids([...o.roots()])).toEqual(['x']);
   });
 
   it('does not loop forever on a reporting cycle', () => {
     const o = new OrgIndex([
-      { id: 'a', name: 'A', title: '', managerId: 'b' },
-      { id: 'b', name: 'B', title: '', managerId: 'a' },
+      { id: 'a', employeeId: 'a', name: 'A', title: '', managerId: 'b' },
+      { id: 'b', employeeId: 'b', name: 'B', title: '', managerId: 'a' },
     ]);
     expect(ids(o.managerChain('a'))).toEqual(['b']);
     expect(ids(o.subtree('a'))).toEqual(['a', 'b']);
