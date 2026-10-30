@@ -9,7 +9,7 @@
 - [ ] M1 Core logic
   - [x] Model types, dates, default config
   - [x] StatusEngine (one record to one check)
-  - [ ] ProgramRules (requirements merge into checks)
+  - [x] ProgramRules (requirements merge into checks)
   - [ ] OrgIndex, RollupCalculator, ReadinessEvaluator
 
 ## Open questions (user's to decide)
