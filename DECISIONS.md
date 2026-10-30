@@ -187,3 +187,16 @@
   Device check-in limits and source staleness stay in config while the devices question is open.
 - **M6: admin edits save and apply at once**, with no Save button, since the acceptance check
   asks for "immediately" and a draft would mean handling unsaved changes on leaving the page.
+- **Program names are unique ignoring case**, and the id is made from the name when the
+  program is created (`prog-night-shift`, numbered if taken). Renaming keeps the id, so
+  assignments, saved defaults and links survive a rename.
+- **Rename saves on Enter or on leaving the field**; Escape puts the saved name back. A bad name
+  shows its reason under the field and changes nothing.
+- **The requirement picker opens inline** under the requirements, grouped by category with a
+  search box, rather than in a dialog, so the list and the live summary stay in view while
+  adding several items.
+- **Confirmations use a native `<dialog>` (daisyUI `modal`)** through one shared
+  `ConfirmDialog`: Escape and Cancel answer no. Specs stub `showModal` (`stubDialogs()` in
+  `src/app/testing.ts`) since jsdom has none.
+- **Admin screens edit settings only through `AdminService`**, which also drives the "Saved"
+  note next to the Admin heading.

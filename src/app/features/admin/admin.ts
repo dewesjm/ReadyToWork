@@ -1,13 +1,25 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ViewerService } from '../../services/viewer-service';
+import { Icon } from '../../shared/icon/icon';
+import { AdminService } from './admin-service';
 
-/** Admin page: section tabs around the routed section. Only the admin persona gets past the notice. */
+/**
+ * Admin page: section tabs around the routed section, and the "Saved" note after each edit.
+ * Only the admin persona gets past the notice.
+ */
 @Component({
   selector: 'rtw-admin',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, Icon],
   template: `
-    <h1 class="text-2xl font-semibold">Admin</h1>
+    <div class="flex items-center gap-3">
+      <h1 class="text-2xl font-semibold">Admin</h1>
+      <span role="status" class="text-sm text-success" data-testid="saved-note">
+        @if (admin.saved()) {
+          <rtw-icon name="check" class="size-4" /> Saved
+        }
+      </span>
+    </div>
     @if (viewer.isAdmin()) {
       <nav class="tabs tabs-border mt-3 mb-5" aria-label="Admin sections">
         @for (s of sections; track s.path) {
@@ -33,6 +45,7 @@ import { ViewerService } from '../../services/viewer-service';
 })
 export class Admin {
   protected readonly viewer = inject(ViewerService);
+  protected readonly admin = inject(AdminService);
   protected readonly sections = [
     { path: 'programs', label: 'Programs' },
     { path: 'thresholds', label: 'Thresholds' },

@@ -97,4 +97,29 @@ export const ICONS: Record<string, readonly IconShape[]> = {
   x: [['path', 'M18 6 6 18'], ['path', 'm6 6 12 12']],
   check: [['path', 'M20 6 9 17l-5-5']],
   info: [['circle', 12, 12, 10], ['path', 'M12 16v-4'], ['path', 'M12 8h.01']],
+
+  // Admin
+  plus: [['path', 'M5 12h14'], ['path', 'M12 5v14']],
+  'trash-2': [
+    ['path', 'M3 6h18'],
+    ['path', 'M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6'],
+    ['path', 'M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'],
+    ['path', 'M10 11v6'],
+    ['path', 'M14 11v6'],
+  ],
+  'arrow-left': [['path', 'm12 19-7-7 7-7'], ['path', 'M19 12H5']],
+  download: [
+    ['path', 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'],
+    ['path', 'm7 10 5 5 5-5'],
+    ['path', 'M12 15V3'],
+  ],
+  upload: [
+    ['path', 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'],
+    ['path', 'm17 8-5-5-5 5'],
+    ['path', 'M12 3v12'],
+  ],
+  'rotate-ccw': [
+    ['path', 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8'],
+    ['path', 'M3 3v5h5'],
+  ],
 };
