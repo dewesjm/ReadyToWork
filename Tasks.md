@@ -24,8 +24,10 @@
   - [x] 6. Preferences in the avatar menu
   - [x] 7. Check and document (screenshots: desktop and 390px phone, light and dark)
 
-- [ ] User checks M3 in the browser
-- [ ] M4 plan: person detail and both layouts
+- [x] User checks M3 in the browser
+- [x] M4 plan written: [plans/M4-person-detail.md](plans/M4-person-detail.md)
+- [ ] User answers the 5 questions at the end of the M4 plan
+- [ ] M4 Person detail and both layouts, steps 1-6 in the plan
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
