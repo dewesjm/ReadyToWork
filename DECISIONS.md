@@ -237,3 +237,9 @@
   (the depth indent is inside it) and the status badge has a fixed width, so category chips
   start at the same x on every row. When a row is too narrow, the roll-up summary wraps
   first. Phones keep the stacked layout.
+- **A tree row click opens and closes the row; a Details button opens the person** (user: the
+  main click should expand and collapse). The whole row toggles a manager's branch, so the
+  chevron is no longer a separate target. Each row ends with a Details button. It is out of
+  the tab order because the row is the tree's one tab stop and Enter on it still opens the
+  person. A row with no one under it has nothing to toggle, so clicking it opens the person
+  (our default; easy to change to "Details only").

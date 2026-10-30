@@ -131,7 +131,7 @@ describe('AvatarMenu', () => {
     expect(query.result().rows[0].person.id).toBe(sapForeman);
   });
 
-  it('switches the layout, which changes what a tree row click does and survives a reload', async () => {
+  it('switches the layout, which changes where Details opens a person and survives a reload', async () => {
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       providers: [
@@ -149,7 +149,7 @@ describe('AvatarMenu', () => {
 
     const harness = await RouterTestingHarness.create('/readiness');
     const row = (harness.routeNativeElement as HTMLElement).querySelector<HTMLElement>('[role="treeitem"]')!;
-    row.click();
+    row.querySelector<HTMLButtonElement>('[data-testid="details"]')!.click();
     await harness.fixture.whenStable();
     expect(TestBed.inject(Router).url).toBe(`/person/${row.dataset['id']}`);
 

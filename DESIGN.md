@@ -106,8 +106,10 @@ toolbar, so filters carry over when switching.
   leads (crews collapsed) unless Issues only or a search narrows it, which opens every path.
 - Keyboard: the WAI-ARIA tree pattern (arrows, Home / End, Enter opens the person, `*` opens
   siblings). Focus returns to the same row after Back.
-- Each row: status icon, name, title, small chips for the categories with issues, and for
-  managers, a roll-up badge with counts.
+- Each row: status icon, name, title, small chips for the categories with issues (lined up in
+  one column), for managers a roll-up badge with counts, and a Details button.
+- Clicking a manager's row opens or closes it; Details (or Enter) opens the person. Clicking
+  the row of someone with no one under them opens the person.
 - **Issues only keeps the path**: managers above a person with an issue stay visible so the
   structure makes sense; everything else is hidden.
 

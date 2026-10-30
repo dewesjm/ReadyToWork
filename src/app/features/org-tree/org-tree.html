@@ -18,18 +18,13 @@
         [class]="r.id === selectedId() ? 'bg-primary/10 ring-1 ring-primary/40' : ''"
         [attr.tabindex]="r.id === focusId() ? 0 : -1"
         (focus)="onFocus(r.id)"
-        (click)="openPerson(r.id)"
+        (click)="onRowClick(r)"
       >
         <!-- Fixed width from sm up so the chips line up across rows and depths. -->
         <div class="flex min-w-0 items-center gap-2 sm:w-[22rem] sm:shrink-0 sm:pl-[calc(var(--depth)*1.25rem)]">
           @if (r.expandable) {
-            <!-- Mouse only; the keyboard uses Right and Left on the row. -->
-            <span
-              class="btn btn-ghost btn-xs btn-square"
-              aria-hidden="true"
-              data-testid="chevron"
-              (click)="toggle(r.id, $event)"
-            >
+            <!-- The row click toggles; the keyboard uses Right and Left on the row. -->
+            <span class="flex size-6 shrink-0 items-center justify-center" aria-hidden="true" data-testid="chevron">
               <rtw-icon [name]="r.expanded ? 'chevron-down' : 'chevron-right'" />
             </span>
           } @else {
@@ -63,6 +58,19 @@
         @if (r.rollup) {
           <rtw-rollup-badge class="max-sm:ml-8 sm:ml-auto" [rollup]="r.rollup" />
         }
+
+        <!-- Out of the tab order: the row is the one tab stop, and Enter on it opens details. -->
+        <button
+          type="button"
+          class="btn btn-ghost btn-xs"
+          [class.ml-auto]="!r.rollup"
+          tabindex="-1"
+          data-testid="details"
+          [attr.aria-label]="'Details for ' + r.person.name"
+          (click)="openPerson(r.id); $event.stopPropagation()"
+        >
+          Details
+        </button>
       </div>
     }
   </div>

@@ -117,7 +117,7 @@ describe('OrgTree', () => {
     expect(row(crew.id)!.querySelector('[data-testid="employee-id"] mark')!.textContent).toBe(crew.employeeId);
   });
 
-  it('expands and collapses all, and toggles a row with its chevron', async () => {
+  it('expands and collapses all, and toggles a row when it is clicked', async () => {
     const { rows, tree, stable, row, router } = await open('/readiness?issues=all');
     tree.collapseAll();
     await stable();
@@ -125,10 +125,14 @@ describe('OrgTree', () => {
     const rootId = rows()[0].dataset['id']!;
     expect(rows()[0].getAttribute('aria-expanded')).toBe('false');
 
-    row(rootId)!.querySelector<HTMLElement>('[data-testid="chevron"]')!.click();
+    row(rootId)!.click();
     await stable();
     expect(rows().length).toBe(1 + readiness().org.childrenOf(rootId).length);
-    expect(router.url).toBe('/readiness?issues=all'); // the chevron doesn't open the person
+    expect(router.url).toBe('/readiness?issues=all'); // the row click doesn't open the person
+
+    row(rootId)!.click();
+    await stable();
+    expect(rows().length).toBe(1);
 
     tree.expandAll();
     await stable();
@@ -152,11 +156,24 @@ describe('OrgTree', () => {
     expect(rows().length).toBeGreaterThan(0);
   });
 
-  it('opens a person when a row is clicked', async () => {
+  it('opens a person with the Details button, without toggling the row', async () => {
     const { row, stable, router } = await open('/readiness');
     const id = fakeOrg().scenarios.sapCrewForemanId;
-    row(id)!.click();
+    const expanded = row(id)!.getAttribute('aria-expanded');
+    row(id)!.querySelector<HTMLButtonElement>('[data-testid="details"]')!.click();
     await stable();
     expect(router.url).toBe(`/person/${id}`);
+    expect(readiness().org.childrenOf(id).length).toBeGreaterThan(0);
+    expect(expanded).not.toBeNull();
+  });
+
+  it('opens a person with no one under them when their row is clicked', async () => {
+    const { rows, row, tree, stable, router } = await open('/readiness?issues=all');
+    tree.expandAll();
+    await stable();
+    const leaf = rows().find((r) => !r.hasAttribute('aria-expanded'))!.dataset['id']!;
+    row(leaf)!.click();
+    await stable();
+    expect(router.url).toBe(`/person/${leaf}`);
   });
 });

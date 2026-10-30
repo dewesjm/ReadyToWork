@@ -39,16 +39,17 @@ describe('Dashboard layout (side panel)', () => {
     const router = TestBed.inject(Router);
     const stable = () => harness.fixture.whenStable();
     const row = (id: string) => el().querySelector<HTMLElement>(`[role="treeitem"][data-id="${id}"]`)!;
+    const details = (id: string) => row(id).querySelector<HTMLButtonElement>('[data-testid="details"]')!;
     const panel = () => el().querySelector<HTMLElement>('[data-testid="person-panel"]');
     const panelPerson = () => panel()?.querySelector<HTMLElement>('[data-person]')?.dataset['person'];
     const params = () => router.parseUrl(router.url).queryParams;
-    return { harness, el, router, stable, row, panel, panelPerson, params };
+    return { harness, el, router, stable, row, details, panel, panelPerson, params };
   }
 
   it('opens a clicked person in the panel and marks their row selected', async () => {
-    const { row, stable, panel, panelPerson, params, router } = await start();
+    const { details, row, stable, panel, panelPerson, params, router } = await start();
     expect(panel()).toBeNull();
-    row(sapForeman()).click();
+    details(sapForeman()).click();
     await stable();
     expect(router.url.startsWith('/readiness')).toBe(true);
     expect(params()['person']).toBe(sapForeman());
@@ -74,25 +75,25 @@ describe('Dashboard layout (side panel)', () => {
   });
 
   it('switches person without adding history entries', async () => {
-    const { row, stable, panelPerson, router } = await start();
+    const { details, stable, panelPerson, router } = await start();
     const navigate = vi.spyOn(router, 'navigate');
-    row(sapForeman()).click();
+    details(sapForeman()).click();
     await stable();
-    row(toolForeman()).click();
+    details(toolForeman()).click();
     await stable();
     expect(panelPerson()).toBe(toolForeman());
     for (const call of navigate.mock.calls) expect(call[1]?.replaceUrl).toBe(true);
   });
 
   it('closes with the Close button or Escape and returns focus to the row', async () => {
-    const { el, row, stable, panel, params } = await start(`/readiness?issues=all&person=${sapForeman()}`);
+    const { details, el, row, stable, panel, params } = await start(`/readiness?issues=all&person=${sapForeman()}`);
     el().querySelector<HTMLButtonElement>('[data-testid="close-panel"]')!.click();
     await stable();
     expect(panel()).toBeNull();
     expect(params()['person']).toBeUndefined();
     expect((document.activeElement as HTMLElement).dataset['id']).toBe(sapForeman());
 
-    row(sapForeman()).click();
+    details(sapForeman()).click();
     await stable();
     panel()!.querySelector<HTMLElement>('rtw-category-tiles button:not([disabled])')!
       .dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
@@ -131,18 +132,18 @@ describe('Dashboard layout (side panel)', () => {
 
   it('opens the full page on a narrow screen', async () => {
     TestBed.inject(ScreenService).wide.set(false);
-    const { row, stable, router, panel } = await start(`/readiness?issues=all&person=${toolForeman()}`);
+    const { details, stable, router, panel } = await start(`/readiness?issues=all&person=${toolForeman()}`);
     expect(panel()).toBeNull();
-    row(sapForeman()).click();
+    details(sapForeman()).click();
     await stable();
     expect(router.url).toBe(`/person/${sapForeman()}`);
   });
 
   it('never shows the panel in the drill-down layout', async () => {
     TestBed.inject(SettingsService).updatePreferences({ layout: 'drilldown' });
-    const { row, stable, router, panel } = await start(`/readiness?issues=all&person=${toolForeman()}`);
+    const { details, stable, router, panel } = await start(`/readiness?issues=all&person=${toolForeman()}`);
     expect(panel()).toBeNull();
-    row(sapForeman()).click();
+    details(sapForeman()).click();
     await stable();
     expect(router.url).toBe(`/person/${sapForeman()}`);
   });
