@@ -3,7 +3,8 @@
 ## Now
 - [x] User reviews DESIGN.md
 - [x] M0 Setup (scaffold, brand themes + avatar menu, shell and routes, PWA, Vercel config)
-- [ ] User checks M0 in the browser (`npm start`), including the avatar theme menu
+- [x] User checks M0 in the browser; colors approved
+- [x] Merge Org tree and Issues into one Readiness page (Tree / List switch, Issues only toggle)
 - [ ] M1 Core logic: plan for review
 
 ## Open questions (user's to decide)

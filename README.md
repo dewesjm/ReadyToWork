@@ -24,6 +24,6 @@ Vercel, as a static site. `vercel.json` sets the build output folder, rewrites e
 
 - `src/core/`: plain TypeScript domain logic (no Angular), unit tested
 - `src/data/`: `DataSource`, `SettingsStore`, `Clock` and their mock implementations
-- `src/app/features/`: screens (org tree, person detail, issues, admin)
+- `src/app/features/`: screens (readiness page with tree and list views, person detail, admin)
 - `src/app/shared/`: app shell, avatar menu, theme list, shared UI pieces
 - `src/app/services/`: Angular services wrapping core and data

@@ -11,8 +11,7 @@ import { AvatarMenu } from '../avatar-menu/avatar-menu';
 })
 export class AppShell {
   protected readonly links = [
-    { path: '/tree', label: 'Org tree' },
-    { path: '/issues', label: 'Issues' },
+    { path: '/readiness', label: 'Readiness' },
     { path: '/admin', label: 'Admin' },
   ];
 }

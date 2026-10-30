@@ -20,7 +20,7 @@ describe('App', () => {
     const links = [...el.querySelectorAll('nav[aria-label="Main"] a')].map((a) =>
       a.textContent?.trim(),
     );
-    expect(links).toEqual(['Org tree', 'Issues', 'Admin']);
+    expect(links).toEqual(['Readiness', 'Admin']);
     expect(el.querySelector('rtw-avatar-menu button')?.textContent?.trim()).toBe('DA');
   });
 });

@@ -1,22 +1,17 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'tree' },
+  { path: '', pathMatch: 'full', redirectTo: 'readiness' },
   {
-    path: 'tree',
-    title: 'Org tree · Ready to Work',
-    loadComponent: () => import('./features/org-tree/org-tree').then((m) => m.OrgTree),
+    path: 'readiness',
+    title: 'Readiness · Ready to Work',
+    loadComponent: () => import('./features/readiness/readiness').then((m) => m.Readiness),
   },
   {
     path: 'person/:id',
     title: 'Person · Ready to Work',
     loadComponent: () =>
       import('./features/person-detail/person-detail').then((m) => m.PersonDetail),
-  },
-  {
-    path: 'issues',
-    title: 'Issues · Ready to Work',
-    loadComponent: () => import('./features/issues-list/issues-list').then((m) => m.IssuesList),
   },
   {
     path: 'admin',

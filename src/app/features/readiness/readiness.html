@@ -1,0 +1,42 @@
+<div class="mb-4 flex flex-wrap items-center gap-4">
+  <h1 class="mr-auto text-2xl font-semibold">Readiness</h1>
+
+  <label class="flex cursor-pointer items-center gap-2 text-sm font-medium">
+    <input
+      type="checkbox"
+      class="toggle toggle-primary"
+      [checked]="issuesOnly()"
+      (change)="setIssuesOnly($any($event.target).checked)"
+    />
+    Issues only
+  </label>
+
+  <div class="join" role="group" aria-label="View">
+    <button
+      type="button"
+      class="btn join-item btn-sm"
+      [class.btn-primary]="view() === 'tree'"
+      [attr.aria-pressed]="view() === 'tree'"
+      (click)="setView('tree')"
+    >
+      Tree
+    </button>
+    <button
+      type="button"
+      class="btn join-item btn-sm"
+      [class.btn-primary]="view() === 'list'"
+      [attr.aria-pressed]="view() === 'list'"
+      (click)="setView('list')"
+    >
+      List
+    </button>
+  </div>
+</div>
+
+<div class="rounded-box border border-base-300 bg-base-100 p-4">
+  @if (view() === 'tree') {
+    <rtw-org-tree />
+  } @else {
+    <rtw-issues-list />
+  }
+</div>

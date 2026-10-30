@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink],
   template: `
     <h1 class="text-2xl font-semibold">Page not found</h1>
-    <a routerLink="/tree" class="link link-primary mt-2 inline-block">Back to the org tree</a>
+    <a routerLink="/readiness" class="link link-primary mt-2 inline-block">Back to readiness</a>
   `,
 })
 export class NotFound {}

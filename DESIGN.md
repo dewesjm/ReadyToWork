@@ -16,8 +16,8 @@ behind one interface, and the real system integrations are written later (not in
 
 | Who | Main question | What they use most |
 |---|---|---|
-| Foreman | "Who on my crew can't work, or soon can't?" | Issues list, person detail |
-| General foreman / superintendent | "Which crews have problems?" | Org tree with roll-ups, issues-only filter |
+| Foreman | "Who on my crew can't work, or soon can't?" | List view, person detail |
+| General foreman / superintendent | "Which crews have problems?" | Tree view with roll-ups, Issues only |
 | Director / manager | "How ready is my whole org?" | Roll-up counts at the top of the tree |
 | Admin | "What does each program require?" | Admin screens (programs, rules, thresholds) |
 
@@ -75,16 +75,31 @@ Four statuses, always shown as **color plus icon plus text** (never color alone)
 
 ## 5. Screens
 
-### 5.1 Org tree (home)
+### 5.1 Readiness page (home)
 
+One page with two views of the same people, switched with a **Tree / List** control. The tree
+answers "where are the problems?"; the list answers "what do I fix today?". They share one
+toolbar, so filters carry over when switching.
+
+- **Toolbar (shared)**: Tree / List switch, person search, **Issues only** toggle switch,
+  category filter (show only SAP issues, for example), status filter, direct reports vs whole
+  subtree, legend. Tree view adds expand/collapse all.
+- **Issues only** is on by default. Off shows everyone (tree) or every check (list).
+- The chosen view and filters are kept in the URL (`/readiness?view=list&...`), so a view can
+  be bookmarked or shared, and Back returns to it.
+
+**Tree view**
 - Collapsible, indented reporting tree, scoped to the current viewer.
 - Each row: status icon, name, title, small chips for the categories with issues, and for
   managers, a roll-up badge with counts.
-- Toolbar: person search, **issues-only toggle**, category filter (show only people with SAP
-  issues, for example), expand/collapse all, legend.
-- **Issues-only keeps the path**: managers above a person with an issue stay visible so the
+- **Issues only keeps the path**: managers above a person with an issue stay visible so the
   structure makes sense; everything else is hidden.
 - Search jumps to the person, expands the path to them, and opens their detail.
+
+**List view**
+- One table of checks in the viewer's subtree, sorted soonest first (overdue at the top).
+- Columns: person, manager, category, item, status, due date, days remaining.
+- Clicking a row opens that person's detail.
 
 ### 5.2 Person detail
 
@@ -95,15 +110,7 @@ Four statuses, always shown as **color plus icon plus text** (never color alone)
 - **Responsible for**: if they manage people, the roll-up of their subtree and a link to view
   the tree from them.
 
-### 5.3 Issues list
-
-- One table of every non-green check in the viewer's subtree, sorted soonest first (overdue at
-  the top).
-- Columns: person, manager, category, item, status, due date, days remaining.
-- Filters: category, status, direct reports only vs whole subtree.
-- This answers "what do I do today?"; the tree answers "where are the problems?"
-
-### 5.4 Admin (admin view only)
+### 5.3 Admin (admin view only)
 
 - **Programs**: create, rename, delete programs; add and remove requirements from a picker of
   known items per category.
@@ -112,12 +119,12 @@ Four statuses, always shown as **color plus icon plus text** (never color alone)
 - **Thresholds**: warning window in days per category.
 - **Settings file**: export settings as JSON, import a JSON file, reset to defaults.
 
-### 5.5 Two layouts (both shown in the demo)
+### 5.4 Two layouts (both shown in the demo)
 
-- **Dashboard**: tree on the left, the selected person's detail in a panel on the right. One
-  screen.
-- **Drill-down**: tree on its own page; clicking a person opens their own detail page (back
-  button returns to the tree with its state kept).
+- **Dashboard**: the readiness page (tree or list) on the left, the selected person's detail
+  in a panel on the right. One screen.
+- **Drill-down**: the readiness page on its own; clicking a person opens their own detail page
+  (Back returns to the same view with its filters kept).
 
 Switched from the demo controls, so users can say which they prefer. Same components, arranged
 differently.
@@ -125,7 +132,7 @@ differently.
 ## 6. Architecture
 
 ```
-Angular views     tree · person detail · issues list · admin · demo controls
+Angular views     readiness (tree, list) · person detail · admin · demo controls
      │  read through Angular services (dependency injection)
 core/ (plain TS)  model types · status engine · roll-ups · program rules · default config
      │
@@ -155,7 +162,8 @@ src/
   core/          model, status engine, rollups, program rules, default config (no Angular)
   data/          DataSource + MockDataSource, fake-org generator, SettingsStore, Clock
   app/
-    features/    org-tree, person-detail, issues-list, admin, demo-controls
+    features/    readiness (page + toolbar), org-tree, issues-list, person-detail, admin,
+                 demo-controls
     shared/      status badge, category chip, roll-up badge, layout shell
     services/    Angular wrappers that provide data/ implementations and computed state
 ```
@@ -231,18 +239,20 @@ schema version, DemoClock.
 Done when: the same seed always produces the same org with the target status mix and the
 planted scenarios; settings round-trip through storage and export/import.
 
-**M3. Org tree.** Tree with status icons, chips and roll-ups; issues-only with path kept;
-category filter; search; expand/collapse; keyboard navigation.
-Done when: the whole fake org renders, issues-only and search behave as in 5.1, and the tree
-can be fully used from the keyboard.
+**M3. Readiness page: toolbar and tree view.** Shared toolbar (Tree / List switch, search,
+Issues only, filters, state in the URL); tree with status icons, chips and roll-ups; issues
+only with path kept; expand/collapse; keyboard navigation.
+Done when: the whole fake org renders, Issues only and search behave as in 5.1, filters
+survive a reload via the URL, and the tree can be fully used from the keyboard.
 
 **M4. Person detail and both layouts.** Detail panel/page and the Dashboard and Drill-down
 layouts.
 Done when: any person can be opened in both layouts, with manager chain and "responsible for"
 working.
 
-**M5. Issues list.** Sorted, filtered table scoped to the viewer.
-Done when: the list matches the checks behind the tree, for every view-as persona.
+**M5. List view.** Sorted table of checks on the readiness page, using the shared toolbar.
+Done when: the list matches the checks behind the tree for every view-as persona, and
+switching between Tree and List keeps the filters.
 
 **M6. Admin.** Programs, requirements, assignments, thresholds, export/import/reset.
 Done when: adding a requirement to a program turns the right people red immediately, and the
