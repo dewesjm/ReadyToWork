@@ -3,11 +3,17 @@ import { DEFAULT_PROGRAMS } from './mock/fake-catalog';
 import {
   Settings,
   SettingsError,
+  clearWarningDays,
   createDefaultSettings,
+  describeSettings,
   exportSettings,
   importSettings,
   parseSettings,
   readinessConfigFrom,
+  resetAdminSettings,
+  setWarningDays,
+  warningDaysProblem,
+  withProgramSetup,
 } from './settings';
 import { LocalSettingsStore } from './settings-store';
 
@@ -88,27 +94,92 @@ describe('LocalSettingsStore', () => {
 });
 
 describe('export and import', () => {
-  it('round-trips through a settings file', () => {
-    expect(importSettings(exportSettings(edited()), defaults())).toEqual(edited());
+  const mine = { ...defaults().preferences, theme: 'nord', personaId: 'admin' };
+
+  it('round-trips the admin settings through a settings file', () => {
+    expect(importSettings(exportSettings(edited()), defaults(), edited().preferences)).toEqual(edited());
+  });
+
+  it('leaves preferences out of the file and keeps the viewer\'s own on import', () => {
+    const file = JSON.parse(exportSettings(edited()));
+    expect(Object.keys(file)).toEqual(['schemaVersion', 'programs', 'assignments', 'warningDays']);
+    const withPrefs = JSON.stringify({ ...file, preferences: { theme: 'dracula', layout: 'sideways' } });
+    expect(importSettings(withPrefs, defaults(), mine).preferences).toEqual(mine);
+  });
+
+  it('drops assignments to programs the file does not have', () => {
+    const text = JSON.stringify({
+      schemaVersion: 1,
+      programs: [{ id: 'a', name: 'A', requirements: [] }],
+      assignments: { p1: ['a', 'gone'], p2: ['gone'] },
+    });
+    expect(importSettings(text, defaults(), mine).assignments).toEqual({ p1: ['a'] });
   });
 
   it('rejects files that are not settings, with a readable message', () => {
     const bad = (text: string, message: string) =>
-      expect(() => importSettings(text, defaults())).toThrowError(new SettingsError(message));
+      expect(() => importSettings(text, defaults(), mine)).toThrowError(new SettingsError(message));
     bad('not json', 'The file is not valid JSON.');
     bad('[1, 2]', 'Settings must be a JSON object.');
     bad('{"programs": []}', 'Settings are missing a schemaVersion number.');
     bad('{"schemaVersion": 99}', 'These settings are from a newer version (99); this app reads up to 1.');
     bad('{"schemaVersion": 1, "programs": [{"id": "x", "name": 5, "requirements": []}]}', 'programs[0].name must be text.');
     bad('{"schemaVersion": 1, "warningDays": {"tool": -5}}', 'warningDays.tool must be a whole number of days (0 to 3650).');
-    bad('{"schemaVersion": 1, "preferences": {"layout": "sideways"}}', 'preferences.layout must be "dashboard" or "drilldown".');
-    bad('{"schemaVersion": 1, "preferences": {"demoToday": "next week"}}', 'preferences.demoToday must be a date like 2026-10-30.');
   });
 
-  it('fills missing sections and preferences from the defaults', () => {
-    const s = importSettings('{"schemaVersion": 1, "preferences": {"theme": "nord"}}', defaults());
+  it('fills missing sections from the defaults', () => {
+    const s = importSettings('{"schemaVersion": 1, "warningDays": {"tool": 7}}', defaults(), mine);
     expect(s.programs).toEqual(defaults().programs);
+    expect(s.assignments).toEqual(defaults().assignments);
+    expect(s.warningDays).toEqual({ tool: 7 });
+  });
+
+  it('describes what a file holds', () => {
+    expect(describeSettings(edited())).toBe('5 programs, 3 assignments, 1 warning window');
+  });
+});
+
+describe('saved preferences', () => {
+  it('fill in from the defaults and are checked field by field', () => {
+    const s = parseSettings({ schemaVersion: 1, preferences: { theme: 'nord' } }, defaults());
     expect(s.preferences).toEqual({ ...defaults().preferences, theme: 'nord' });
+    const bad = (preferences: object, message: string) =>
+      expect(() => parseSettings({ schemaVersion: 1, preferences }, defaults())).toThrowError(
+        new SettingsError(message),
+      );
+    bad({ layout: 'sideways' }, 'preferences.layout must be "dashboard" or "drilldown".');
+    bad({ demoToday: 'next week' }, 'preferences.demoToday must be a date like 2026-10-30.');
+  });
+});
+
+describe('admin edits on settings', () => {
+  it('resets admin settings and keeps preferences', () => {
+    const reset = resetAdminSettings(edited(), defaults());
+    expect(reset).toEqual({ ...defaults(), preferences: edited().preferences });
+  });
+
+  it('sets and clears a warning window', () => {
+    const s = setWarningDays(defaults(), 'tool', 45);
+    expect(s.warningDays).toEqual({ tool: 45 });
+    expect(clearWarningDays(s, 'tool').warningDays).toEqual({});
+  });
+
+  it('accepts whole days from 0 to 3650 only', () => {
+    expect(warningDaysProblem(0)).toBeNull();
+    expect(warningDaysProblem(3650)).toBeNull();
+    for (const days of [-1, 3651, 1.5, NaN]) {
+      expect(warningDaysProblem(days)).toBe('Enter a whole number of days from 0 to 3650.');
+    }
+  });
+
+  it('clears a default program that was deleted', () => {
+    const s = defaults();
+    s.preferences.defaultProgramId = 'prog-crane';
+    const kept = withProgramSetup(s, { programs: s.programs, assignments: {} });
+    expect(kept.preferences.defaultProgramId).toBe('prog-crane');
+    const gone = withProgramSetup(s, { programs: s.programs.filter((p) => p.id !== 'prog-crane'), assignments: {} });
+    expect(gone.preferences.defaultProgramId).toBeNull();
+    expect(gone.assignments).toEqual({});
   });
 });
 

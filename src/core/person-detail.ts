@@ -1,6 +1,7 @@
 import { compareByUrgency } from './check-order';
 import { CategoryConfig } from './config';
 import { Check, Person, Program, Rollup, Status, StatusCounts } from './model';
+import { programStatus } from './program-edits';
 import { ReadinessResult } from './readiness-evaluator';
 import { FilterViewer, canView } from './readiness-filter';
 import { emptyCounts } from './rollup-calculator';
@@ -65,12 +66,7 @@ export class PersonDetailBuilder {
     const programs = (input.assignments[person.id] ?? [])
       .map((id) => programsById.get(id))
       .filter((p): p is Program => p !== undefined)
-      .map((program) => ({
-        program,
-        status:
-          worstStatus(checks.filter((c) => c.requiredBy.includes(program.id)).map((c) => c.status)) ??
-          'ready',
-      }));
+      .map((program) => ({ program, status: programStatus(program.id, checks) }));
 
     const tiles = this.categories.map((category) => {
       const counts = emptyCounts();

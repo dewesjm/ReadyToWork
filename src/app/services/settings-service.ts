@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { Settings, exportSettings, importSettings } from '../../data';
+import { Settings, exportSettings, importSettings, resetAdminSettings } from '../../data';
 import { DEFAULT_SETTINGS, SETTINGS_STORE } from './tokens';
 
 /** Current settings as a signal. Every change is saved through the SettingsStore. */
@@ -26,17 +26,24 @@ export class SettingsService {
     this.update((s) => ({ ...s, preferences: { ...s.preferences, ...change } }));
   }
 
+  /** Everything back to defaults, preferences included. */
   async reset(): Promise<void> {
     this.current.set(await this.store.reset());
   }
 
+  /** Programs, assignments and warning windows back to defaults; preferences are kept. */
+  resetAdmin(): void {
+    this.update((s) => resetAdminSettings(s, this.defaults()));
+  }
+
+  /** The settings file: admin settings only. */
   exportJson(): string {
     return exportSettings(this.current());
   }
 
-  /** Replaces settings from an exported file. Throws SettingsError on a bad file. */
+  /** Replaces the admin settings from a file. Throws SettingsError on a bad file. */
   importJson(text: string): void {
-    const imported = importSettings(text, this.defaults());
+    const imported = importSettings(text, this.defaults(), this.current().preferences);
     this.update(() => imported);
   }
 }

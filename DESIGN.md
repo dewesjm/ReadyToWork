@@ -138,7 +138,9 @@ toolbar, so filters carry over when switching.
 - **Program assignments**: assign people to programs (search and pick, or assign a whole
   subtree).
 - **Thresholds**: warning window in days per category.
-- **Settings file**: export settings as JSON, import a JSON file, reset to defaults.
+- **Settings file**: export the admin settings (programs, assignments, warning windows) as JSON,
+  import a JSON file, reset them to defaults. Each viewer's own preferences (theme, layout,
+  default scope, persona, demo date) stay out of the file and are kept on import and reset.
 
 ### 5.4 Two layouts (both shown in the demo)
 

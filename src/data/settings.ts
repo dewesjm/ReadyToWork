@@ -1,4 +1,13 @@
-import { CategoryId, DEFAULT_CONFIG, IsoDate, Program, ReadinessConfig, isIsoDate } from '../core';
+import {
+  CategoryId,
+  DEFAULT_CONFIG,
+  IsoDate,
+  Program,
+  ProgramSetup,
+  ReadinessConfig,
+  isIsoDate,
+  pruneAssignments,
+} from '../core';
 
 export const SETTINGS_SCHEMA_VERSION = 1;
 
@@ -71,19 +80,88 @@ export const MIGRATIONS: Record<number, Migration> = {};
 
 export class SettingsError extends Error {}
 
+/**
+ * The settings file: admin settings only (programs, assignments, warning windows). Preferences
+ * belong to each viewer and stay out of it.
+ */
 export function exportSettings(settings: Settings): string {
-  return JSON.stringify(settings, null, 2);
+  const { schemaVersion, programs, assignments, warningDays } = settings;
+  return JSON.stringify({ schemaVersion, programs, assignments, warningDays }, null, 2);
 }
 
-/** Parses an exported settings file. Throws SettingsError with a readable message. */
-export function importSettings(text: string, defaults: Settings): Settings {
+/**
+ * Parses a settings file. The viewer keeps `preferences` (any in the file are ignored); missing
+ * sections come from `defaults`; assignments to programs not in the file are dropped. Throws
+ * SettingsError with a readable message.
+ */
+export function importSettings(text: string, defaults: Settings, preferences: Preferences): Settings {
   let raw: unknown;
   try {
     raw = JSON.parse(text);
   } catch {
     throw new SettingsError('The file is not valid JSON.');
   }
-  return parseSettings(raw, defaults);
+  if (isObject(raw)) {
+    const { preferences: _ignored, ...rest } = raw;
+    raw = rest;
+  }
+  const parsed = parseSettings(raw, defaults);
+  const ids = new Set(parsed.programs.map((p) => p.id));
+  return {
+    ...parsed,
+    assignments: pruneAssignments(parsed.assignments, (id) => ids.has(id)),
+    preferences: { ...preferences },
+  };
+}
+
+/** Admin settings back to the defaults; the viewer's preferences are kept. */
+export function resetAdminSettings(settings: Settings, defaults: Settings): Settings {
+  return { ...structuredClone(defaults), preferences: { ...settings.preferences } };
+}
+
+/** Applies edited programs and assignments. A default program that no longer exists is cleared. */
+export function withProgramSetup(settings: Settings, setup: ProgramSetup): Settings {
+  const prog = settings.preferences.defaultProgramId;
+  const keepDefault = prog === null || setup.programs.some((p) => p.id === prog);
+  return {
+    ...settings,
+    programs: setup.programs,
+    assignments: setup.assignments,
+    preferences: keepDefault ? settings.preferences : { ...settings.preferences, defaultProgramId: null },
+  };
+}
+
+export const MAX_WARNING_DAYS = 3650;
+
+/** Why a warning window can't be used, or null when it can. */
+export function warningDaysProblem(days: number): string | null {
+  return Number.isInteger(days) && days >= 0 && days <= MAX_WARNING_DAYS
+    ? null
+    : `Enter a whole number of days from 0 to ${MAX_WARNING_DAYS}.`;
+}
+
+export function setWarningDays(settings: Settings, category: CategoryId, days: number): Settings {
+  return { ...settings, warningDays: { ...settings.warningDays, [category]: days } };
+}
+
+/** Goes back to the config default for the category. */
+export function clearWarningDays(settings: Settings, category: CategoryId): Settings {
+  const { [category]: _removed, ...rest } = settings.warningDays;
+  return { ...settings, warningDays: rest };
+}
+
+/** What a settings file holds, e.g. "5 programs, 61 assignments, 2 warning windows". */
+export function describeSettings(settings: Settings): string {
+  const assignments = Object.values(settings.assignments).reduce((n, ids) => n + ids.length, 0);
+  return [
+    count(settings.programs.length, 'program'),
+    count(assignments, 'assignment'),
+    count(Object.keys(settings.warningDays).length, 'warning window'),
+  ].join(', ');
+}
+
+function count(n: number, noun: string): string {
+  return `${n.toLocaleString('en-US')} ${noun}${n === 1 ? '' : 's'}`;
 }
 
 /**
@@ -164,8 +242,10 @@ function warningDays(value: unknown): Record<string, number> {
   if (!isObject(value)) throw new SettingsError('"warningDays" must be an object.');
   const out: Record<string, number> = {};
   for (const [category, days] of Object.entries(value)) {
-    if (typeof days !== 'number' || !Number.isInteger(days) || days < 0 || days > 3650) {
-      throw new SettingsError(`warningDays.${category} must be a whole number of days (0 to 3650).`);
+    if (typeof days !== 'number' || warningDaysProblem(days) !== null) {
+      throw new SettingsError(
+        `warningDays.${category} must be a whole number of days (0 to ${MAX_WARNING_DAYS}).`,
+      );
     }
     out[category] = days;
   }

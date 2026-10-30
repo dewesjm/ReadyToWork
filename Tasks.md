@@ -48,7 +48,7 @@
 - [x] M6 plan written: [plans/M6-admin.md](plans/M6-admin.md)
 - [x] User answers the 5 questions at the end of the M6 plan (all recommended options)
 - [ ] M6 Admin, steps 1-7 in the plan
-  - [ ] 1. Core: admin edits
+  - [x] 1. Core: admin edits
   - [ ] 2. Admin page shell and access (View as in Preferences)
   - [ ] 3. Programs and requirements
   - [ ] 4. Program assignments
