@@ -31,7 +31,7 @@ export class SettingsService {
     this.current.set(await this.store.reset());
   }
 
-  /** Programs, assignments and warning windows back to defaults; preferences are kept. */
+  /** Programs, assignments, warning windows and announcements back to defaults; preferences are kept. */
   resetAdmin(): void {
     this.update((s) => resetAdminSettings(s, this.defaults()));
   }

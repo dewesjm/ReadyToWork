@@ -49,6 +49,7 @@ export class Admin {
   protected readonly sections = [
     { path: 'programs', label: 'Programs' },
     { path: 'thresholds', label: 'Thresholds' },
+    { path: 'announcements', label: 'Announcements' },
     { path: 'file', label: 'Settings file' },
   ];
 }

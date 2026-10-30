@@ -6,15 +6,18 @@ import { ConfirmDialog } from '../../shared/confirm-dialog';
 import { Icon } from '../../shared/icon/icon';
 import { AdminService } from './admin-service';
 
-/** Export, import and reset the admin settings (programs, assignments, warning windows). */
+/**
+ * Export, import and reset the admin settings (programs, assignments, warning windows,
+ * announcements).
+ */
 @Component({
   selector: 'rtw-settings-file',
   imports: [ConfirmDialog, Icon],
   template: `
     <p class="mb-4 max-w-prose text-sm opacity-80">
-      Settings are kept in this browser only. To share your programs, assignments and warning
-      windows, export them to a file and import it on another browser. Your own preferences
-      (theme, layout, default scope) are not in the file.
+      Settings are kept in this browser only. To share your programs, assignments, warning
+      windows and announcements, export them to a file and import it on another browser. Your
+      own preferences (theme, layout, default scope) are not in the file.
     </p>
     <p class="mb-4 text-sm">Now: <span data-testid="current-summary">{{ current() }}</span></p>
 
@@ -52,7 +55,7 @@ import { AdminService } from './admin-service';
       <section class="card card-sm border border-base-300 bg-base-100">
         <div class="card-body">
           <h2 class="card-title text-base">Reset</h2>
-          <p class="text-sm opacity-70">Go back to the shipped programs, assignments and windows.</p>
+          <p class="text-sm opacity-70">Go back to the shipped programs, assignments, windows and announcements.</p>
           <button type="button" class="btn btn-sm btn-outline btn-error" data-testid="reset" (click)="askReset()">
             <rtw-icon name="rotate-ccw" /> Reset to defaults
           </button>

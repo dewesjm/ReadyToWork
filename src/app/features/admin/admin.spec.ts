@@ -19,7 +19,7 @@ describe('Admin', () => {
 
     const el = harness.routeNativeElement as HTMLElement;
     const tabs = [...el.querySelectorAll<HTMLAnchorElement>('nav[aria-label="Admin sections"] a')];
-    expect(tabs.map((t) => t.textContent?.trim())).toEqual(['Programs', 'Thresholds', 'Settings file']);
+    expect(tabs.map((t) => t.textContent?.trim())).toEqual(['Programs', 'Thresholds', 'Announcements', 'Settings file']);
     expect(tabs[0].getAttribute('aria-current')).toBe('page');
 
     tabs[1].click();

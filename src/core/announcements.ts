@@ -1,4 +1,5 @@
 import { IsoDate, isIsoDate } from './dates';
+import { formatDate } from './format';
 
 /** Admin notices shown in a banner on every page: outages, delays, general information. */
 export type AnnouncementType = 'outage' | 'delayed' | 'info';
@@ -126,4 +127,16 @@ export function deleteAnnouncement(list: readonly Announcement[], id: string): A
 
 function tidy(d: AnnouncementDraft): AnnouncementDraft {
   return { type: d.type, message: d.message.trim(), startsOn: d.startsOn, endsOn: d.endsOn, on: d.on };
+}
+
+/** When a notice shows, in words: "Always", "From Nov 3, 2026", "Nov 3, 2026 to Nov 5, 2026". */
+export function describeSchedule(a: Pick<Announcement, 'startsOn' | 'endsOn'>): string {
+  if (a.startsOn && a.endsOn) {
+    return a.startsOn === a.endsOn
+      ? `On ${formatDate(a.startsOn)}`
+      : `${formatDate(a.startsOn)} to ${formatDate(a.endsOn)}`;
+  }
+  if (a.startsOn) return `From ${formatDate(a.startsOn)}`;
+  if (a.endsOn) return `Until ${formatDate(a.endsOn)}`;
+  return 'Always';
 }

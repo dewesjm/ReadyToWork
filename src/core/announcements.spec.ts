@@ -6,6 +6,7 @@ import {
   announcementState,
   createAnnouncement,
   deleteAnnouncement,
+  describeSchedule,
   dismissKey,
   setAnnouncementOn,
   updateAnnouncement,
@@ -111,5 +112,16 @@ describe('edits', () => {
     const off = setAnnouncementOn([note()], 'a1', false);
     expect(off[0]).toMatchObject({ on: false, revision: 1 });
     expect(deleteAnnouncement(off, 'a1')).toEqual([]);
+  });
+});
+
+describe('describeSchedule', () => {
+  it('says when a notice shows', () => {
+    const at = (startsOn: string | null, endsOn: string | null) => describeSchedule({ startsOn, endsOn });
+    expect(at(null, null)).toBe('Always');
+    expect(at('2026-11-03', null)).toBe('From Nov 3, 2026');
+    expect(at(null, '2026-11-05')).toBe('Until Nov 5, 2026');
+    expect(at('2026-11-03', '2026-11-05')).toBe('Nov 3, 2026 to Nov 5, 2026');
+    expect(at('2026-11-03', '2026-11-03')).toBe('On Nov 3, 2026');
   });
 });

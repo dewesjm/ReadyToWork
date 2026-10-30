@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { ProgramSetup, ProgramSummary, programSummary } from '../../../core';
+import { Announcement, ProgramSetup, ProgramSummary, programSummary } from '../../../core';
 import { Settings, withProgramSetup } from '../../../data';
 import { ReadinessService } from '../../services/readiness-service';
 import { SettingsService } from '../../services/settings-service';
@@ -22,6 +22,7 @@ export class AdminService {
     const { programs, assignments } = this.settings.settings();
     return { programs, assignments };
   });
+  readonly announcements = computed(() => this.settings.settings().announcements);
   readonly catalog = this.readiness.catalog;
   readonly saved = signal(false);
 
@@ -38,6 +39,10 @@ export class AdminService {
     this.edit((s) => withProgramSetup(s, change({ programs: s.programs, assignments: s.assignments })));
   }
 
+  editAnnouncements(change: (list: Announcement[]) => Announcement[]): void {
+    this.edit((s) => ({ ...s, announcements: change(s.announcements) }));
+  }
+
   edit(change: (settings: Settings) => Settings): void {
     this.settings.update(change);
     this.markSaved();
@@ -48,7 +53,7 @@ export class AdminService {
     this.edit(() => settings);
   }
 
-  /** Programs, assignments and warning windows back to the defaults; preferences are kept. */
+  /** Programs, assignments, warning windows and announcements back to the defaults; preferences are kept. */
   resetAdmin(): void {
     this.settings.resetAdmin();
     this.markSaved();

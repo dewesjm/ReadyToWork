@@ -23,6 +23,16 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./thresholds').then((m) => m.Thresholds),
       },
       {
+        path: 'announcements',
+        title: 'Announcements · Admin · Ready to Work',
+        loadComponent: () => import('./announcement-list').then((m) => m.AnnouncementList),
+      },
+      {
+        path: 'announcements/:id',
+        title: 'Announcement · Admin · Ready to Work',
+        loadComponent: () => import('./announcement-editor').then((m) => m.AnnouncementEditor),
+      },
+      {
         path: 'file',
         title: 'Settings file · Admin · Ready to Work',
         loadComponent: () => import('./settings-file').then((m) => m.SettingsFile),
