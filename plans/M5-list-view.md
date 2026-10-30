@@ -1,6 +1,6 @@
 # M5 plan: List view
 
-Status: **planned, waiting for user review** of the questions at the end. Spec: DESIGN.md
+Status: **in progress**. Questions answered 2026-10-30 (all recommended options). Spec: DESIGN.md
 section 5.1 (List view). Acceptance ("Done when", DESIGN.md section 10):
 
 > The list matches the checks behind the tree for every view-as persona, and switching between
@@ -81,7 +81,7 @@ One table of checks, soonest first (overdue at the top), using the same toolbar 
   top; check it.
 - Update Tasks.md, DECISIONS.md, README.md, DESIGN.md.
 
-## Questions for the user (answer before step 1)
+## Questions for the user (answered: the recommended option each time)
 
 1. **Where do checks with no date go in the soonest-first order?** Some red items have no date
    (a required qualification someone doesn't hold, a lost Yubikey, a revoked role), and grey

@@ -37,8 +37,12 @@
 
 - [x] User checks M4 in the browser
 - [x] M5 plan written: [plans/M5-list-view.md](plans/M5-list-view.md)
-- [ ] User answers the 4 questions at the end of the M5 plan
+- [x] User answers the 4 questions at the end of the M5 plan (all recommended options)
 - [ ] M5 List view, steps 1-4 in the plan
+  - [x] 1. Core: list rows (shared scope and issue rule, `listChecks`)
+  - [ ] 2. List component
+  - [ ] 3. Toolbar and focus
+  - [ ] 4. Check and document
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)

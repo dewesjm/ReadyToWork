@@ -38,14 +38,17 @@ describe('check order', () => {
     ]);
   });
 
-  it('sorts soonest first (overdue at top), undated last, for the list view', () => {
-    expect(names([...checks].sort(compareBySoonest))).toEqual([
+  it('sorts soonest first for the list view: undated not ready on top, other undated last', () => {
+    const all = [...checks, check('G completed', 'ready'), check('H lost', 'not-ready')];
+    expect(names(all.sort(compareBySoonest))).toEqual([
+      'D missing',
+      'H lost',
       'C overdue',
       'F expiring soon',
       'B expiring',
       'A ready',
-      'D missing',
       'E unknown',
+      'G completed',
     ]);
   });
 });

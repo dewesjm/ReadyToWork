@@ -157,3 +157,12 @@
   don't repeat a date the reason already names; they say "56 days left" instead.
 - **Category tiles size to their container** (CSS container query): four across on the page,
   two across in the narrow panel.
+- **M5: undated checks in the list** (user): not ready with no date (missing, lost, revoked)
+  sorts to the top with the overdue items, since it blocks work today; unknown with no date
+  goes after everything dated. Within each group, worst status first, then item name.
+- **M5: a picked program narrows the list to the same people as the tree** (user), with all
+  their issue checks, so the list and tree always agree. Rows show "required by".
+- **M5: long lists show 100 rows at a time** (user) with "Show 100 more" and "Showing 100 of
+  2,140". Filters are the real way to narrow it.
+- **M5: one fixed list order, soonest first** (user). No column sorting for now; ask users in
+  the demo whether they miss it.

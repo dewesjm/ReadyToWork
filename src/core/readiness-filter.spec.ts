@@ -184,6 +184,83 @@ describe('ReadinessFilter', () => {
   });
 });
 
+describe('ReadinessFilter.listChecks', () => {
+  function list(query: Partial<ReadinessQuery>, viewer: FilterViewer = director) {
+    return filter.listChecks({
+      readiness: { org, checksByPerson, statusByPerson },
+      assignments,
+      viewer,
+      query: { ...DEFAULT_QUERY, issuesOnly: false, ...query },
+    });
+  }
+  const items = (r: ReturnType<typeof list>) => r.rows.map((row) => `${row.person.id}:${row.check.category}`);
+
+  it('lists only issue checks with Issues only on, red first', () => {
+    const r = list({ issuesOnly: true });
+    expect(items(r)).toEqual(['c2:tool', 'c1:sap-password', 'c2:sap-password', 'f2:training']);
+    expect(r.personCount).toBe(3);
+    expect(r.scopeCount).toBe(8);
+  });
+
+  it('lists every check, ready ones included, with Issues only off', () => {
+    const total = [...checksByPerson.values()].reduce((n, c) => n + c.length, 0);
+    expect(list({}).rows.length).toBe(total);
+  });
+
+  it('gives each row its person and direct manager', () => {
+    const row = list({ issuesOnly: true }).rows[0];
+    expect(row.person.id).toBe('c2');
+    expect(row.manager?.id).toBe('f1');
+    expect(list({ supervisorId: 'dir' }).rows.find((r) => r.person.id === 'dir')!.manager).toBeNull();
+  });
+
+  it('applies the category and status filters only with Issues only on', () => {
+    expect(items(list({ issuesOnly: true, categories: ['sap-password'] }))).toEqual([
+      'c1:sap-password',
+      'c2:sap-password',
+    ]);
+    expect(items(list({ issuesOnly: true, statuses: ['unknown'] }))).toEqual(['f2:training']);
+    expect(list({ categories: ['tool'], statuses: ['not-ready'] }).rows.length).toBe(list({}).rows.length);
+  });
+
+  it("keeps all of a matched person's checks, but only the matching item otherwise", () => {
+    const byPerson = list({ keyword: 'ana' });
+    expect(items(byPerson)).toEqual(['c1:sap-password', 'c1:network']);
+    expect(byPerson.rows.every((r) => r.match.person && !r.match.item)).toBe(true);
+
+    const byItem = list({ keyword: 'TOOL' });
+    expect(items(byItem)).toEqual(['c2:tool']);
+    expect(byItem.rows[0].match).toEqual({ person: false, item: true });
+  });
+
+  it('scopes by supervisor, direct reports and program like the tree', () => {
+    expect(new Set(list({ supervisorId: 'm2' }).rows.map((r) => r.person.id))).toEqual(new Set(['m2']));
+    expect(new Set(list({ supervisorId: 'm1', directOnly: true }).rows.map((r) => r.person.id))).toEqual(
+      new Set(['m1', 'f1', 'f2']),
+    );
+    expect(new Set(list({ programId: 'crane' }).rows.map((r) => r.person.id))).toEqual(new Set(['c1']));
+    expect(list({ supervisorId: 'dir' }, { personId: 'm2', isAdmin: false }).scopeCount).toBe(2);
+  });
+
+  it("agrees with the tree: same people, and each person's issue checks", () => {
+    const queries: Partial<ReadinessQuery>[] = [
+      { issuesOnly: true },
+      { issuesOnly: true, categories: ['sap-password'] },
+      { issuesOnly: true, statuses: ['expiring', 'unknown'] },
+      { issuesOnly: true, supervisorId: 'm1', directOnly: true },
+      { issuesOnly: true, programId: 'crane' },
+      {},
+    ];
+    for (const q of queries) {
+      const treePeople = run(q).rows.filter((r) => !r.context).map((r) => r.person.id);
+      // People with no checks at all show in the tree as unknown but have no list rows.
+      const withChecks = treePeople.filter((id) => (checksByPerson.get(id) ?? []).length > 0);
+      const listPeople = new Set(list(q).rows.map((r) => r.person.id));
+      expect([...listPeople].sort()).toEqual([...withChecks].sort());
+    }
+  });
+});
+
 describe('supervisorOptions', () => {
   it('lists the viewer then every manager below, with depth', () => {
     const options = supervisorOptions(org, director).map((o) => `${o.depth}:${o.person.id}`);

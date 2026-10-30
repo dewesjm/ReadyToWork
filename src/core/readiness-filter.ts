@@ -1,3 +1,4 @@
+import { compareBySoonest } from './check-order';
 import { CategoryConfig, STATUS_META } from './config';
 import { CategoryId, Check, Person, Status } from './model';
 import { OrgIndex } from './org-index';
@@ -77,6 +78,25 @@ export interface FilterResult {
   narrowed: boolean;
 }
 
+/** One check in the list view. */
+export interface ListRow {
+  check: Check;
+  person: Person;
+  /** The person's direct manager, or null at the top of the org. */
+  manager: Person | null;
+  /** What the keyword matched: the person's name, title or ID, and/or the item name. */
+  match: { person: boolean; item: boolean };
+}
+
+export interface ListResult {
+  /** Soonest first; see compareBySoonest. */
+  rows: ListRow[];
+  /** Distinct people with at least one row. */
+  personCount: number;
+  /** People in scope (supervisor, direct only, program) before Issues only and keyword. */
+  scopeCount: number;
+}
+
 export interface SupervisorOption {
   person: Person;
   /** 0 is the viewer (or a top of the org, for an admin). */
@@ -101,14 +121,8 @@ export class ReadinessFilter {
   apply(input: FilterInput): FilterResult {
     const { org, checksByPerson, statusByPerson } = input.readiness;
     const { query } = input;
-    const rootId = resolveSupervisor(org, input.viewer, query.supervisorId);
-    const root = org.get(rootId);
+    const { rootId, root, scoped } = scope(input);
     if (!root) return { rootId, rows: [], shownCount: 0, scopeCount: 0, narrowed: false };
-
-    const inScope = query.directOnly ? [root, ...org.childrenOf(rootId)] : org.subtree(rootId);
-    const scoped = query.programId
-      ? inScope.filter((p) => (input.assignments[p.id] ?? []).includes(query.programId!))
-      : inScope;
 
     const keyword = query.keyword.trim();
     const matches = new Set<string>();
@@ -158,6 +172,39 @@ export class ReadinessFilter {
       shownCount: shown.size,
       scopeCount: scoped.length,
       narrowed: query.issuesOnly || keyword !== '',
+    };
+  }
+
+  /**
+   * The list view: the checks of everyone in scope, filtered by Issues only (with its category
+   * and status filters) and the keyword, soonest first. A keyword matching a person's name,
+   * title or employee ID keeps all their checks; one matching an item name keeps that check.
+   */
+  listChecks(input: FilterInput): ListResult {
+    const { org, checksByPerson } = input.readiness;
+    const { query } = input;
+    const { scoped } = scope(input);
+    const keyword = query.keyword.trim();
+    const lower = keyword.toLowerCase();
+
+    const rows: ListRow[] = [];
+    for (const person of scoped) {
+      let checks = checksByPerson.get(person.id) ?? [];
+      if (query.issuesOnly) checks = checks.filter((c) => isIssue(c, query));
+      const personMatch = keyword !== '' && matchesKeyword(person, keyword);
+      const manager = person.managerId === null ? null : (org.get(person.managerId) ?? null);
+      for (const check of checks) {
+        const itemMatch = keyword !== '' && check.itemName.toLowerCase().includes(lower);
+        if (keyword && !personMatch && !itemMatch) continue;
+        rows.push({ check, person, manager, match: { person: personMatch, item: itemMatch } });
+      }
+    }
+    rows.sort((a, b) => compareBySoonest(a.check, b.check) || a.person.name.localeCompare(b.person.name));
+
+    return {
+      rows,
+      personCount: new Set(rows.map((r) => r.person.id)).size,
+      scopeCount: scoped.length,
     };
   }
 
@@ -247,22 +294,44 @@ export function highlightParts(text: string, keyword: string): { text: string; m
   return parts;
 }
 
+/**
+ * Whether a check counts as an issue under the query's category and status filters. The tree
+ * and the list both use this, so they always agree.
+ */
+export function isIssue(check: Check, query: Pick<ReadinessQuery, 'categories' | 'statuses'>): boolean {
+  const statuses = query.statuses.length > 0 ? query.statuses : ISSUE_STATUSES;
+  return (
+    check.status !== 'ready' &&
+    statuses.includes(check.status) &&
+    (query.categories.length === 0 || query.categories.includes(check.category))
+  );
+}
+
 function hasIssue(
   personId: string,
   checksByPerson: ReadonlyMap<string, readonly Check[]>,
   statusByPerson: ReadonlyMap<string, Status>,
   query: ReadinessQuery,
 ): boolean {
-  const statuses = query.statuses.length > 0 ? query.statuses : ISSUE_STATUSES;
   const checks = checksByPerson.get(personId) ?? [];
   // Someone with no checks at all is unknown; that only shows when no category is picked.
   if (checks.length === 0) {
+    const statuses = query.statuses.length > 0 ? query.statuses : ISSUE_STATUSES;
     return query.categories.length === 0 && statuses.includes(statusByPerson.get(personId) ?? 'unknown');
   }
-  return checks.some(
-    (c) =>
-      c.status !== 'ready' &&
-      statuses.includes(c.status) &&
-      (query.categories.length === 0 || query.categories.includes(c.category)),
-  );
+  return checks.some((c) => isIssue(c, query));
+}
+
+/** The scope root (after falling back to the viewer) and everyone in scope, depth first. */
+function scope(input: FilterInput): { rootId: string; root: Person | undefined; scoped: Person[] } {
+  const { org } = input.readiness;
+  const { query } = input;
+  const rootId = resolveSupervisor(org, input.viewer, query.supervisorId);
+  const root = org.get(rootId);
+  if (!root) return { rootId, root, scoped: [] };
+  const inScope = query.directOnly ? [root, ...org.childrenOf(rootId)] : org.subtree(rootId);
+  const scoped = query.programId
+    ? inScope.filter((p) => (input.assignments[p.id] ?? []).includes(query.programId!))
+    : inScope;
+  return { rootId, root, scoped };
 }
