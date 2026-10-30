@@ -35,8 +35,10 @@
   - [x] 5. Layout switch in Preferences
   - [x] 6. Check and document (screenshots: dashboard, drill-down, 390px phone, light and dark)
 
-- [ ] User checks M4 in the browser (try both layouts: avatar menu, Preferences, Layout)
-- [ ] M5 plan: list view
+- [x] User checks M4 in the browser
+- [x] M5 plan written: [plans/M5-list-view.md](plans/M5-list-view.md)
+- [ ] User answers the 4 questions at the end of the M5 plan
+- [ ] M5 List view, steps 1-4 in the plan
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
