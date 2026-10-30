@@ -206,3 +206,6 @@
   to narrow it."), over the whole org since admins see everyone.
 - **Pick lists that are rebuilt on every edit keep their selection** (`linkedSignal` with the
   previous value) while it is still a choice; otherwise each assignment reset the supervisor.
+- **A warning window applies 400 ms after typing stops**, or at once on Enter or leaving the
+  field. A value outside 0 to 3650 whole days shows its reason on the row and changes nothing.
+  Typing the default value removes the override, so the settings file only lists real changes.
