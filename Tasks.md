@@ -63,11 +63,12 @@
 - [x] Tree: aligned issue chips; row click expands, Details opens the person; "new version available" notice with Refresh (user requests; 281 tests)
 - [x] Announcements plan written (user request: admin banner for outages and delays): [plans/announcements.md](plans/announcements.md)
 - [x] User answers the 5 questions at the end of the announcements plan (all recommended options)
-- [ ] Announcements, steps 1-4 in the plan
+- [x] Announcements, steps 1-4 in the plan (307 tests)
+- [ ] User checks announcements in the browser
   - [x] 1. Core: notices (292 tests)
   - [x] 2. The banner (298 tests)
   - [x] 3. Admin › Announcements tab (307 tests)
-  - [ ] 4. Check and document
+  - [x] 4. Check and document (screenshots desktop, dark and 390px phone)
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)
@@ -86,6 +87,8 @@
   the phone pass.
 - Demo: ask users whether they miss sorting the list by column (M5 shipped one fixed order).
 - M8: context rows are dimmed with opacity; check their contrast in the accessibility pass.
+- M8: in the dark theme, the Outage strip is white text on a light red (the theme's error
+  colors, as on the Not ready badges); check its contrast.
 - M8: inactive Admin tabs are pale grey, faint in the dark theme; check their contrast.
 - Demo: ask admins whether "Add everyone under" should be a standing rule (new people under that
   supervisor join the program) rather than a one-time add.

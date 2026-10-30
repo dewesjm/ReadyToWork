@@ -137,8 +137,9 @@ toolbar, so filters carry over when switching.
 
 ### 5.3 Admin (admin view only)
 
-Three tabs, each its own URL: Programs (`/admin/programs`, each program at
-`/admin/programs/:id`), Thresholds and Settings file. The Admin link shows only for the admin
+Four tabs, each its own URL: Programs (`/admin/programs`, each program at
+`/admin/programs/:id`), Thresholds, Announcements (`/admin/announcements`, each notice at
+`/admin/announcements/:id`, a new one at `new`) and Settings file. The Admin link shows only for the admin
 persona; anyone else opening `/admin` is told it is for admins.
 
 - **Programs**: create, rename, delete programs; add and remove requirements from a picker of
@@ -146,9 +147,16 @@ persona; anyone else opening `/admin` is told it is for admins.
 - **Program assignments**: on each program's page, assign people (search and pick, or add
   everyone under a supervisor in one go) and remove them one by one.
 - **Thresholds**: warning window in days per category, applied as you type.
+- **Announcements**: banner notices (see 5.5). A list showing each notice as the banner shows
+  it, with its state (Live, Scheduled, Ended, Off), when it shows, an On switch and Edit. The
+  form has type (Outage, Delayed, Info), message (up to 300 characters), optional first and
+  last day, On, a live preview, and Publish / Cancel / Delete (asks first).
 - Every admin change saves and applies at once (no Save button); a "Saved" note confirms it.
+  The exception is an announcement's form: nothing goes live until Publish, so a half-typed
+  message never shows.
   Each program shows how many people are on it and how ready they are for it, updating live.
-- **Settings file**: export the admin settings (programs, assignments, warning windows) as JSON,
+- **Settings file**: export the admin settings (programs, assignments, warning windows,
+  announcements) as JSON,
   import a JSON file, reset them to defaults. Each viewer's own preferences (theme, layout,
   default scope, persona, demo date) stay out of the file and are kept on import and reset.
 
@@ -163,6 +171,19 @@ persona; anyone else opening `/admin` is told it is for admins.
 Switched under Preferences in the avatar menu (and later the demo controls), so users can say
 which they prefer. Same components, arranged
 differently.
+
+### 5.5 Announcements banner
+
+- Admins' notices for outages and delays, full width under the top bar on every page, one
+  strip per notice: color plus icon plus type word plus message. Outage is red, Delayed amber,
+  Info blue. Outages show first, then delays, then info.
+- A notice shows while it is on and from its first day through its last day (both optional,
+  dates only; times go in the message). It hides by itself after the last day.
+- Viewers can close Info and Delayed notices; their browser remembers it, and the notice comes
+  back if an admin publishes an edit. Outages can't be closed.
+- The demo starts with one live Delayed notice about training records.
+- In the mockup, notices live in the admin's browser like the other settings (the settings
+  file shares them). The real app would store them on a server so everyone sees them.
 
 ## 6. Architecture
 

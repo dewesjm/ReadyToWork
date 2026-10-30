@@ -1,6 +1,6 @@
 # Plan: Announcements (admin banner messages)
 
-Status: **building** (2026-10-30). Questions answered the same day (all recommended options). User request: "a banner message
+Status: **done** 2026-10-30. Questions answered the same day (all recommended options). User request: "a banner message
 admin capability, to announce outages or things that are delayed."
 Comes before M7 (demo controls); not in DESIGN.md yet (step 4 adds it).
 
