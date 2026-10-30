@@ -1,0 +1,150 @@
+<div class="space-y-3">
+  <!-- Title, scope and view -->
+  <div class="flex flex-wrap items-end gap-3">
+    <h1 class="mr-auto w-full text-2xl font-semibold sm:w-auto">Readiness</h1>
+
+    <label class="flex w-full flex-col gap-1 text-xs font-medium sm:w-auto">
+      Showing people under
+      <select
+        class="select select-sm w-full sm:w-72"
+        data-testid="supervisor"
+        (change)="query.setSupervisor($any($event.target).value)"
+      >
+        @for (o of supervisorOptions(); track o.id) {
+          <option [value]="o.id" [selected]="o.id === query.supervisorId()">{{ o.label }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="flex w-full flex-col gap-1 text-xs font-medium sm:w-auto">
+      Program
+      <select
+        class="select select-sm w-full sm:w-56"
+        data-testid="program"
+        (change)="query.setProgram($any($event.target).value || null)"
+      >
+        <option value="" [selected]="query.programId() === null">All programs</option>
+        @for (p of query.programs(); track p.id) {
+          <option [value]="p.id" [selected]="p.id === query.programId()">{{ p.name }}</option>
+        }
+      </select>
+    </label>
+
+    <div class="join" role="group" aria-label="View">
+      <button
+        type="button"
+        class="btn join-item btn-sm"
+        [class.btn-primary]="query.view() === 'tree'"
+        [attr.aria-pressed]="query.view() === 'tree'"
+        (click)="query.setView('tree')"
+      >
+        Tree
+      </button>
+      <button
+        type="button"
+        class="btn join-item btn-sm"
+        [class.btn-primary]="query.view() === 'list'"
+        [attr.aria-pressed]="query.view() === 'list'"
+        (click)="query.setView('list')"
+      >
+        List
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and filters -->
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+    <label class="input input-sm w-full sm:w-64">
+      <rtw-icon name="search" class="opacity-60" />
+      <input
+        type="search"
+        class="grow"
+        placeholder="Name, title or employee ID"
+        aria-label="Search people"
+        data-testid="keyword"
+        [value]="query.keyword()"
+        (input)="query.setKeyword($any($event.target).value)"
+      />
+      @if (query.keyword()) {
+        <button
+          type="button"
+          class="btn btn-ghost btn-xs btn-circle"
+          aria-label="Clear search"
+          (click)="query.setKeyword('')"
+        >
+          <rtw-icon name="x" />
+        </button>
+      }
+    </label>
+
+    <label class="flex cursor-pointer items-center gap-2 text-sm font-medium">
+      <input
+        type="checkbox"
+        class="toggle toggle-primary toggle-sm"
+        data-testid="issues-only"
+        [checked]="query.issuesOnly()"
+        (change)="query.setIssuesOnly($any($event.target).checked)"
+      />
+      Issues only
+    </label>
+
+    <label class="flex cursor-pointer items-center gap-2 text-sm font-medium">
+      <input
+        type="checkbox"
+        class="toggle toggle-sm"
+        data-testid="direct-only"
+        [checked]="query.directOnly()"
+        (change)="query.setDirectOnly($any($event.target).checked)"
+      />
+      Direct reports only
+    </label>
+
+    <!-- What counts as an issue: only used while Issues only is on. -->
+    <div
+      class="flex flex-wrap items-center gap-2"
+      role="group"
+      aria-label="What counts as an issue"
+      [attr.title]="query.issuesOnly() ? null : 'Turn on Issues only to filter by category or status'"
+    >
+      <rtw-category-filter [disabled]="!query.issuesOnly()" />
+      @for (s of issueStatuses; track s) {
+        <button
+          type="button"
+          class="btn btn-sm gap-1"
+          [class]="statusChipClass(s)"
+          [disabled]="!query.issuesOnly()"
+          [attr.aria-pressed]="query.statuses().includes(s)"
+          [attr.data-status]="s"
+          (click)="query.toggleStatus(s)"
+        >
+          <rtw-icon [name]="statusMeta[s].icon" />
+          {{ statusMeta[s].label }}
+        </button>
+      }
+    </div>
+
+    <rtw-legend />
+
+    @if (query.hasFilters()) {
+      <button type="button" class="btn btn-ghost btn-sm" data-testid="clear-filters" (click)="query.clearFilters()">
+        <rtw-icon name="x" />
+        Clear filters
+      </button>
+    }
+  </div>
+
+  <!-- Count and tree controls -->
+  <div class="flex flex-wrap items-center gap-2 text-sm">
+    <span class="mr-auto opacity-80" aria-live="polite" data-testid="shown-count">{{ shownText() }}</span>
+    @if (query.view() === 'tree') {
+      <button type="button" class="btn btn-ghost btn-xs gap-1" (click)="tree.expandAll()">
+        <rtw-icon name="chevrons-up-down" />
+        Expand all
+      </button>
+      <button type="button" class="btn btn-ghost btn-xs gap-1" (click)="tree.collapseAll()">
+        <rtw-icon name="chevrons-down-up" />
+        Collapse all
+      </button>
+    }
+  </div>
+</div>

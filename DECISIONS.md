@@ -118,3 +118,10 @@
 - **Category chips and roll-ups keep color + icon + text**: a chip shows the category icon and
   label plus the status icon, with the status as screen-reader text and tooltip. Roll-ups list
   counts worst first ("2 not ready, 3 expiring, 18 ready") and hide zero counts.
+- **Readiness URL parameters**: `view`, `issues`, `sup`, `prog`, `cat`, `status`, `direct`, `q`.
+  Defaults are left out. `prog=all` exists so "All programs" can override a default program
+  from Preferences. Unknown or out-of-scope values are ignored rather than shown as errors.
+- **Keyword search filters as you type**; the URL catches up after a 300 ms pause (replacing
+  the history entry, so Back doesn't step through every keystroke).
+- **Clear filters** resets categories, statuses, Direct reports only and the keyword. Scope,
+  view and Issues only are kept: they are choices of what to look at, not filters.

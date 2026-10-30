@@ -15,6 +15,18 @@ const TEXT: Record<string, string> = {
   success: 'text-success',
 };
 
+const BUTTON: Record<string, string> = {
+  error: 'btn-error',
+  warning: 'btn-warning',
+  neutral: 'btn-neutral',
+  success: 'btn-success',
+};
+
+/** daisyUI button color class for a status, e.g. 'btn-error'. */
+export function buttonClass(status: Status): string {
+  return BUTTON[STATUS_META[status].color];
+}
+
 /** daisyUI badge color class for a status, e.g. 'badge-error'. */
 export function badgeClass(status: Status): string {
   return BADGE[STATUS_META[status].color];

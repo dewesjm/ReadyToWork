@@ -18,7 +18,7 @@
 - [ ] M3 Readiness page (toolbar + tree view), steps 1-7 in the plan
   - [x] 1. Icons and shared status pieces
   - [x] 2. Core filtering (`ReadinessFilter`, supervisor options, keyword highlight)
-  - [ ] 3. Query state in the URL and the toolbar
+  - [x] 3. Query state in the URL and the toolbar
   - [ ] 4. Tree view
   - [ ] 5. Keyboard navigation
   - [ ] 6. Preferences in the avatar menu
