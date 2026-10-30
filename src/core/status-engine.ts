@@ -1,5 +1,6 @@
 import { ReadinessConfig, STATUS_META } from './config';
 import { IsoDate, addDays, daysBetween } from './dates';
+import { formatDate } from './format';
 import { CategoryId, Check, RecordProblem, SourceRecord, Status } from './model';
 
 /** Worst of the given statuses, or null when there are none. */
@@ -49,7 +50,7 @@ export class StatusEngine {
       verdict = {
         ...verdict,
         status: 'unknown',
-        reason: `Data out of date (last synced ${record.lastSynced})`,
+        reason: `Data out of date (last synced ${formatDate(record.lastSynced)})`,
       };
     }
     return {
@@ -121,7 +122,7 @@ function byDate(date: IsoDate, today: IsoDate, warn: number, kind: 'expires' | '
     const verb = kind === 'expires' ? 'Expires' : 'Due';
     return { status: 'expiring', reason: days === 0 ? `${verb} today` : `${verb} in ${plural(days, 'day')}`, ...at };
   }
-  return { status: 'ready', reason: kind === 'expires' ? `Valid through ${date}` : `Due ${date}`, ...at };
+  return { status: 'ready', reason: kind === 'expires' ? `Valid through ${formatDate(date)}` : `Due ${formatDate(date)}`, ...at };
 }
 
 function plural(n: number, unit: string): string {

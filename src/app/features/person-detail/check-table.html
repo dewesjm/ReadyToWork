@@ -49,8 +49,8 @@
           <rtw-status-badge [status]="r.check.status" [compact]="true" />
         </div>
         <div class="mt-1">{{ r.check.reason }}</div>
-        @if (r.check.dueDate) {
-          <div class="mt-1 opacity-80">Due {{ r.due }} · {{ r.days }}</div>
+        @if (r.dueLine) {
+          <div class="mt-1 opacity-80">{{ r.dueLine }}</div>
         }
         <div class="mt-1 opacity-70">
           {{ r.category }} · {{ r.source }} · synced {{ r.synced.toLowerCase() }}

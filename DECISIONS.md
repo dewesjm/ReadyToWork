@@ -153,3 +153,7 @@
 - **In the dashboard, arrow keys only move focus; Enter or a click opens the person**, so the
   panel doesn't change while moving through the tree. Close (or Escape) puts focus back on the
   person's row.
+- **Status reasons use the friendly date format too** ("Valid through Dec 25, 2026"). Cards
+  don't repeat a date the reason already names; they say "56 days left" instead.
+- **Category tiles size to their container** (CSS container query): four across on the page,
+  two across in the narrow panel.

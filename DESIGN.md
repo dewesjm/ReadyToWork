@@ -116,8 +116,11 @@ toolbar, so filters carry over when switching.
 
 ### 5.2 Person detail
 
-- Header: name, title, status, manager chain (breadcrumb, each link clickable), programs.
-- Summary strip: one tile per category with its status.
+- Header: name, title, employee ID, status, manager chain (breadcrumb; managers above the
+  viewer are plain text), programs as badges with their own status ("Crane Operations: Not
+  ready").
+- Summary strip: one tile per category with its status; "Nothing tracked" tiles are greyed out.
+  Clicking a tile filters the check table to that category.
 - Check table: every check, sorted worst-first then soonest-due, with item, status, due date,
   days remaining, source and last-synced time.
 - **Responsible for**: if they manage people, the roll-up of their subtree and a link to view
@@ -135,11 +138,13 @@ toolbar, so filters carry over when switching.
 ### 5.4 Two layouts (both shown in the demo)
 
 - **Dashboard**: the readiness page (tree or list) on the left, the selected person's detail
-  in a panel on the right. One screen.
+  in a panel on the right. One screen. The open person is in the URL (`person=`); picking
+  another replaces the history entry. Below 1024px wide it opens the full page instead.
 - **Drill-down**: the readiness page on its own; clicking a person opens their own detail page
   (Back returns to the same view with its filters kept).
 
-Switched from the demo controls, so users can say which they prefer. Same components, arranged
+Switched under Preferences in the avatar menu (and later the demo controls), so users can say
+which they prefer. Same components, arranged
 differently.
 
 ## 6. Architecture

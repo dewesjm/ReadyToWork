@@ -26,7 +26,7 @@ describe('StatusEngine', () => {
       const c = evaluate({ expires: '2026-11-16' }); // 15 days
       expect(c.status).toBe('ready');
       expect(c.daysRemaining).toBe(15);
-      expect(c.reason).toBe('Valid through 2026-11-16');
+      expect(c.reason).toBe('Valid through Nov 16, 2026');
     });
 
     it('is expiring exactly on the window boundary', () => {
@@ -152,7 +152,7 @@ describe('StatusEngine', () => {
       const c = evaluate({ expires: '2027-01-01', lastSynced: '2026-10-28' });
       expect(c.stale).toBe(true);
       expect(c.status).toBe('unknown');
-      expect(c.reason).toBe('Data out of date (last synced 2026-10-28)');
+      expect(c.reason).toBe('Data out of date (last synced Oct 28, 2026)');
     });
 
     it('turns expiring grey', () => {

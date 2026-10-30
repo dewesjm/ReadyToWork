@@ -1,6 +1,6 @@
 # M4 plan: Person detail and both layouts
 
-Status: **in progress**. Questions answered 2026-10-30 (all recommended options). Spec: DESIGN.md
+Status: **done** 2026-10-30. Questions answered the same day (all recommended options). Spec: DESIGN.md
 sections 5.2 and 5.4. Acceptance ("Done when", DESIGN.md section 10):
 
 > Any person can be opened in both layouts, with manager chain and "responsible for" working.

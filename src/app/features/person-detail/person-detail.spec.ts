@@ -132,4 +132,22 @@ describe('PersonDetail', () => {
     const foremanId = fakeOrg().scenarios.toolCrewForemanId;
     expect(el.querySelector(`a[data-chain="${foremanId}"]`)!.getAttribute('href')).toBe(`/readiness?person=${foremanId}`);
   });
+
+  it('marks out-of-date data for the planted stale Yubikey crew', async () => {
+    const member = org().childrenOf(fakeOrg().scenarios.staleCrewForemanId)[0];
+    const { el } = await render(member.id);
+    const row = [...el.querySelectorAll('[data-testid="check-table"] tbody tr')].find((r) =>
+      r.textContent!.includes('Yubikey register'),
+    )!;
+    expect(row.textContent).toContain('Out of date');
+    expect(row.textContent).toContain('Data out of date');
+  });
+
+  it('does not repeat the date on cards when the reason already names it', async () => {
+    const { el } = await render(fakeOrg().scenarios.toolCrewForemanId, 'director', 'panel');
+    const cards = [...el.querySelectorAll('[data-testid="check-cards"] li')].map((c) => c.textContent!);
+    const valid = cards.find((t) => t.includes('Valid through'))!;
+    expect(valid).toMatch(/\d+ days? left|Today/);
+    expect(valid).not.toContain('Due ');
+  });
 });

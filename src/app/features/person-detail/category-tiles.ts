@@ -3,12 +3,15 @@ import { CategoryId, CategoryTile, STATUS_META } from '../../../core';
 import { Icon } from '../../shared/icon/icon';
 import { StatusBadge } from '../../shared/status/status-badge';
 
-/** One tile per category with its worst status. Clicking a tile filters the check list to it. */
+/**
+ * One tile per category with its worst status. Clicking a tile filters the check list to it.
+ * Columns follow the space available (container query), so the narrow panel gets two.
+ */
 @Component({
   selector: 'rtw-category-tiles',
   imports: [Icon, StatusBadge],
   template: `
-    <div class="grid grid-cols-2 gap-2 sm:grid-cols-4" role="group" aria-label="Filter checks by category">
+    <div class="grid grid-cols-2 gap-2 @xl:grid-cols-4" role="group" aria-label="Filter checks by category">
       @for (t of tiles(); track t.category.id) {
         <button
           type="button"
@@ -33,6 +36,7 @@ import { StatusBadge } from '../../shared/status/status-badge';
       }
     </div>
   `,
+  host: { class: '@container block' },
 })
 export class CategoryTiles {
   readonly tiles = input.required<CategoryTile[]>();

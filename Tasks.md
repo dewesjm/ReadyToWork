@@ -27,13 +27,16 @@
 - [x] User checks M3 in the browser
 - [x] M4 plan written: [plans/M4-person-detail.md](plans/M4-person-detail.md)
 - [x] User answers the 5 questions at the end of the M4 plan (all recommended options)
-- [ ] M4 Person detail and both layouts, steps 1-6 in the plan
+- [x] M4 Person detail and both layouts, steps 1-6 in the plan (205 tests)
   - [x] 1. Core: person detail and display wording
   - [x] 2. Person detail components
   - [x] 3. Drill-down: the person page
   - [x] 4. Dashboard: the side panel
   - [x] 5. Layout switch in Preferences
-  - [ ] 6. Check and document
+  - [x] 6. Check and document (screenshots: dashboard, drill-down, 390px phone, light and dark)
+
+- [ ] User checks M4 in the browser (try both layouts: avatar menu, Preferences, Layout)
+- [ ] M5 plan: list view
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
