@@ -1,64 +1,74 @@
 @if (rows().length === 0) {
   <rtw-readiness-empty />
 } @else {
-  <!-- Wide screens: a table. The person's name is a button so each row is keyboard reachable. -->
-  <table class="table table-sm hidden md:table" data-testid="check-list">
-    <thead>
-      <tr>
-        <th>Person</th>
-        @if (!compact()) {
-          <th>Manager</th>
-          <th>Category</th>
-        }
-        <th>Item</th>
-        <th>Status</th>
-        <th>Due</th>
-        <th>Days left</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (r of rows(); track r.key) {
-        <tr
-          class="cursor-pointer hover:bg-base-200"
-          [class]="r.person.id === selectedId() ? 'bg-primary/10' : ''"
-          [attr.data-key]="r.key"
-          [attr.data-selected]="r.person.id === selectedId() || null"
-          (click)="open(r)"
-        >
-          <td>
-            <button type="button" class="link link-hover text-left font-medium" data-testid="open-person">
-              <rtw-highlight [text]="r.person.name" [keyword]="r.match.person ? keyword() : ''" />
-              @if (r.person.id === selectedId()) {
-                <span class="sr-only">(open in the panel)</span>
-              }
-            </button>
-            <div class="text-xs opacity-70">
-              <rtw-highlight [text]="r.person.title" [keyword]="r.match.person ? keyword() : ''" />
-              @if (compact() && r.manager) {
-                · under {{ r.manager.name }}
-              }
-            </div>
-          </td>
+  <!-- Wide screens: a table. The person's name is a button so each row is keyboard reachable.
+       The wrapper does the hiding: the "table" class also sets display: table. -->
+  <div class="hidden md:block">
+    <table class="table table-sm" data-testid="check-list">
+      <thead>
+        <tr>
+          <th>Person</th>
           @if (!compact()) {
-            <td>{{ r.manager?.name ?? '—' }}</td>
-            <td>{{ r.category }}</td>
+            <th>Manager</th>
+            <th>Category</th>
           }
-          <td>
-            <rtw-highlight [text]="r.check.itemName" [keyword]="r.match.item ? keyword() : ''" />
-            @if (compact()) {
-              <div class="text-xs opacity-70">{{ r.category }}</div>
-            }
-            @if (r.requiredBy) {
-              <div class="text-xs opacity-70">Required by {{ r.requiredBy }}</div>
-            }
-          </td>
-          <td><rtw-status-badge [status]="r.check.status" [compact]="true" /></td>
-          <td class="whitespace-nowrap">{{ r.due }}</td>
-          <td class="whitespace-nowrap">{{ r.days }}</td>
+          <th>Item</th>
+          <th>Status</th>
+          <th>Due</th>
+          <th>Days left</th>
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @for (r of rows(); track r.key) {
+          <tr
+            class="cursor-pointer hover:bg-base-200"
+            [class]="r.person.id === selectedId() ? 'bg-primary/10' : ''"
+            [attr.data-key]="r.key"
+            [attr.data-selected]="r.person.id === selectedId() || null"
+            (click)="open(r)"
+          >
+            <td>
+              <button
+                type="button"
+                class="link link-hover text-left font-medium"
+                data-testid="open-person"
+              >
+                <rtw-highlight [text]="r.person.name" [keyword]="r.match.person ? keyword() : ''" />
+                @if (r.person.id === selectedId()) {
+                  <span class="sr-only">(open in the panel)</span>
+                }
+              </button>
+              <div class="text-xs opacity-70">
+                <rtw-highlight
+                  [text]="r.person.title"
+                  [keyword]="r.match.person ? keyword() : ''"
+                />
+                @if (compact() && r.manager) {
+                  · under {{ r.manager.name }}
+                }
+              </div>
+            </td>
+            @if (!compact()) {
+              <td>{{ r.manager?.name ?? '—' }}</td>
+              <td>{{ r.category }}</td>
+            }
+            <td>
+              <rtw-highlight [text]="r.check.itemName" [keyword]="r.match.item ? keyword() : ''" />
+              @if (compact()) {
+                <div class="text-xs opacity-70">{{ r.category }}</div>
+              }
+              @if (r.requiredBy) {
+                <div class="text-xs opacity-70">Required by {{ r.requiredBy }}</div>
+              }
+            </td>
+            <td><rtw-status-badge [status]="r.check.status" [compact]="true" /></td>
+            <td class="whitespace-nowrap">{{ r.due }}</td>
+            <td class="whitespace-nowrap">{{ r.days }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 
   <!-- Phones: cards. -->
   <ul class="flex flex-col gap-2 md:hidden" data-testid="check-list-cards">
@@ -77,7 +87,7 @@
         </div>
         <div class="mt-1">
           <rtw-highlight [text]="r.check.itemName" [keyword]="r.match.item ? keyword() : ''" />
-          <span class="opacity-70">· {{ r.category }}</span>
+          <span class="ml-1 opacity-70">· {{ r.category }}</span>
         </div>
         <div class="mt-1 opacity-80">
           @if (r.check.dueDate) {

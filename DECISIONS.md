@@ -170,3 +170,5 @@
   the whole row is also clickable. With the Dashboard panel open, the manager and category
   columns fold under the person and item, since the list column is narrower.
 - **The tree and list share one empty state** (`ReadinessEmpty`).
+- **Don't hide a daisyUI `table` with `hidden md:table`**: the class `table` is also Tailwind's
+  `display: table` utility and wins over `hidden`. Hide a wrapper div instead.

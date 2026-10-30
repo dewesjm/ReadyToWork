@@ -38,11 +38,14 @@
 - [x] User checks M4 in the browser
 - [x] M5 plan written: [plans/M5-list-view.md](plans/M5-list-view.md)
 - [x] User answers the 4 questions at the end of the M5 plan (all recommended options)
-- [ ] M5 List view, steps 1-4 in the plan
+- [x] M5 List view, steps 1-4 in the plan (227 tests)
   - [x] 1. Core: list rows (shared scope and issue rule, `listChecks`)
   - [x] 2. List component (with focus restore and Show more)
   - [x] 3. Toolbar and focus
-  - [ ] 4. Check and document
+  - [x] 4. Check and document (parity test for all personas; screenshots desktop, panel, 390px phone, light and dark)
+
+- [ ] User checks M5 in the browser
+- [ ] M6 plan: admin
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
@@ -56,6 +59,7 @@
 
 ## Follow-ups
 - M8: the "Ready to Work" brand wraps onto two lines in the header at phone width.
+- Demo: ask users whether they miss sorting the list by column (M5 shipped one fixed order).
 - M8: context rows are dimmed with opacity; check their contrast in the accessibility pass.
 - M7: the persona can only change in code/settings until the View-as control exists (default
   is the Foreman persona).

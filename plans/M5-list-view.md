@@ -1,6 +1,6 @@
 # M5 plan: List view
 
-Status: **in progress**. Questions answered 2026-10-30 (all recommended options). Spec: DESIGN.md
+Status: **done** 2026-10-30. Questions answered the same day (all recommended options). Spec: DESIGN.md
 section 5.1 (List view). Acceptance ("Done when", DESIGN.md section 10):
 
 > The list matches the checks behind the tree for every view-as persona, and switching between

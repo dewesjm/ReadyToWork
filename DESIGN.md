@@ -111,8 +111,13 @@ toolbar, so filters carry over when switching.
 
 **List view**
 - One table of checks in the viewer's subtree, sorted soonest first (overdue at the top).
-- Columns: person, manager, category, item, status, due date, days remaining.
-- Clicking a row opens that person's detail.
+  Not-ready checks with no date (missing, lost, revoked) sort above even the overdue ones;
+  other undated checks go last. One fixed order, no column sorting.
+- Columns: person, manager, category, item, status, due date, days remaining. Phones get
+  cards; with the Dashboard panel open, manager and category fold into other columns.
+- The same scope and issue rule as the tree, so both always show the same people.
+- 100 rows at a time, with "Show 100 more".
+- Clicking a row (or Enter on the person's name) opens that person's detail.
 
 ### 5.2 Person detail
 
