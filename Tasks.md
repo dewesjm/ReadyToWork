@@ -46,7 +46,15 @@
 
 - [ ] User checks M5 in the browser
 - [x] M6 plan written: [plans/M6-admin.md](plans/M6-admin.md)
-- [ ] User answers the 5 questions at the end of the M6 plan
+- [x] User answers the 5 questions at the end of the M6 plan (all recommended options)
+- [ ] M6 Admin, steps 1-7 in the plan
+  - [ ] 1. Core: admin edits
+  - [ ] 2. Admin page shell and access (View as in Preferences)
+  - [ ] 3. Programs and requirements
+  - [ ] 4. Program assignments
+  - [ ] 5. Thresholds
+  - [ ] 6. Settings file
+  - [ ] 7. Check and document
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
@@ -62,8 +70,6 @@
 - M8: the "Ready to Work" brand wraps onto two lines in the header at phone width.
 - Demo: ask users whether they miss sorting the list by column (M5 shipped one fixed order).
 - M8: context rows are dimmed with opacity; check their contrast in the accessibility pass.
-- M7: the persona can only change in code/settings until the View-as control exists (default
-  is the Foreman persona).
 
 ## Later (real app, not this mockup)
 - Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)

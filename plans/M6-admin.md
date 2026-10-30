@@ -1,6 +1,6 @@
 # M6 plan: Admin
 
-Status: **plan, waiting for the user's answers** (2026-10-30). Spec: DESIGN.md section 5.3.
+Status: **in progress**. Questions answered 2026-10-30 (all recommended options). Spec: DESIGN.md section 5.3.
 Acceptance ("Done when", DESIGN.md section 10):
 
 > Adding a requirement to a program turns the right people red immediately, and the settings
@@ -112,7 +112,7 @@ The Admin page has four tabs, each its own URL (`/admin/programs`, `/admin/thres
 - Demo check: assign Crane Operations to the crane candidate and see them turn red in the tree.
 - Update Tasks.md, DECISIONS.md, README.md, DESIGN.md.
 
-## Questions for the user
+## Questions for the user (answered: the recommended option each time)
 
 1. **How does someone reach the Admin screens before M7's View-as control exists?** The app
    opens as the Foreman, and right now there is no way to switch to the Admin persona.

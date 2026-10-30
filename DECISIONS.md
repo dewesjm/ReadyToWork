@@ -172,3 +172,18 @@
 - **The tree and list share one empty state** (`ReadinessEmpty`).
 - **Don't hide a daisyUI `table` with `hidden md:table`**: the class `table` is also Tailwind's
   `display: table` utility and wins over `hidden`. Hide a wrapper div instead.
+- **M6: View as moves into Preferences now** (user), as Layout did in M4; M7's presenter panel
+  reuses it. The Admin link and screens show only for the Admin persona; `/admin` tells other
+  personas it is for admins.
+- **M6: assignments are edited on each program's page** (user), in a People section with add
+  and remove, next to the program's requirements.
+- **M6: "assign a whole subtree" is a one-time add** (user): everyone under that supervisor now,
+  each removable on their own. A standing rule would need a settings schema change and the fake
+  org never changes, so the demo couldn't show the difference.
+- **M6: the settings file and Admin's Reset cover admin settings only** (user): programs,
+  assignments and warning windows. Importing keeps the viewer's own preferences (theme, layout,
+  default scope, persona, demo date). M7's demo Reset is the one that clears everything.
+- **M6: Thresholds holds only the warning window per category** (user), as DESIGN.md says.
+  Device check-in limits and source staleness stay in config while the devices question is open.
+- **M6: admin edits save and apply at once**, with no Save button, since the acceptance check
+  asks for "immediately" and a draft would mean handling unsaved changes on leaving the page.
