@@ -11,7 +11,7 @@ export const routes: Routes = [
     path: 'person/:id',
     title: 'Person · Ready to Work',
     loadComponent: () =>
-      import('./features/person-detail/person-detail').then((m) => m.PersonDetail),
+      import('./features/person-detail/person-page').then((m) => m.PersonPage),
   },
   {
     path: 'admin',

@@ -30,7 +30,7 @@
 - [ ] M4 Person detail and both layouts, steps 1-6 in the plan
   - [x] 1. Core: person detail and display wording
   - [x] 2. Person detail components
-  - [ ] 3. Drill-down: the person page
+  - [x] 3. Drill-down: the person page
   - [ ] 4. Dashboard: the side panel
   - [ ] 5. Layout switch in Preferences
   - [ ] 6. Check and document
