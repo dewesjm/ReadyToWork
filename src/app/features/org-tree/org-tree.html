@@ -21,7 +21,7 @@
         (click)="onRowClick(r)"
       >
         <!-- Fixed width from sm up so the chips line up across rows and depths. -->
-        <div class="flex min-w-0 items-center gap-2 sm:w-[22rem] sm:shrink-0 sm:pl-[calc(var(--depth)*1.25rem)]">
+        <div class="flex min-w-0 items-center gap-2 sm:w-[22rem] sm:shrink-0 md:w-[26rem] lg:w-[30rem] xl:w-[34rem] sm:pl-[calc(var(--depth)*1.25rem)]">
           @if (r.expandable) {
             <!-- The row click toggles; the keyboard uses Right and Left on the row. -->
             <span class="flex size-6 shrink-0 items-center justify-center" aria-hidden="true" data-testid="chevron">

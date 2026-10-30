@@ -233,8 +233,9 @@
 - **Fake names are common American first and last names** (user: the earlier mix read as too
   exotic). Pairs are random, so they are not real people; the seed now gives different names.
 - **Tree issue chips line up in a column** (user: the issues weren't horizontally aligned).
-  From the sm breakpoint up, the status badge, name and title sit in a fixed 22rem column
-  (the depth indent is inside it) and the status badge has a fixed width, so category chips
+  From the sm breakpoint up, the status badge, name and title sit in a fixed-width column
+  (the depth indent is inside it; 22rem, widening to 26, 30 and 34rem at md, lg and xl so the
+  admin's five-level tree doesn't wrap names on desktop) and the status badge has a fixed width, so category chips
   start at the same x on every row. When a row is too narrow, the roll-up summary wraps
   first. Phones keep the stacked layout.
 - **A tree row click opens and closes the row; a Details button opens the person** (user: the
