@@ -81,9 +81,18 @@ One page with two views of the same people, switched with a **Tree / List** cont
 answers "where are the problems?"; the list answers "what do I fix today?". They share one
 toolbar, so filters carry over when switching.
 
-- **Toolbar (shared)**: Tree / List switch, person search, **Issues only** toggle switch,
+- **Scope (shared)**: two pick lists that combine.
+  - **Supervisor**: "Showing people under [You]". Lists the viewer and every manager below
+    them, indented by level.
+  - **Program**: "All programs" or one program, narrowing to people on that program.
+  - Defaults (You, All programs) are set under **Preferences** in the avatar menu and
+    remembered in the browser. Trial design: the user will judge it once it can be clicked.
+- **Toolbar (shared)**: Tree / List switch, **keyword search**, **Issues only** toggle switch,
   category filter (show only SAP issues, for example), status filter, direct reports vs whole
   subtree, legend. Tree view adds expand/collapse all.
+- **Keyword search** filters the results already on the page as you type: person name, title
+  and employee ID, plus item names in the list view. In the tree, matches keep their manager
+  path visible.
 - **Issues only** is on by default. Off shows everyone (tree) or every check (list).
 - The chosen view and filters are kept in the URL (`/readiness?view=list&...`), so a view can
   be bookmarked or shared, and Back returns to it.
@@ -94,7 +103,6 @@ toolbar, so filters carry over when switching.
   managers, a roll-up badge with counts.
 - **Issues only keeps the path**: managers above a person with an issue stay visible so the
   structure makes sense; everything else is hidden.
-- Search jumps to the person, expands the path to them, and opens their detail.
 
 **List view**
 - One table of checks in the viewer's subtree, sorted soonest first (overdue at the top).
@@ -239,10 +247,12 @@ schema version, DemoClock.
 Done when: the same seed always produces the same org with the target status mix and the
 planted scenarios; settings round-trip through storage and export/import.
 
-**M3. Readiness page: toolbar and tree view.** Shared toolbar (Tree / List switch, search,
-Issues only, filters, state in the URL); tree with status icons, chips and roll-ups; issues
+**M3. Readiness page: toolbar and tree view.** Shared toolbar (supervisor and program pick
+lists, Tree / List switch, keyword search, Issues only, filters, state in the URL), default
+scope under Preferences in the avatar menu; tree with status icons, chips and roll-ups; issues
 only with path kept; expand/collapse; keyboard navigation.
-Done when: the whole fake org renders, Issues only and search behave as in 5.1, filters
+Done when: the whole fake org renders, scope pickers, Issues only and keyword search behave as
+in 5.1, filters
 survive a reload via the URL, and the tree can be fully used from the keyboard.
 
 **M4. Person detail and both layouts.** Detail panel/page and the Dashboard and Drill-down

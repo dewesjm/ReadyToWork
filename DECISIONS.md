@@ -71,3 +71,9 @@
   Programs summary tile is left for M4.
 - **Device check-in uses "valid through" too**: day 29 without a check-in is the last yellow
   day; day 30 is red with 1 day overdue.
+- **Scope pick lists on the Readiness page** (user, on trial). A Supervisor list ("people
+  under [You]") and a Program list ("All programs") that combine. The user will judge it once
+  it can be clicked.
+- **Keyword search filters the page's results** (user) instead of jumping to one person:
+  names, titles, employee IDs, and item names in the list view.
+- **Default scope lives under Preferences in the avatar menu** (user), next to the theme.

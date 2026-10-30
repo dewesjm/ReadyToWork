@@ -8,7 +8,8 @@
 - [x] M1 plan reviewed
 - [x] M1 Core logic (model, dates, config, StatusEngine, ProgramRules, OrgIndex,
   RollupCalculator, ReadinessEvaluator, check ordering; 73 tests)
-- [ ] Decide: scope picker on the Readiness page (by supervisor, by program, default)
+- [x] Decide scope picker: supervisor + program pick lists (trial), keyword search, defaults in
+  avatar menu Preferences
 - [ ] M2 Fake data and storage: plan for review
 
 ## Open questions (user's to decide)
