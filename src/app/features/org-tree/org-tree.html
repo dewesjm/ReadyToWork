@@ -1,14 +1,5 @@
 @if (rows().length === 0) {
-  <div class="flex flex-col items-center gap-3 py-10 text-center" data-testid="empty">
-    @if (query.hasFilters()) {
-      <p>No one matches these filters.</p>
-      <button type="button" class="btn btn-sm" (click)="query.clearFilters()">Clear filters</button>
-    } @else if (query.issuesOnly()) {
-      <p>No issues: everyone here is ready.</p>
-    } @else {
-      <p>No one in this scope.</p>
-    }
-  </div>
+  <rtw-readiness-empty />
 } @else {
   <div role="tree" aria-label="Reporting tree" class="flex flex-col gap-0.5" (keydown)="onKeydown($event)">
     @for (r of rows(); track r.id) {

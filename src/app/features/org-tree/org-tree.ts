@@ -7,6 +7,7 @@ import { CategoryChip } from '../../shared/status/category-chip';
 import { RollupBadge } from '../../shared/status/rollup-badge';
 import { StatusBadge } from '../../shared/status/status-badge';
 import { PersonNavigator } from '../readiness/person-navigator';
+import { ReadinessEmpty } from '../readiness/readiness-empty';
 import { ReadinessQueryService } from '../readiness/readiness-query-service';
 import { TreeModel } from '../readiness/tree-model';
 import { TreeStateService } from '../readiness/tree-state-service';
@@ -18,7 +19,7 @@ import { TreeStateService } from '../readiness/tree-state-service';
  */
 @Component({
   selector: 'rtw-org-tree',
-  imports: [Highlight, Icon, StatusBadge, CategoryChip, RollupBadge],
+  imports: [Highlight, Icon, StatusBadge, CategoryChip, RollupBadge, ReadinessEmpty],
   templateUrl: './org-tree.html',
 })
 export class OrgTree {

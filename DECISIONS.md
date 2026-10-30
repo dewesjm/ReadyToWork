@@ -166,3 +166,7 @@
   2,140". Filters are the real way to narrow it.
 - **M5: one fixed list order, soonest first** (user). No column sorting for now; ask users in
   the demo whether they miss it.
+- **In the list, the person's name is the row's button** (keyboard reachable, Enter opens);
+  the whole row is also clickable. With the Dashboard panel open, the manager and category
+  columns fold under the person and item, since the list column is narrower.
+- **The tree and list share one empty state** (`ReadinessEmpty`).

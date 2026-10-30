@@ -125,6 +125,18 @@ export class ReadinessQueryService {
     });
   });
 
+  /** The list view's checks, under the same query as the tree. */
+  readonly listResult = computed(() => {
+    const viewer = this.viewer();
+    if (!viewer) return { rows: [], personCount: 0, scopeCount: 0 };
+    return this.filter.listChecks({
+      readiness: this.readiness.result(),
+      assignments: this.settings.settings().assignments,
+      viewer,
+      query: this.query(),
+    });
+  });
+
   /** The person open in the dashboard panel, if the viewer may see them. */
   readonly personId = computed(() => {
     const id = this.param('person');
