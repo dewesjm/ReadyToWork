@@ -21,7 +21,7 @@
   - [x] 3. Query state in the URL and the toolbar
   - [x] 4. Tree view
   - [x] 5. Keyboard navigation
-  - [ ] 6. Preferences in the avatar menu
+  - [x] 6. Preferences in the avatar menu
   - [ ] 7. Check and document
 
 ## Open questions (user's to decide)

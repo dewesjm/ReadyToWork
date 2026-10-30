@@ -85,8 +85,8 @@ toolbar, so filters carry over when switching.
   - **Supervisor**: "Showing people under [You]". Lists the viewer and every manager below
     them, indented by level.
   - **Program**: "All programs" or one program, narrowing to people on that program.
-  - Defaults (You, All programs) are set under **Preferences** in the avatar menu and
-    remembered in the browser. Trial design: the user will judge it once it can be clicked.
+  - Defaults (You, All programs) are set under **Preferences** in the avatar menu (above the
+    themes) and remembered in the browser. Trial design: the user will judge it once it can be clicked.
 - **Toolbar (shared)**: Tree / List switch, **keyword search**, **Issues only** toggle switch,
   category filter (show only SAP issues, for example), status filter, direct reports vs whole
   subtree, legend. Tree view adds expand/collapse all.

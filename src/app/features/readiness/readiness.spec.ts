@@ -6,6 +6,7 @@ import { CRANE_PROGRAM_ID } from '../../../data/mock/fake-catalog';
 import { DATA_SOURCE } from '../../services/tokens';
 import { SettingsService } from '../../services/settings-service';
 import { ViewerService } from '../../services/viewer-service';
+import { SUPERVISOR_INDENT } from '../../shared/supervisor-choices';
 import { loadAppState } from '../../testing';
 import { READINESS_PAGE_CONFIG } from './readiness-page-config';
 import { Readiness } from './readiness';
@@ -155,7 +156,7 @@ describe('Readiness page and toolbar', () => {
     const options = [...byTestId<HTMLSelectElement>('supervisor').options];
     expect(options[0].textContent).toBe(`You (${director().name})`);
     expect(options.length).toBeGreaterThan(10);
-    expect(options[1].textContent!.startsWith(' '.repeat(READINESS_PAGE_CONFIG.supervisorIndent))).toBe(true);
+    expect(options[1].textContent!.startsWith(' '.repeat(SUPERVISOR_INDENT))).toBe(true);
   });
 
   it('disables the category and status filters while Issues only is off', async () => {
