@@ -92,3 +92,8 @@
   Admin to turn them red).
 - **Personas**: Foreman (tool-crew foreman), Superintendent, Director, and Admin (the director
   with admin rights, so admin sees everyone).
+- **Settings shape**: one JSON object (`schemaVersion`, programs, assignments by person,
+  warning-window overrides by category, preferences) under browser key `rtw.settings`.
+  Imports are checked field by field with readable errors; missing sections fall back to
+  defaults; older files are upgraded one version at a time through a migrations table.
+  Unreadable saved data falls back to defaults rather than breaking the app.

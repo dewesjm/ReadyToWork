@@ -14,7 +14,7 @@
 - [ ] M2 Fake data and storage
   - [x] DataSource and Clock interfaces, DemoClock, seeded random
   - [x] Fake org generator, catalog, programs, planted scenarios, MockDataSource
-  - [ ] Settings, LocalSettingsStore (schema version, export/import, reset)
+  - [x] Settings, LocalSettingsStore (schema version, export/import, reset)
   - [ ] Angular wiring: providers, ReadinessService, theme and persona via settings
 
 ## Open questions (user's to decide)
