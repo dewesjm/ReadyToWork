@@ -8,7 +8,7 @@
 - [x] M1 plan reviewed
 - [ ] M1 Core logic
   - [x] Model types, dates, default config
-  - [ ] StatusEngine (one record to one check)
+  - [x] StatusEngine (one record to one check)
   - [ ] ProgramRules (requirements merge into checks)
   - [ ] OrgIndex, RollupCalculator, ReadinessEvaluator
 
