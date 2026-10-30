@@ -13,7 +13,7 @@
 - [x] M2 plan reviewed (fake dates relative to the real date)
 - [ ] M2 Fake data and storage
   - [x] DataSource and Clock interfaces, DemoClock, seeded random
-  - [ ] Fake org generator, catalog, programs, planted scenarios, MockDataSource
+  - [x] Fake org generator, catalog, programs, planted scenarios, MockDataSource
   - [ ] Settings, LocalSettingsStore (schema version, export/import, reset)
   - [ ] Angular wiring: providers, ReadinessService, theme and persona via settings
 

@@ -83,3 +83,12 @@
 - **People carry an employee ID** so keyword search can match it.
 - **DataSource and SettingsStore are asynchronous** (Promises), like a real API, so screens
   don't change when the mock is swapped out.
+- **Fake org hits its status mix by design**: each person gets a target status first (planted
+  scenarios, then weighted sampling so some crews are clearly worse), then records are
+  generated to produce it. Default seed gives 201 people at 70/18/9/3%.
+- **Planted scenarios**: a crew with expired tool calibrations (the Foreman persona's crew),
+  a crew whose SAP passwords expire in 6-9 days, a crew greyed out by out-of-date Yubikey
+  data, and one green person who lacks the crane qualification (assign Crane Operations in
+  Admin to turn them red).
+- **Personas**: Foreman (tool-crew foreman), Superintendent, Director, and Admin (the director
+  with admin rights, so admin sees everyone).
