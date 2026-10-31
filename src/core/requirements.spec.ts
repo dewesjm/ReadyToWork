@@ -3,7 +3,7 @@ import { itemKey, itemNames, normalizeId, optionLabel, requirementKey, requireme
 
 const names = itemNames([
   { category: 'training', itemId: 'HW-210', itemName: 'Hot Work and Fire Watch' },
-  { category: 'access-role', itemId: 'PS_PLANNER', itemName: 'PS_PLANNER' },
+  { category: 'access-role', itemId: 'PS_PLANNER', itemName: 'SAP role PS_PLANNER' },
 ]);
 
 describe('requirements', () => {
@@ -21,7 +21,7 @@ describe('requirements', () => {
 
   it('labels an option with its name from the data when known', () => {
     expect(optionLabel({ category: 'training', itemId: 'hw-210' }, names)).toBe('Hot Work and Fire Watch (hw-210)');
-    expect(optionLabel({ category: 'access-role', itemId: 'PS_PLANNER' }, names)).toBe('PS_PLANNER');
+    expect(optionLabel({ category: 'access-role', itemId: 'ps_planner' }, names)).toBe('SAP role PS_PLANNER');
     expect(optionLabel({ category: 'training', itemId: 'NEW-1' }, names)).toBe('NEW-1');
   });
 

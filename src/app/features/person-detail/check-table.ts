@@ -35,7 +35,8 @@ export class CheckTable {
         dueLine: dueLine(c),
         category: config?.label ?? c.category,
         // The course or qual ID of a held item (a missing item's label already has it).
-        itemId: config?.showsItemId && c.source !== 'program' && c.itemId !== c.itemName ? c.itemId : null,
+        itemId:
+          config?.showsItemId && c.source !== 'program' && !c.itemName.includes(c.itemId) ? c.itemId : null,
         due: c.dueDate ? formatDate(c.dueDate) : '—',
         days: c.daysRemaining === undefined ? '—' : describeDays(c.daysRemaining),
         source: sourceLabel(c.source),

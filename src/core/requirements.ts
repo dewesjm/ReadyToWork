@@ -37,11 +37,15 @@ export function itemNames(
   return names;
 }
 
-/** One option for display: "Hot Work and Fire Watch (HW-210)", or the ID alone when unknown. */
+/**
+ * One option for display: "Hot Work and Fire Watch (HW-210)"; just the name when it already
+ * contains the ID ("SAP role PS_PLANNER"); the ID alone when no record has it.
+ */
 export function optionLabel(option: RequirementOption, names: ItemNames): string {
   const id = option.itemId.trim();
   const name = names.get(itemKey(option.category, id));
-  return name && name !== id ? `${name} (${id})` : id;
+  if (!name) return id;
+  return name.toLowerCase().includes(id.toLowerCase()) ? name : `${name} (${id})`;
 }
 
 /**
