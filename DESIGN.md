@@ -139,6 +139,8 @@ toolbar, so filters carry over when switching.
   Issues only on) hides the other columns.
 - Sorted worst first, then by the soonest due issue (not-ready checks with no date count as
   most overdue), then name. One fixed order, no column sorting.
+- Below very wide screens (2xl) the manager folds under the name; if the table is still too wide,
+  it scrolls inside its box, never the page.
 - Phones get cards with chips for the categories that have issues. With the Dashboard panel
   open, the manager folds under the name and cells show the status icon only (text as a
   tooltip and for screen readers).

@@ -2,14 +2,16 @@
   <rtw-readiness-empty />
 } @else {
   <!-- Wide screens: a table. The person's name is a button so each row is keyboard reachable.
-       The wrapper does the hiding: the "table" class also sets display: table. -->
-  <div class="hidden md:block">
+       The wrapper does the hiding (the "table" class also sets display: table) and keeps any
+       overflow inside the box, so the page never scrolls sideways. -->
+  <div class="hidden overflow-x-auto md:block">
     <table class="table table-sm" data-testid="person-list">
       <thead>
         <tr>
           <th>Person</th>
+          <!-- Below 2xl the manager folds under the name to leave room for the categories. -->
           @if (!compact()) {
-            <th>Manager</th>
+            <th class="max-2xl:hidden">Manager</th>
           }
           @for (c of columns(); track c.id) {
             <th class="text-center align-bottom" [attr.data-category]="c.id">
@@ -44,8 +46,8 @@
               </button>
               <div class="text-xs opacity-70">
                 <rtw-highlight [text]="r.person.title" [keyword]="r.match ? keyword() : ''" />
-                @if (compact() && r.manager) {
-                  · under {{ r.manager.name }}
+                @if (r.manager) {
+                  <span class="ml-1" [class.2xl:hidden]="!compact()" data-testid="under-manager">· under {{ r.manager.name }}</span>
                 }
               </div>
               <button
@@ -61,7 +63,7 @@
               </button>
             </td>
             @if (!compact()) {
-              <td>{{ r.manager?.name ?? '—' }}</td>
+              <td class="max-2xl:hidden">{{ r.manager?.name ?? '—' }}</td>
             }
             @for (c of r.cells; track $index) {
               <td class="text-center" [attr.data-category]="columns()[$index].id">

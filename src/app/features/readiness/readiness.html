@@ -1,7 +1,8 @@
 <rtw-readiness-toolbar class="mb-4 block" />
 
 <div class="grid items-start gap-4" [class]="panelId() ? 'lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' : ''">
-  <div class="rounded-box border border-base-300 bg-base-100 p-2 sm:p-4">
+  <!-- min-w-0: a grid item otherwise grows to its content's width and the page scrolls sideways. -->
+  <div class="min-w-0 rounded-box border border-base-300 bg-base-100 p-2 sm:p-4">
     @if (query.view() === 'tree') {
       <rtw-org-tree />
     } @else {

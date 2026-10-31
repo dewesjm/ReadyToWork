@@ -346,3 +346,6 @@
   search couldn't find them. While there is a keyword, Issues only and its category and status
   filters pause; the switch says so, the filter buttons are disabled, and clearing the search
   restores them. The rule is one core function (`issuesFilterApplies`).
+- **No sideways page scroll on the Readiness page** (user). The tree/list box is a grid item,
+  which grew to the table's width; it now has `min-w-0` and the table scrolls inside its own
+  box when it must. Below 2xl the list folds the manager under the name, like the panel view.
