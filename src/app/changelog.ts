@@ -20,7 +20,11 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
       'Export: download the people shown as a file for Excel, from the tree or the list.',
       'A General Foreman under View as in the avatar menu.',
     ],
-    fixes: ['If you opened the demo before today, you now get the new sample programs without resetting anything.'],
+    fixes: [
+      'If you opened the demo before today, you now get the new sample programs without resetting anything.',
+      'The side panel has a clear Close button.',
+      'The dropdowns in the avatar menu have a visible outline.',
+    ],
     changes: [
       'In the tree, only the Details button opens a person. Clicking a row opens or closes a team.',
       'The list shows one row per person, with a column for each category.',

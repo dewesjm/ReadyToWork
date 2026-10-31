@@ -17,16 +17,16 @@
       data-testid="person-panel"
       (keydown.escape)="closePanel()"
     >
-      <div class="mb-2 flex items-center justify-end gap-1">
-        <a class="btn btn-ghost btn-xs" data-testid="open-full-page" [routerLink]="['/person', id]">Open full page</a>
+      <div class="mb-2 flex items-center justify-end gap-2">
+        <a class="btn btn-ghost btn-sm" data-testid="open-full-page" [routerLink]="['/person', id]">Open full page</a>
         <button
           type="button"
-          class="btn btn-ghost btn-xs btn-square"
+          class="btn btn-outline btn-sm"
           aria-label="Close person detail"
           data-testid="close-panel"
           (click)="closePanel()"
         >
-          <rtw-icon name="x" />
+          <rtw-icon name="x" /> Close
         </button>
       </div>
       <rtw-person-detail [personId]="id" mode="panel" />

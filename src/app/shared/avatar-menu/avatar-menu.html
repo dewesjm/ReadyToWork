@@ -37,7 +37,7 @@
       <label class="flex flex-col gap-1 text-xs font-medium">
         View as (demo)
         <select
-          class="select select-sm w-full"
+          class="select select-sm w-full border-base-content/40"
           data-testid="persona"
           (change)="setPersona($any($event.target).value)"
         >
@@ -49,7 +49,7 @@
       <label class="flex flex-col gap-1 text-xs font-medium">
         Readiness page opens on people under
         <select
-          class="select select-sm w-full"
+          class="select select-sm w-full border-base-content/40"
           data-testid="default-supervisor"
           (change)="setDefaultSupervisor($any($event.target).value)"
         >
@@ -61,7 +61,7 @@
       <label class="flex flex-col gap-1 text-xs font-medium">
         Layout
         <select
-          class="select select-sm w-full"
+          class="select select-sm w-full border-base-content/40"
           data-testid="layout"
           (change)="setLayout($any($event.target).value)"
         >
@@ -72,7 +72,7 @@
       <label class="flex flex-col gap-1 text-xs font-medium">
         Default program
         <select
-          class="select select-sm w-full"
+          class="select select-sm w-full border-base-content/40"
           data-testid="default-program"
           (change)="setDefaultProgram($any($event.target).value)"
         >
