@@ -185,6 +185,22 @@ describe('Readiness page and toolbar', () => {
     expect(byTestId('shown-count').textContent).toBe(`${shownCount} of ${scopeCount} people shown`);
   });
 
+  it('finds a ready person by search with Issues only on, and says the filter is paused', async () => {
+    // The superintendent persona is ready; Issues only alone would hide them.
+    const { byTestId, query, harness, stable, el } = await open('/readiness', 'superintendent');
+    const me = TestBed.inject(ViewerService).viewer()!;
+    expect(query.issuesOnly()).toBe(true);
+    expect(el.querySelector('[data-testid="searching-everyone"]')).toBeNull();
+
+    await harness.navigateByUrl(`/readiness?q=${encodeURIComponent(me.name.split(' ')[0])}`);
+    await stable();
+    const shown = query.result().rows.filter((r) => !r.context && r.match).map((r) => r.person.id);
+    expect(shown).toContain(me.personId);
+    expect(byTestId('searching-everyone').textContent).toContain('searching everyone');
+    expect(byTestId<HTMLInputElement>('issues-only').checked).toBe(true);
+    expect(el.querySelector<HTMLButtonElement>('[aria-label="What counts as an issue"] button[disabled]')).not.toBeNull();
+  });
+
   it('exports the people shown, in either view, as a CSV named for the day', async () => {
     const saved: { name: string; blob: Blob }[] = [];
     const blobs = new Map<string, Blob>();

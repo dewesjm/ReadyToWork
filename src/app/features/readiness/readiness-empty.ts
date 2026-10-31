@@ -9,7 +9,7 @@ import { ReadinessQueryService } from './readiness-query-service';
       @if (query.hasFilters()) {
         <p>No one matches these filters.</p>
         <button type="button" class="btn btn-sm" (click)="query.clearFilters()">Clear filters</button>
-      } @else if (query.issuesOnly()) {
+      } @else if (query.issuesOnly() && !query.searchingEveryone()) {
         <p>No issues: everyone here is ready.</p>
       } @else {
         <p>No one in this scope.</p>

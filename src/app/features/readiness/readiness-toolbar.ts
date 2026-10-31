@@ -23,6 +23,8 @@ export class ReadinessToolbar {
   private readonly clock = inject(ClockService);
   protected readonly issueStatuses = ISSUE_STATUSES;
   protected readonly statusMeta = STATUS_META;
+  /** The category and status filters only apply while Issues only does (not during a search). */
+  protected readonly filtersApply = computed(() => this.query.issuesOnly() && !this.query.searchingEveryone());
 
   protected readonly supervisorOptions = computed(() =>
     supervisorChoices(this.query.supervisorOptions(), this.viewer.viewer()?.personId),

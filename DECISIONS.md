@@ -342,3 +342,7 @@
   qualifications per trade. Not built.
 - **Department per person** (user): planned, then put on hold to do trades first. The draft is
   plans/department.md.
+- **Search ignores Issues only** (user). A ready person showed in the tree as context but the
+  search couldn't find them. While there is a keyword, Issues only and its category and status
+  filters pause; the switch says so, the filter buttons are disabled, and clearing the search
+  restores them. The rule is one core function (`issuesFilterApplies`).

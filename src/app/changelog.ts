@@ -24,6 +24,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     fixes: [
       'If you opened the demo before today, you now get the new sample programs without resetting anything.',
       'The side panel has a clear Close button.',
+      'Search finds anyone in view, even people who are ready while Issues only is on.',
       'The dropdowns in the avatar menu have a visible outline.',
     ],
     changes: [

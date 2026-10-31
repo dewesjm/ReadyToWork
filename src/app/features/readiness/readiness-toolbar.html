@@ -96,6 +96,9 @@
         (change)="query.setIssuesOnly($any($event.target).checked)"
       />
       Issues only
+      @if (query.searchingEveryone()) {
+        <span class="text-xs font-normal opacity-70" data-testid="searching-everyone">(paused: searching everyone)</span>
+      }
     </label>
 
     <label class="flex cursor-pointer items-center gap-2 text-sm font-medium">
@@ -114,15 +117,15 @@
       class="flex flex-wrap items-center gap-2"
       role="group"
       aria-label="What counts as an issue"
-      [attr.title]="query.issuesOnly() ? null : 'Turn on Issues only to filter by category or status'"
+      [attr.title]="filtersApply() ? null : query.searchingEveryone() ? 'Clear the search to filter by category or status' : 'Turn on Issues only to filter by category or status'"
     >
-      <rtw-category-filter [disabled]="!query.issuesOnly()" />
+      <rtw-category-filter [disabled]="!filtersApply()" />
       @for (s of issueStatuses; track s) {
         <button
           type="button"
           class="btn btn-sm gap-1"
           [class]="statusChipClass(s)"
-          [disabled]="!query.issuesOnly()"
+          [disabled]="!filtersApply()"
           [attr.aria-pressed]="query.statuses().includes(s)"
           [attr.data-status]="s"
           (click)="query.toggleStatus(s)"

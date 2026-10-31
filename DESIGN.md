@@ -143,6 +143,10 @@ toolbar, so filters carry over when switching.
   open, the manager folds under the name and cells show the status icon only (text as a
   tooltip and for screen readers).
 - The keyword matches people (name, title, employee ID), as in the tree.
+- **Search looks through everyone in scope** (both views): while there is a keyword, Issues
+  only and its category and status filters pause, so a ready person can be found by name. The
+  switch stays on and says "(paused: searching everyone)"; clearing the search brings the
+  filter back.
 
 **Export** (both views)
 - An Export button next to Tree / List downloads `readiness-<date>.csv` for Excel: one row per

@@ -7,6 +7,7 @@ import {
   ReadinessFilter,
   ReadinessQuery,
   highlightParts,
+  issuesFilterApplies,
   opensByDefault,
   resolveSupervisor,
   supervisorOptions,
@@ -155,11 +156,14 @@ describe('ReadinessFilter', () => {
     expect(run({ keyword: '  ' }).narrowed).toBe(false);
   });
 
-  it('combines the keyword with Issues only', () => {
-    const r = run({ keyword: 'person', issuesOnly: true });
-    expect(ids(r)).toEqual(['dir', 'm1', 'f1', 'c2', 'f2', 'm2', 'f3']);
-    // dir matches the keyword but has no issue, so it is only context.
-    expect(contextIds(r)).toEqual(['dir', 'm1', 'f1', 'm2']);
+  it('searches everyone in scope, ignoring Issues only and its filters while there is a keyword', () => {
+    const searched = run({ keyword: 'person', issuesOnly: true, categories: ['tool'], statuses: ['not-ready'] });
+    expect(searched).toEqual(run({ keyword: 'person', issuesOnly: false }));
+    // dir has no issue but matches, so it is a match, not just context.
+    expect(contextIds(searched)).not.toContain('dir');
+    expect(searched.rows.find((row) => row.person.id === 'dir')!.match).toBe(true);
+    expect(issuesFilterApplies({ issuesOnly: true, keyword: '  ' })).toBe(true);
+    expect(issuesFilterApplies({ issuesOnly: true, keyword: 'x' })).toBe(false);
   });
 
   it('marks the root as a match when it matches', () => {

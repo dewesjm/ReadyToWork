@@ -34,6 +34,14 @@ export const DEFAULT_QUERY: ReadinessQuery = {
 /** Statuses that can be an issue, worst first. */
 export const ISSUE_STATUSES: readonly Status[] = ['not-ready', 'expiring'];
 
+/**
+ * Whether Issues only (with its category and status filters) applies. A search looks through
+ * everyone in scope, so while there is a keyword it doesn't.
+ */
+export function issuesFilterApplies(query: Pick<ReadinessQuery, 'issuesOnly' | 'keyword'>): boolean {
+  return query.issuesOnly && query.keyword.trim() === '';
+}
+
 export interface FilterViewer {
   personId: string;
   /** Admins may scope to anyone; everyone else only to their own subtree. */
@@ -137,7 +145,7 @@ export class ReadinessFilter {
     const matches = new Set<string>();
     const shown = new Set<string>();
     for (const p of scoped) {
-      if (query.issuesOnly && !hasIssue(p.id, checksByPerson, statusByPerson, query)) continue;
+      if (issuesFilterApplies(query) && !hasIssue(p.id, checksByPerson, statusByPerson, query)) continue;
       if (keyword) {
         if (!matchesKeyword(p, keyword)) continue;
         matches.add(p.id);
@@ -192,7 +200,7 @@ export class ReadinessFilter {
   listPeople(input: FilterInput): PersonListResult {
     const { org, checksByPerson, statusByPerson } = input.readiness;
     const { query } = input;
-    const picked = query.issuesOnly ? query.categories : [];
+    const picked = issuesFilterApplies(query) ? query.categories : [];
     const columns = this.categories
       .map((c) => c.id)
       .filter((id) => picked.length === 0 || picked.includes(id));

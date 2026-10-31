@@ -48,6 +48,8 @@ export class ReadinessQueryService {
   readonly view = computed<ReadinessView>(() => (this.param('view') === 'list' ? 'list' : 'tree'));
   /** On unless the URL says `issues=all`. */
   readonly issuesOnly = computed(() => this.param('issues') !== 'all');
+  /** Issues only is on but paused because there is a search. */
+  readonly searchingEveryone = computed(() => this.issuesOnly() && this.keyword().trim() !== '');
 
   readonly viewer = computed<FilterViewer | null>(() => {
     const v = this.viewerService.viewer();
