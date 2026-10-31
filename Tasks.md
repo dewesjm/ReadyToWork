@@ -79,6 +79,8 @@
 - [x] User answers the 5 questions at the end of the list by person plan (all recommended options)
 - [x] List by person: one row per person, a column per category (310 tests)
 - [ ] User checks the list by person in the browser
+- [x] Shipyard sample data plan written (user request: fake ships, titles, tools, training): [plans/shipyard-data.md](plans/shipyard-data.md)
+- [ ] User answers the 3 questions at the end of the shipyard data plan
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)
