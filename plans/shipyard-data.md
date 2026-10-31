@@ -6,6 +6,7 @@ app gets programs from elsewhere; the program list as proposed. User request 202
 the sample data closer to reality without real company data. A program is a shipbuilding
 program: on larger ships usually one specific ship, on smaller, modular builds the whole class.
 Fake ship names are fine; job titles, tool names and training are a good start.
+Since then: the user asked for no manual reset after all, so saved settings upgrade automatically (versions 2 and 3); crew titles now follow their superintendent's trade (DESIGN.md section 7).
 
 Acceptance ("Done when"):
 

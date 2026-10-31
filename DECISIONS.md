@@ -74,7 +74,9 @@
   under [You]") and a Program list ("All programs") that combine. The user will judge it once
   it can be clicked.
 - **Keyword search filters the page's results** (user) instead of jumping to one person:
-  names, titles, employee IDs, and item names in the list view.
+  names, titles, employee IDs~~, and item names in the list view~~. (Item names dropped
+  2026-10-31 when the list became one row per person; since then a search also pauses Issues
+  only.)
 - **Default scope lives under Preferences in the avatar menu** (user), next to the theme.
 - **Fake dates are relative to the real date** (user). The generator builds every date from
   the day the demo is opened, so it looks the same whenever it's shown; the demo clock starts
@@ -89,7 +91,7 @@
   a crew whose SAP passwords expire in 6-9 days, and one green person who lacks the crane qualification (assign Crane Operations in
   Admin to turn them red).
 - **Personas**: Foreman (tool-crew foreman), Superintendent, Director, and Admin (the director
-  with admin rights, so admin sees everyone).
+  with admin rights, so admin sees everyone). (General Foreman added 2026-10-31.)
 - **Settings shape**: one JSON object (`schemaVersion`, programs, assignments by person,
   warning-window overrides by category, preferences) under browser key `rtw.settings`.
   Imports are checked field by field with readable errors; missing sections fall back to
@@ -105,7 +107,7 @@
   see it.
 - **M3: category and status filters only apply with Issues only on** (user). They define what
   counts as an issue ("Issues only, for SAP, not ready"); with Issues only off everyone in scope
-  is shown and the filters are disabled.
+  is shown and the filters are disabled. (Since 2026-10-31 they also pause during a search.)
 - **M3: manager roll-ups always count everyone below** (user), whatever is filtered, so the
   numbers are always true. Filters only change which rows show.
 - **M3: the tree opens down to foremen** (user) when Issues only is off and there is no search:
@@ -162,11 +164,13 @@
   their issue checks, so the list and tree always agree. Rows show "required by".
 - **M5: long lists show 100 rows at a time** (user) with "Show 100 more" and "Showing 100 of
   2,140". Filters are the real way to narrow it.
-- **M5: one fixed list order, soonest first** (user). No column sorting for now; ask users in
-  the demo whether they miss it.
+- **M5: one fixed list order, ~~soonest first~~** (user). No column sorting for now; ask users
+  in the demo whether they miss it. (Since the 2026-10-31 list by person: worst first, then
+  soonest due.)
 - **In the list, the person's name is the row's button** (keyboard reachable, Enter opens);
-  the whole row is also clickable. With the Dashboard panel open, the manager and category
-  columns fold under the person and item, since the list column is narrower.
+  the whole row is also clickable. With the Dashboard panel open, the manager ~~and category
+  columns fold under the person and item~~ folds under the name and cells show icons only
+  (2026-10-31, list by person).
 - **The tree and list share one empty state** (`ReadinessEmpty`).
 - **Don't hide a daisyUI `table` with `hidden md:table`**: the class `table` is also Tailwind's
   `display: table` utility and wins over `hidden`. Hide a wrapper div instead.
@@ -190,9 +194,10 @@
   assignments, saved defaults and links survive a rename.
 - **Rename saves on Enter or on leaving the field**; Escape puts the saved name back. A bad name
   shows its reason under the field and changes nothing.
-- **The requirement picker opens inline** under the requirements, grouped by category with a
+- ~~**The requirement picker opens inline** under the requirements, grouped by category with a
   search box, rather than in a dialog, so the list and the live summary stay in view while
-  adding several items.
+  adding several items.~~ (Replaced 2026-10-31 by typed requirements; the typed form also opens
+  inline, for the same reason.)
 - **Confirmations use a native `<dialog>` (daisyUI `modal`)** through one shared
   `ConfirmDialog`: Escape and Cancel answer no. Specs stub `showModal` (`stubDialogs()` in
   `src/app/testing.ts`) since jsdom has none.
@@ -322,8 +327,6 @@
   anything); the toggle is a plain button out of the tab order like Details, and Enter on a row
   still opens Details. Open items are remembered while switching views. The due-line wording
   and which item IDs to show moved into the core so Details and the inline view match.
-- **Export is next** (user): the export plan's recommended options, built after the inline
-  items.
 - **Export to CSV** (user: "export to Excel, likely just CSV"; the plan's recommended options).
   One row per person, exactly the people the page shows under the current filters, a "Reports
   to" column instead of the tree's context rows, the same file from both views. Each category
@@ -349,3 +352,8 @@
 - **No sideways page scroll on the Readiness page** (user). The tree/list box is a grid item,
   which grew to the table's width; it now has `min-w-0` and the table scrolls inside its own
   box when it must. Below 2xl the list folds the manager under the name, like the panel view.
+- **Cleanup pass** (user: "clean up documentation, look for tech debt or duplicative code").
+  Shared helpers replace repeated code: `categoryConfig` and `countText` in the core,
+  `downloadFile` for both downloads, `SettingsService.programNames`, and one `ItemsToggle`
+  component for the tree, list and phone cards. Docs brought in line with what is built;
+  replaced decisions above are marked.

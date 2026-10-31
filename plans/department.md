@@ -1,7 +1,8 @@
 # Plan: A department on each person
 
-Status: **waiting on the user's answers** (questions at the end). User request 2026-10-31: "add
+Status: **on hold** 2026-10-31 (user: "maybe not yet"; trades came first). User request 2026-10-31: "add
 department to each person."
+Since then (2026-10-31): crews are by trade (one per superintendent), so departments could follow the trade.
 
 Acceptance ("Done when"):
 

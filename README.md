@@ -24,14 +24,15 @@ Vercel, as a static site. `vercel.json` sets the build output folder, rewrites e
 
 ## Layout
 
-- `plans/`: one plan per milestone, written before it is built
+- `plans/`: one plan per milestone or feature, written and reviewed before it is built
 
 - `src/core/`: plain TypeScript domain logic (no Angular), unit tested
-- `src/data/`: `DataSource`, `SettingsStore`, `Clock` and their mock implementations
-- `src/app/features/`: screens (readiness page with tree and list views, person detail, admin);
-  `readiness/` holds the URL-backed query, the toolbar and the tree's expand state; `admin/` holds
-  the admin tabs and their child routes
-- `src/app/shared/`: app shell, avatar menu, theme list, shared UI pieces
+- `src/data/`: `DataSource`, `SettingsStore`, `Clock` and their mock implementations; the fake
+  org (people, trades, items, programs) is in `src/data/mock/`
+- `src/app/features/`: screens (readiness page with tree and list views, person detail, admin,
+  change log); `readiness/` holds the URL-backed query, the toolbar, the tree's expand state and
+  the items shown in place; `admin/` holds the admin tabs and their child routes
+- `src/app/shared/`: app shell, avatar menu, theme list, shared UI pieces and the file download
 - `src/app/changelog.ts`: the change log shown at `/changelog`; add a line for any change users
   would notice
 - `src/app/services/`: Angular services wrapping core and data; `tokens.ts` is where the mock

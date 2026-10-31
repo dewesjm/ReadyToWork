@@ -30,7 +30,8 @@ feedback. Read DESIGN.md first; it is the spec and the build plan.
 - After every change, summarize: files touched, behavior changed, anything unverified.
 
 ## Working notes (for a fresh session)
-- Start here: Tasks.md "Now" shows where things stand; milestone plans live in `plans/`.
+- Start here: Tasks.md "Now" shows where things stand; milestone and feature plans live in
+  `plans/`.
 - Angular 21 (not 22: the dev machine's Node 24.14 is too old for 22). Tailwind 4 + daisyUI 5.
 - `npm start` (dev server), `npm test -- --watch=false` (Vitest), `npm run build` (typecheck).
 - Run one spec file: `npx ng test --watch=false --include src/path/to/file.spec.ts`.
@@ -50,6 +51,8 @@ feedback. Read DESIGN.md first; it is the spec and the build plan.
   screenshot another persona, serve a copy of the build whose index.html sets that key in a
   script before the app boots.
 - Git warns "LF will be replaced by CRLF" on every commit; harmless.
+- Don't run Prettier over whole folders: much of the existing code isn't Prettier-formatted, so
+  it rewraps untouched lines and buries the real change. Format only what you wrote.
 - Changing the default sample programs (`DEFAULT_PROGRAMS`)? Browsers that opened the demo keep
   their saved copy. Bump `SETTINGS_SCHEMA_VERSION` in `src/data/settings.ts` and add
   `replaceSamplePrograms` to `MIGRATIONS` for the old version, so they get the new ones.

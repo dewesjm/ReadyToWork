@@ -2,6 +2,7 @@
 
 Status: **done** 2026-10-30. Questions answered the same day (all recommended options). Spec: DESIGN.md
 section 5.1 (List view). Acceptance ("Done when", DESIGN.md section 10):
+Since then: on 2026-10-31 the list became one row per person with a column per category (plans/list-by-person.md).
 
 > The list matches the checks behind the tree for every view-as persona, and switching between
 > Tree and List keeps the filters.

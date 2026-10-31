@@ -1,6 +1,57 @@
 # Tasks
 
 ## Now
+- [ ] User checks in the browser (each built and tested, not yet looked at by the user):
+  - [ ] M5 list view and M6 Admin
+  - [ ] Announcements
+  - [ ] Change log
+  - [ ] List by person
+  - [ ] Shipyard data and crews by trade
+  - [ ] Typed requirements
+  - [ ] Items in place (and revise the wording)
+  - [ ] An export opened in Excel
+- [ ] Department per person: on hold, draft in [plans/department.md](plans/department.md)
+- [ ] M7 plan: demo controls
+
+## Open questions (user's to decide)
+- Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
+- Will the demo be presented live, or sent as a link for users to try alone? (A link needs
+  more on-screen guidance.)
+- Devices: what makes a device "not ready" for your users (access expiring, not checked in,
+  compliance)? Mockup assumes access expiry plus last check-in (14 days yellow, 30 red).
+- Access and roles: is the concern only missing or expiring roles, or also people holding
+  roles they shouldn't (excess access)?
+- Tools: assigned to individuals, crews, or both?
+- License: MIT for the repo? Check the employer's policy on licensing work code first.
+
+## Follow-ups
+- M8: the "Ready to Work" brand wraps onto two lines in the header at phone width.
+- M8: below 640px wide, a tree row's Details button drops onto a line of its own; check it in
+  the phone pass.
+- Demo: ask users whether they miss sorting the list by column (M5 shipped one fixed order).
+- M8: context rows are dimmed with opacity; check their contrast in the accessibility pass.
+- M8: in the dark theme, the Outage strip is white text on a light red (the theme's error
+  colors, as on the Not ready badges); check its contrast.
+- M8: inactive Admin tabs are pale grey, faint in the dark theme; check their contrast.
+- Demo: ask admins whether "Add everyone under" should be a standing rule (new people under that
+  supervisor join the program) rather than a one-time add.
+- Hosting: password-protect the Vercel site with basic-auth middleware (`middleware.ts`,
+  credentials in Vercel environment variables). Decided, not built; see DECISIONS.md 2026-10-31.
+- Demo: ask whether people want a "Show items" switch that opens everyone's items at once
+  (proposed 2026-10-31, held until asked).
+- Items in place repeat the days ("Expires in 28 days · Due Nov 28, 2026 · 28 days"), as Details
+  does; revise the wording with the user.
+- The list's "Show 100 more" test failed once in a full run and passed on reruns; watch it.
+
+## Later (real app, not this mockup)
+- Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)
+- Where real program assignments come from (likely by who you work for: "you work for X, so you
+  get their program")
+- Notifications / weekly digest email
+- History and audit trail
+- Trade-specific qualifications within a program (a program may need different quals per trade)
+
+## Done
 - [x] User reviews DESIGN.md
 - [x] M0 Setup (scaffold, brand themes + avatar menu, shell and routes, PWA, Vercel config)
 - [x] User checks M0 in the browser; colors approved
@@ -44,7 +95,6 @@
   - [x] 3. Toolbar and focus
   - [x] 4. Check and document (parity test for all personas; screenshots desktop, panel, 390px phone, light and dark)
 
-- [ ] User checks M5 in the browser
 - [x] M6 plan written: [plans/M6-admin.md](plans/M6-admin.md)
 - [x] User answers the 5 questions at the end of the M6 plan (all recommended options)
 - [x] M6 Admin, steps 1-7 in the plan (276 tests)
@@ -57,14 +107,12 @@
   - [x] 7. Check and document (acceptance test with the fake org; screenshots desktop and
     390px phone, light and dark; crane candidate turns red in the tree)
 
-- [ ] User checks M6 in the browser
 - [x] Remove the Unknown status: three statuses, judged by dates only (user request; 274 tests)
 - [x] Full-width pages; common American fake names (user requests)
 - [x] Tree: aligned issue chips; row click expands, Details opens the person; "new version available" notice with Refresh (user requests; 281 tests)
 - [x] Announcements plan written (user request: admin banner for outages and delays): [plans/announcements.md](plans/announcements.md)
 - [x] User answers the 5 questions at the end of the announcements plan (all recommended options)
 - [x] Announcements, steps 1-4 in the plan (307 tests)
-- [ ] User checks announcements in the browser
   - [x] 1. Core: notices (292 tests)
   - [x] 2. The banner (298 tests)
   - [x] 3. Admin › Announcements tab (307 tests)
@@ -74,64 +122,23 @@
 - [x] User answers the 4 questions at the end of the change log plan (own page, start today,
   no dot, dates only; New / Changes / Fixes)
 - [x] Change log page and avatar menu row (311 tests)
-- [ ] User checks the change log in the browser
 - [x] List by person plan written (user request: a column per category): [plans/list-by-person.md](plans/list-by-person.md)
 - [x] User answers the 5 questions at the end of the list by person plan (all recommended options)
 - [x] List by person: one row per person, a column per category (310 tests)
-- [ ] User checks the list by person in the browser
 - [x] Shipyard sample data plan written (user request: fake ships, titles, tools, training): [plans/shipyard-data.md](plans/shipyard-data.md)
 - [x] User answers the 3 questions at the end of the shipyard data plan
 - [x] Shipyard sample data: ships and classes as programs, shipyard titles, training, quals, tools (310 tests)
-- [ ] User checks the shipyard data
 - [x] Typed requirements plan written (user request: admin types the course, qualification or role): [plans/typed-requirements.md](plans/typed-requirements.md)
 - [x] User answers the 3 questions at the end of the typed requirements plan (IDs, plain text box,
   network and SAP addable; plus a new need: "any of" requirements)
 - [x] User answers the second round of 4 questions in the typed requirements plan
 - [x] Typed requirements: IDs typed in Admin, "any of" with mixed types, optional names (326 tests)
-- [ ] User checks typed requirements in the browser
 - [x] Saved settings upgrade (version 2): older saved settings get the new sample programs, no manual reset (328 tests)
 - [x] Export plan written (user request: export to Excel/CSV on both views): [plans/export-csv.md](plans/export-csv.md)
 - [x] User answers the 3 questions at the end of the export plan (recommended options; build after inline items)
 - [x] Inline items plan written (user request: expand a person to see what they're missing): [plans/inline-items.md](plans/inline-items.md)
 - [x] User answers the 3 questions at the end of the inline items plan (recommended, no keyboard shortcut)
 - [x] Inline items: open a person's items under their row in the tree and the list (335 tests)
-- [ ] User checks the inline items in the browser and revises
 - [x] Export to CSV from both views, per plans/export-csv.md (339 tests)
-- [ ] User opens an export in Excel
 - [x] Crews by trade: crew titles and quals follow their superintendent's trade, odd person on loan (343 tests)
 - [x] Search looks through everyone in scope, pausing Issues only (user decision)
-- [ ] Department per person: on hold, draft in [plans/department.md](plans/department.md)
-- [ ] M7 plan: demo controls
-
-## Open questions (user's to decide)
-- Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
-- Will the demo be presented live, or sent as a link for users to try alone? (A link needs
-  more on-screen guidance.)
-- Devices: what makes a device "not ready" for your users (access expiring, not checked in,
-  compliance)? Mockup assumes access expiry plus last check-in (14 days yellow, 30 red).
-- Access and roles: is the concern only missing or expiring roles, or also people holding
-  roles they shouldn't (excess access)?
-- Tools: assigned to individuals, crews, or both?
-
-## Follow-ups
-- M8: the "Ready to Work" brand wraps onto two lines in the header at phone width.
-- M8: below 640px wide, a tree row's Details button drops onto a line of its own; check it in
-  the phone pass.
-- Demo: ask users whether they miss sorting the list by column (M5 shipped one fixed order).
-- M8: context rows are dimmed with opacity; check their contrast in the accessibility pass.
-- M8: in the dark theme, the Outage strip is white text on a light red (the theme's error
-  colors, as on the Not ready badges); check its contrast.
-- M8: inactive Admin tabs are pale grey, faint in the dark theme; check their contrast.
-- Demo: ask admins whether "Add everyone under" should be a standing rule (new people under that
-  supervisor join the program) rather than a one-time add.
-
-- Hosting: password-protect the Vercel site with basic-auth middleware (`middleware.ts`,
-  credentials in Vercel environment variables). Decided, not built; see DECISIONS.md 2026-10-31.
-
-## Later (real app, not this mockup)
-- Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)
-- Where real program assignments come from (likely by who you work for: "you work for X, so you
-  get their program")
-- Notifications / weekly digest email
-- History and audit trail
-- Trade-specific qualifications within a program (a program may need different quals per trade)

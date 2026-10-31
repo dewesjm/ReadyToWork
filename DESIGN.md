@@ -36,15 +36,17 @@ Every tracked item becomes a **check**: one person, one requirement, one status.
 | Access and roles | SAP role `MM_BUYER` | Required role missing, or role grant expiring |
 | Qualifications | Pipe Welding | Expiration approaching or passed, or missing when required |
 | Yubikeys (2FA) | Yubikey serial 1834… | None assigned, reported lost, or certificate expiring |
-| Program requirements | Program XYZ needs training ABC | A program the person is on requires something they lack |
 | Tools | Torque wrench TW-118 | Calibration expiring or expired |
+
+Program requirements are not a category of their own: a program's missing item shows as a red
+check in that item's category (a missing course under Training), marked "Required by".
 
 Category names, icons and warning windows live in a config table, so adding or renaming a
 category doesn't require new screens.
 
 ## 4. Status rules
 
-Four statuses, always shown as **color plus icon plus text** (never color alone):
+Three statuses, always shown as **color plus icon plus text** (never color alone):
 
 | Status | Color | Meaning |
 |---|---|---|
@@ -53,8 +55,8 @@ Four statuses, always shown as **color plus icon plus text** (never color alone)
 | Not ready | Red | Something expired, missing, or overdue, or there is no data |
 
 - **Warning windows are set per category** (defaults: SAP password 14 days, network access 30,
-  training 30, qualifications 60, tools 30, Yubikey certificate 30, devices 14). Admins can change
-  them.
+  training 30, access and roles 30, qualifications 60, tools 30, Yubikey certificate 30, devices
+  14). Admins can change them.
 - **A person's status is their worst check.** Red beats yellow beats green. Someone with no
   data at all is red, so missing data never looks like "all good."
 - **Status comes from dates alone.** When a source hasn't synced within its limit (3 days by
@@ -105,11 +107,13 @@ toolbar, so filters carry over when switching.
 - **Toolbar (shared)**: Tree / List switch, **keyword search**, **Issues only** toggle switch,
   category filter (show only SAP issues, for example), status filter, direct reports vs whole
   subtree, legend. Tree view adds expand/collapse all.
-- **Keyword search** filters the results already on the page as you type: person name, title
-  and employee ID, plus item names in the list view. In the tree, matches keep their manager
-  path visible.
-- **Issues only** is on by default. Off shows everyone (tree) or every check (list). The
-  category and status filters only apply while it is on: they define what counts as an issue.
+- **Keyword search** filters as you type: person name, title and employee ID. It looks
+  through everyone in scope: while there is a keyword, Issues only and its category and status
+  filters pause, so a ready person can be found by name. The switch stays on and says "(paused:
+  searching everyone)"; clearing the search brings the filter back. In the tree, matches keep
+  their manager path visible.
+- **Issues only** is on by default. Off shows everyone in scope. The category and status
+  filters only apply while it is on: they define what counts as an issue.
 - Manager roll-ups always count everyone below them, whatever is filtered.
 - The chosen view and filters are kept in the URL (`/readiness?view=list&...`), so a view can
   be bookmarked or shared, and Back returns to it.
@@ -144,11 +148,10 @@ toolbar, so filters carry over when switching.
 - Phones get cards with chips for the categories that have issues. With the Dashboard panel
   open, the manager folds under the name and cells show the status icon only (text as a
   tooltip and for screen readers).
-- The keyword matches people (name, title, employee ID), as in the tree.
-- **Search looks through everyone in scope** (both views): while there is a keyword, Issues
-  only and its category and status filters pause, so a ready person can be found by name. The
-  switch stays on and says "(paused: searching everyone)"; clearing the search brings the
-  filter back.
+- Under each name, "3 issues" (or "Items") opens the person's items in a row below, the same
+  view as in the tree; on phones the card's chips do it.
+- 100 rows at a time, with "Show 100 more".
+- Clicking a row (or Enter on the person's name) opens that person's detail.
 
 **Export** (both views)
 - An Export button next to Tree / List downloads `readiness-<date>.csv` for Excel: one row per
@@ -156,20 +159,16 @@ toolbar, so filters carry over when switching.
   employee ID, title, reports to, overall status, then a status column and a days-left column
   per category shown. UTF-8 with a byte-order mark so Excel reads it correctly; cells that
   would start a formula get an apostrophe.
-- Under each name, "3 issues" (or "Items") opens the person's items in a row below, the same
-  view as in the tree; on phones the card's chips do it.
-- 100 rows at a time, with "Show 100 more".
-- Clicking a row (or Enter on the person's name) opens that person's detail.
 
 ### 5.2 Person detail
 
 - Header: name, title, employee ID, status, manager chain (breadcrumb; managers above the
-  viewer are plain text), programs as badges with their own status ("Ridgeline R-01 (supply ship): Not
-  ready").
+  viewer are plain text), programs as badges with their own status ("Ridgeline R-01 (supply
+  ship): Not ready").
 - Summary strip: one tile per category with its status; "Nothing tracked" tiles are greyed out.
   Clicking a tile filters the check table to that category.
-- Check table: every check, sorted worst-first then soonest-due, with item, status, due date,
-  days remaining, source and last-synced time.
+- Check table: every check, sorted worst-first then soonest-due, with item (and its course or
+  qual ID), status, due date, days remaining, source and last-synced time.
 - **Responsible for**: if they manage people, the roll-up of their subtree and a link to view
   the tree from them.
 
@@ -177,11 +176,12 @@ toolbar, so filters carry over when switching.
 
 Four tabs, each its own URL: Programs (`/admin/programs`, each program at
 `/admin/programs/:id`), Thresholds, Announcements (`/admin/announcements`, each notice at
-`/admin/announcements/:id`, a new one at `new`) and Settings file. The Admin link shows only for the admin
-persona; anyone else opening `/admin` is told it is for admins.
+`/admin/announcements/:id`, a new one at `new`) and Settings file. The Admin link shows only
+for the admin persona; anyone else opening `/admin` is told it is for admins.
 
 - **Programs**: create, rename, delete programs; add requirements by typing one or more IDs
-  (type plus ID per row, "any one will do" for several, optional name) and remove them.
+  (type plus ID per row, "any one will do" for several, optional name) and remove them. Each
+  program shows how many people are on it and how ready they are for it, updating live.
 - **Program assignments**: on each program's page, assign people (search and pick, or add
   everyone under a supervisor in one go) and remove them one by one.
 - **Thresholds**: warning window in days per category, applied as you type.
@@ -192,10 +192,8 @@ persona; anyone else opening `/admin` is told it is for admins.
 - Every admin change saves and applies at once (no Save button); a "Saved" note confirms it.
   The exception is an announcement's form: nothing goes live until Publish, so a half-typed
   message never shows.
-  Each program shows how many people are on it and how ready they are for it, updating live.
 - **Settings file**: export the admin settings (programs, assignments, warning windows,
-  announcements) as JSON,
-  import a JSON file, reset them to defaults. Each viewer's own preferences (theme, layout,
+  announcements) as JSON, import a JSON file, reset them to defaults. Each viewer's own preferences (theme, layout,
   default scope, persona, demo date) stay out of the file and are kept on import and reset.
 
 ### 5.4 Two layouts (both shown in the demo)
@@ -207,8 +205,8 @@ persona; anyone else opening `/admin` is told it is for admins.
   (Back returns to the same view with its filters kept).
 
 Switched under Preferences in the avatar menu (and later the demo controls), so users can say
-which they prefer. Same components, arranged
-differently.
+which they prefer. Same components, arranged differently. The panel has Open full page and a
+Close button; Escape also closes it.
 
 ### 5.5 Announcements banner
 
@@ -228,7 +226,8 @@ differently.
 ```
 Angular views     readiness (tree, list) · person detail · admin · demo controls
      │  read through Angular services (dependency injection)
-core/ (plain TS)  model types · status engine · roll-ups · program rules · default config
+core/ (plain TS)  model · status engine · roll-ups · program rules · filter · requirements ·
+                  person detail · CSV export · default config
      │
 data/             DataSource interface      → MockDataSource (seeded fake org)
                   SettingsStore interface   → LocalSettingsStore (browser storage)
@@ -257,25 +256,31 @@ data/             DataSource interface      → MockDataSource (seeded fake org)
 - **The fake people and checks are generated, not stored**: the same seed always gives the
   same org, so demos are repeatable. Only settings are saved.
 
-### Folder layout (planned)
+### Folder layout
 
 ```
 src/
-  core/          model, status engine, rollups, program rules, default config (no Angular)
-  data/          DataSource + MockDataSource, fake-org generator, SettingsStore, Clock
+  core/          model, status engine, roll-ups, program rules, readiness filter, typed
+                 requirements, person items, CSV export, default config (no Angular)
+  data/          DataSource + MockDataSource, fake-org generator, SettingsStore, settings
+                 schema and upgrades
   app/
-    features/    readiness (page + toolbar), org-tree, issues-list, person-detail, admin,
-                 demo-controls
-    shared/      status badge, category chip, roll-up badge, layout shell
+    features/    readiness (page, toolbar, query in the URL, items in place), org-tree,
+                 issues-list, person-detail, admin, changelog, not-found
+    shared/      app shell, avatar menu, status badge, category chip, roll-up badge, icons,
+                 announcement banner, update prompt, download
     services/    Angular wrappers that provide data/ implementations and computed state
+    changelog.ts the change log's entries
 ```
+
+Demo controls (M7) are not built yet.
 
 ### Stack
 
 - **Angular 21**, standalone components, zoneless, signals for state. (Angular 22 needs a
   newer Node than the dev machine has; 21 is fine for a mockup.)
-- **Tailwind CSS 4 + daisyUI 5** for styling. daisyUI's `success` / `warning` / `error` /
-  `neutral` colors map to the four statuses.
+- **Tailwind CSS 4 + daisyUI 5** for styling. daisyUI's `success` / `warning` / `error`
+  colors map to the three statuses.
 - **Themes**: a custom brand theme (navy, white, gold) is the default, with a dark navy
   variant. An avatar button at the top right shows the current viewer's initials; clicking it
   opens a menu to pick the brand themes or any of daisyUI's built-in themes. The choice is
@@ -290,15 +295,16 @@ src/
   offline and can be installed. When a newer build has downloaded, a notice at the bottom of
   every page says "A new version of Ready to Work is available" with Refresh and Later. The
   app checks for a new build every 15 minutes while open and when its tab comes back into view.
-- **Tests**: Angular's default Vitest runner. The core logic is tested; screens get a few
-  smoke tests.
+- **Tests**: Angular's default Vitest runner. The core logic has unit tests; screens have
+  component tests through the router (no browser needed).
 - No backend, no external calls at runtime.
 
 ## 7. Fake data plan
 
 - A seeded random generator builds an org of about **200 people, 5 levels deep**: director →
   managers / superintendents → general foremen → foremen → crew.
-- Believable fake names (common American first and last names, randomly paired), titles, employee IDs, devices, tools and training. No real people.
+- Believable fake names (common American first and last names, randomly paired), titles,
+  employee IDs, devices, tools and training. No real people.
 - Shipyard flavor (2026-10-31): shipyard trade titles (shipfitter, pipefitter, marine
   electrician), shipyard training and qualifications (hot work and fire watch, pipe welding,
   shipyard competent person) and calibrated tools (4-gas meter, ultrasonic thickness gauge).
@@ -310,9 +316,9 @@ src/
   qualification. The trades, loan rate and qualification rate are tables in the mock data.
 - Default mix: about 73% ready, 18% expiring, 9% not ready, spread unevenly so
   some crews look clearly worse than others.
-- A few **planted scenarios** for the demo script, for example: one crew with a cluster of
-  expired tool calibrations; one person whose new program assignment makes them red; SAP passwords expiring across a
-  team next week.
+- A few **planted scenarios** for the demo script: one crew with a cluster of expired tool
+  calibrations (the Foreman persona's crew); one person whose new program assignment makes them
+  red (the crane candidate); SAP passwords expiring across a team next week.
 - 6 sample programs (three single ships, three whole classes) with requirements, and default
   assignments. The crane candidate turns red when added to Ridgeline R-01.
 
@@ -321,8 +327,8 @@ src/
 A small panel (toggle with a button or keyboard shortcut) for the presenter:
 
 - **Today**: date picker plus "+1 week / +1 month" buttons. Statuses update live.
-- **View as**: switch between a sample foreman, general foreman, superintendent, director and admin. Shows
-  subtree scoping and the admin screens without a real login. Also under Preferences in the
+- **View as**: switch between a sample foreman, general foreman, superintendent, director and
+  admin. Shows subtree scoping and the admin screens without a real login. Also under Preferences in the
   avatar menu (from M6).
 - **Layout**: Dashboard or Drill-down.
 - **Theme**: lives in the avatar menu at the top right (see section 6, Stack), not here.
@@ -371,6 +377,7 @@ Done when: any person can be opened in both layouts, with manager chain and "res
 working.
 
 **M5. List view.** Sorted table of checks on the readiness page, using the shared toolbar.
+(Since 2026-10-31 one row per person with a column per category; see 5.1.)
 Done when: the list matches the checks behind the tree for every view-as persona, and
 switching between Tree and List keeps the filters.
 

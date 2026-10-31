@@ -2,6 +2,7 @@
 
 Status: **done** 2026-10-30. Questions answered the same day (all recommended options). Spec: DESIGN.md section 5.3.
 Acceptance ("Done when", DESIGN.md section 10):
+Since then: on 2026-10-31 the requirement picker gave way to typed IDs with "any of" (plans/typed-requirements.md).
 
 > Adding a requirement to a program turns the right people red immediately, and the settings
 > survive a reload and an export/import round trip.
