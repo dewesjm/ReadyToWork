@@ -1,6 +1,8 @@
 # Plan: Shipyard sample data
 
-Status: **waiting on the user's answers** (questions at the end). User request 2026-10-31: get
+Status: **done** 2026-10-31. Answers: no settings upgrade (only the user has seen the demo;
+Reset to defaults loads the new programs); ship versus class only in the name, since the real
+app gets programs from elsewhere; the program list as proposed. User request 2026-10-31: get
 the sample data closer to reality without real company data. A program is a shipbuilding
 program: on larger ships usually one specific ship, on smaller, modular builds the whole class.
 Fake ship names are fine; job titles, tool names and training are a good start.

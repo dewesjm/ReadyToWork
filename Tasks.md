@@ -80,7 +80,9 @@
 - [x] List by person: one row per person, a column per category (310 tests)
 - [ ] User checks the list by person in the browser
 - [x] Shipyard sample data plan written (user request: fake ships, titles, tools, training): [plans/shipyard-data.md](plans/shipyard-data.md)
-- [ ] User answers the 3 questions at the end of the shipyard data plan
+- [x] User answers the 3 questions at the end of the shipyard data plan
+- [x] Shipyard sample data: ships and classes as programs, shipyard titles, training, quals, tools (310 tests)
+- [ ] User resets settings (Admin › Settings file › Reset to defaults) and checks the shipyard data
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)

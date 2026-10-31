@@ -113,9 +113,9 @@ describe('PersonDetail', () => {
     const { el, text } = await render(id);
     const badge = el.querySelector(`[data-program="${CRANE_PROGRAM_ID}"]`)!;
     expect(badge.className).toContain('badge-error');
-    expect(badge.textContent!.replace(/\s+/g, ' ').trim()).toBe('Crane Operations: Not ready');
+    expect(badge.textContent!.replace(/\s+/g, ' ').trim()).toBe('Ridgeline R-01 (supply ship): Not ready');
     // The missing crane qualification is the worst check, so it comes first.
-    expect(text('[data-testid="check-table"] tbody tr')).toContain('Crane Operations');
+    expect(text('[data-testid="check-table"] tbody tr')).toContain('Ridgeline R-01 (supply ship)');
   });
 
   it('says so for someone outside the viewer subtree', async () => {

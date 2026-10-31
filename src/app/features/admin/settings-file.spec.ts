@@ -88,7 +88,7 @@ describe('Settings file', () => {
 
     await click('reset');
     await answer('Reset to defaults?', 'yes');
-    expect(service().settings().programs.find((p) => p.id === CRANE_PROGRAM_ID)!.name).toBe('Crane Operations');
+    expect(service().settings().programs.find((p) => p.id === CRANE_PROGRAM_ID)!.name).toBe('Ridgeline R-01 (supply ship)');
     expect(service().settings().warningDays).toEqual({});
     expect(service().preferences().theme).toBe('nord');
 

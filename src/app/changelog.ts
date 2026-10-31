@@ -18,6 +18,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     changes: [
       'In the tree, only the Details button opens a person. Clicking a row opens or closes a team.',
       'The list shows one row per person, with a column for each category.',
+      'Sample data now looks like a shipyard: programs are ships and ship classes, with shipyard jobs, training and tools.',
     ],
   },
 ];

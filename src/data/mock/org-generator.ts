@@ -36,7 +36,7 @@ export interface PlantedScenarios {
   toolCrewForemanId: string;
   /** Foreman whose crew's SAP passwords expire next week. */
   sapCrewForemanId: string;
-  /** All green, but lacks the crane qualification: assigning Crane Operations turns them red. */
+  /** All green, but lacks the crane qualification: assigning Ridgeline R-01 turns them red. */
   craneCandidateId: string;
 }
 

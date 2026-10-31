@@ -34,7 +34,7 @@ Every tracked item becomes a **check**: one person, one requirement, one status.
 | Devices | Laptop LT-40213 | Device access/compliance expiring, or device not checked in recently |
 | Training | Annual safety refresher | Assigned and not complete; due date approaching or passed |
 | Access and roles | SAP role `MM_BUYER` | Required role missing, or role grant expiring |
-| Qualifications | Forklift certification | Expiration approaching or passed, or missing when required |
+| Qualifications | Pipe Welding | Expiration approaching or passed, or missing when required |
 | Yubikeys (2FA) | Yubikey serial 1834… | None assigned, reported lost, or certificate expiring |
 | Program requirements | Program XYZ needs training ABC | A program the person is on requires something they lack |
 | Tools | Torque wrench TW-118 | Calibration expiring or expired |
@@ -67,7 +67,11 @@ Four statuses, always shown as **color plus icon plus text** (never color alone)
 
 ### Program requirements
 
-- A **program** has a name and a list of requirements. Each requirement is a category plus an
+- A **program** is a shipbuilding program: on larger ships usually one specific ship, on
+  smaller, modular builds the whole class. The real app gets the list of programs from
+  elsewhere and doesn't decide which is which; the name says it ("Ridgeline R-01 (supply
+  ship)", "Kestrel class (patrol boat)").
+- A program has a name and a list of requirements. Each requirement is a category plus an
   item, e.g. "Training: Export Control Basics" or "Qualification: Crane Operator."
 - Requirements are "all of" in the mockup (no AND/OR logic). Optional later: "any one of."
 - People are **assigned to programs** by admins in the mockup. Where real assignments come from
@@ -131,7 +135,7 @@ toolbar, so filters carry over when switching.
 ### 5.2 Person detail
 
 - Header: name, title, employee ID, status, manager chain (breadcrumb; managers above the
-  viewer are plain text), programs as badges with their own status ("Crane Operations: Not
+  viewer are plain text), programs as badges with their own status ("Ridgeline R-01 (supply ship): Not
   ready").
 - Summary strip: one tile per category with its status; "Nothing tracked" tiles are greyed out.
   Clicking a tile filters the check table to that category.
@@ -263,12 +267,17 @@ src/
 - A seeded random generator builds an org of about **200 people, 5 levels deep**: director →
   managers / superintendents → general foremen → foremen → crew.
 - Believable fake names (common American first and last names, randomly paired), titles, employee IDs, devices, tools and training. No real people.
+- Shipyard flavor (2026-10-31): shipyard trade titles (shipfitter, pipefitter, marine
+  electrician), shipyard training and qualifications (hot work and fire watch, pipe welding,
+  shipyard competent person) and calibrated tools (4-gas meter, ultrasonic thickness gauge).
+  Programs are invented ships and classes. No real ship, class, hull number or company name.
 - Default mix: about 73% ready, 18% expiring, 9% not ready, spread unevenly so
   some crews look clearly worse than others.
 - A few **planted scenarios** for the demo script, for example: one crew with a cluster of
   expired tool calibrations; one person whose new program assignment makes them red; SAP passwords expiring across a
   team next week.
-- 4 to 6 sample programs with requirements, and default assignments.
+- 6 sample programs (three single ships, three whole classes) with requirements, and default
+  assignments. The crane candidate turns red when added to Ridgeline R-01.
 
 ## 8. Demo controls
 

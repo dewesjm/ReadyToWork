@@ -27,13 +27,13 @@ describe('M6 acceptance', () => {
   }
 
   it('adding a requirement turns exactly the people on the program who lack it red, at once', async () => {
-    const firstAid = TestBed.inject(ReadinessService).catalog().find((c) => c.itemId === 'trn:first-aid')!;
-    const hold = await holders(firstAid.itemId);
+    const hearing = TestBed.inject(ReadinessService).catalog().find((c) => c.itemId === 'trn:hearing')!;
+    const hold = await holders(hearing.itemId);
     const before = statuses();
     const shouldTurnRed = [...before.keys()].filter((id) => onCrane(id) && !hold.has(id));
     expect(shouldTurnRed.length).toBeGreaterThan(0);
 
-    add(firstAid);
+    add(hearing);
     const after = statuses();
 
     for (const id of shouldTurnRed) expect(after.get(id)).toBe('not-ready');
@@ -42,13 +42,13 @@ describe('M6 acceptance', () => {
     expect(changed.every((id) => shouldTurnRed.includes(id))).toBe(true);
     expect(changed.length).toBe(shouldTurnRed.filter((id) => before.get(id) !== 'not-ready').length);
     const checks = TestBed.inject(ReadinessService).result().checksByPerson.get(shouldTurnRed[0])!;
-    expect(checks.find((c) => c.itemId === firstAid.itemId)).toEqual(
+    expect(checks.find((c) => c.itemId === hearing.itemId)).toEqual(
       expect.objectContaining({ status: 'not-ready', source: 'program', requiredBy: [CRANE_PROGRAM_ID] }),
     );
   });
 
   it('keeps the change after a reload', async () => {
-    add(TestBed.inject(ReadinessService).catalog().find((c) => c.itemId === 'trn:first-aid')!);
+    add(TestBed.inject(ReadinessService).catalog().find((c) => c.itemId === 'trn:hearing')!);
     const settings = TestBed.inject(SettingsService).settings();
     const red = statuses();
 
@@ -59,7 +59,7 @@ describe('M6 acceptance', () => {
   });
 
   it('survives an export, reset and import round trip', async () => {
-    add(TestBed.inject(ReadinessService).catalog().find((c) => c.itemId === 'trn:first-aid')!);
+    add(TestBed.inject(ReadinessService).catalog().find((c) => c.itemId === 'trn:hearing')!);
     const admin = TestBed.inject(AdminService);
     admin.edit((s) => ({ ...s, warningDays: { 'sap-password': 21 } }));
     const settings = TestBed.inject(SettingsService);

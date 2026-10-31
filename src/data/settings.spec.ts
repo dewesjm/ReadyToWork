@@ -17,13 +17,13 @@ import {
 } from './settings';
 import { LocalSettingsStore } from './settings-store';
 
-const defaults = () => createDefaultSettings(DEFAULT_PROGRAMS, { p010: ['prog-crane'] }, DEFAULT_ANNOUNCEMENTS);
+const defaults = () => createDefaultSettings(DEFAULT_PROGRAMS, { p010: ['prog-ridgeline-r01'] }, DEFAULT_ANNOUNCEMENTS);
 
 function edited(): Settings {
   const s = defaults();
   s.programs[0].name = 'Renamed program';
   s.programs[0].requirements.push({ category: 'qualification', itemId: 'qual:forklift', itemName: 'Forklift' });
-  s.assignments['p020'] = ['prog-export', 'prog-electrical'];
+  s.assignments['p020'] = ['prog-bastion-b01', 'prog-tern'];
   s.warningDays['sap-password'] = 21;
   s.announcements.unshift({
     id: 'a2', type: 'outage', message: 'SAP down', startsOn: '2026-11-07', endsOn: '2026-11-07', on: true, revision: 3,
@@ -166,7 +166,7 @@ describe('export and import', () => {
   });
 
   it('describes what a file holds', () => {
-    expect(describeSettings(edited())).toBe('5 programs, 3 assignments, 1 warning window, 2 announcements');
+    expect(describeSettings(edited())).toBe('6 programs, 3 assignments, 1 warning window, 2 announcements');
   });
 });
 
@@ -206,10 +206,10 @@ describe('admin edits on settings', () => {
 
   it('clears a default program that was deleted', () => {
     const s = defaults();
-    s.preferences.defaultProgramId = 'prog-crane';
+    s.preferences.defaultProgramId = 'prog-ridgeline-r01';
     const kept = withProgramSetup(s, { programs: s.programs, assignments: {} });
-    expect(kept.preferences.defaultProgramId).toBe('prog-crane');
-    const gone = withProgramSetup(s, { programs: s.programs.filter((p) => p.id !== 'prog-crane'), assignments: {} });
+    expect(kept.preferences.defaultProgramId).toBe('prog-ridgeline-r01');
+    const gone = withProgramSetup(s, { programs: s.programs.filter((p) => p.id !== 'prog-ridgeline-r01'), assignments: {} });
     expect(gone.preferences.defaultProgramId).toBeNull();
     expect(gone.assignments).toEqual({});
   });

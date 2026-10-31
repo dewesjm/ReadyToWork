@@ -44,8 +44,8 @@ describe('Admin programs', () => {
     const cards = [...el().querySelectorAll<HTMLElement>('[data-program]')];
     expect(cards.map((c) => c.dataset['program'])).toEqual(settings().programs.map((p) => p.id));
     const card = el().querySelector(`[data-program="${CRANE_PROGRAM_ID}"]`)!;
-    expect(card.textContent).toContain('Crane Operations');
-    expect(card.textContent).toContain('Requires: Crane Operator, Qualified Rigger');
+    expect(card.textContent).toContain('Ridgeline R-01 (supply ship)');
+    expect(card.textContent).toContain('Requires: Crane Operator, Qualified Rigger, Hot Work and Fire Watch');
     const total = TestBed.inject(AdminService).summaries().get(CRANE_PROGRAM_ID)!.rollup.total;
     expect(total).toBeGreaterThan(0);
     expect(card.querySelector('rtw-rollup-badge')?.textContent).toContain(`${total} people:`);
@@ -60,10 +60,10 @@ describe('Admin programs', () => {
     await submit();
     expect($('#new-program-problem').textContent).toContain('Enter a program name.');
 
-    await type('[data-testid="new-program-name"]', 'crane operations');
+    await type('[data-testid="new-program-name"]', 'ridgeline r-01 (supply ship)');
     await submit();
-    expect($('#new-program-problem').textContent).toContain('There is already a program called "Crane Operations".');
-    expect(settings().programs.length).toBe(5);
+    expect($('#new-program-problem').textContent).toContain('There is already a program called "Ridgeline R-01 (supply ship)".');
+    expect(settings().programs.length).toBe(6);
 
     await type('[data-testid="new-program-name"]', 'Night Shift');
     await submit();
@@ -78,19 +78,19 @@ describe('Admin programs', () => {
     await type('[data-testid="program-name"]', '  ');
     await key('[data-testid="program-name"]', 'Enter');
     expect($('#program-name-problem').textContent).toContain('Enter a program name.');
-    expect(crane().name).toBe('Crane Operations');
+    expect(crane().name).toBe('Ridgeline R-01 (supply ship)');
 
-    await type('[data-testid="program-name"]', 'field purchasing');
+    await type('[data-testid="program-name"]', 'kestrel class (patrol boat)');
     await key('[data-testid="program-name"]', 'Enter');
-    expect($('#program-name-problem').textContent).toContain('already a program called "Field Purchasing"');
+    expect($('#program-name-problem').textContent).toContain('already a program called "Kestrel class (patrol boat)"');
 
     await key('[data-testid="program-name"]', 'Escape');
-    expect($<HTMLInputElement>('[data-testid="program-name"]').value).toBe('Crane Operations');
+    expect($<HTMLInputElement>('[data-testid="program-name"]').value).toBe('Ridgeline R-01 (supply ship)');
     expect($('#program-name-problem')).toBeNull();
 
-    await type('[data-testid="program-name"]', 'Crane and Rigging');
+    await type('[data-testid="program-name"]', 'Ridgeline R-01 (heavy lift ship)');
     await key('[data-testid="program-name"]', 'Enter');
-    expect(crane().name).toBe('Crane and Rigging');
+    expect(crane().name).toBe('Ridgeline R-01 (heavy lift ship)');
     expect(crane().id).toBe(CRANE_PROGRAM_ID);
     expect($('[data-testid="program-name"]').closest('rtw-admin')?.querySelector('[data-testid="saved-note"]')?.textContent).toContain('Saved');
   });
@@ -103,18 +103,18 @@ describe('Admin programs', () => {
     await stable();
     const offered = () => [...el().querySelectorAll<HTMLElement>('[data-testid="picker"] [data-item]')].map((b) => b.dataset['item']);
     expect(offered()).not.toContain('qual:crane');
-    expect(offered()).toContain('trn:first-aid');
+    expect(offered()).toContain('trn:hearing');
     expect(offered()).not.toContain(undefined);
     expect(document.activeElement).toBe($('[data-testid="picker-search"]'));
 
-    await type('[data-testid="picker-search"]', 'first');
-    expect(offered()).toEqual(['trn:first-aid']);
-    $<HTMLButtonElement>('[data-item="trn:first-aid"]').click();
+    await type('[data-testid="picker-search"]', 'hearing');
+    expect(offered()).toEqual(['trn:hearing']);
+    $<HTMLButtonElement>('[data-item="trn:hearing"]').click();
     await stable();
 
-    expect(crane().requirements.map((r) => r.itemId)).toEqual(['qual:crane', 'qual:rigging', 'trn:first-aid']);
+    expect(crane().requirements.map((r) => r.itemId)).toEqual(['qual:crane', 'qual:rigging', 'trn:hot-work', 'trn:hearing']);
     expect(offered()).toEqual([]);
-    expect($('[data-testid="picker"]').textContent).toContain('No items match "first".');
+    expect($('[data-testid="picker"]').textContent).toContain('No items match "hearing".');
     const after = TestBed.inject(AdminService).summaries().get(CRANE_PROGRAM_ID)!.rollup;
     expect(after.total).toBe(before.total);
     expect(after.counts['not-ready']).toBeGreaterThan(before.counts['not-ready']);
@@ -125,7 +125,7 @@ describe('Admin programs', () => {
     const { $, stable } = await open(`/admin/programs/${CRANE_PROGRAM_ID}`);
     $<HTMLButtonElement>('[data-requirement="qual:rigging"] button').click();
     await stable();
-    expect(crane().requirements.map((r) => r.itemId)).toEqual(['qual:crane']);
+    expect(crane().requirements.map((r) => r.itemId)).toEqual(['qual:crane', 'trn:hot-work']);
     expect($('[data-requirement="qual:rigging"]')).toBeNull();
   });
 
@@ -140,7 +140,7 @@ describe('Admin programs', () => {
       await stable();
       const dialog = $<HTMLDialogElement>('dialog');
       expect(dialog.hasAttribute('open')).toBe(true);
-      expect(dialog.textContent).toContain(`Crane Operations is assigned to ${assigned} people`);
+      expect(dialog.textContent).toContain(`Ridgeline R-01 (supply ship) is assigned to ${assigned} people`);
       dialog.querySelector<HTMLButtonElement>(`button[value="${value}"]`)!.click();
       await stable();
     };

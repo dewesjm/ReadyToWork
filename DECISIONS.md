@@ -286,3 +286,10 @@
   panel open, cells show icons only. Two follow-ons: the list now shows exactly the tree's
   people (including someone with no records, all dashes), so the count line is the tree's
   "N of M people shown"; and the keyword no longer matches item names, since rows are people.
+- **Shipyard sample data** (user). Programs are shipbuilding programs: one ship on larger
+  builds (Ridgeline R-01, R-02, Bastion B-01), the whole class on smaller, modular ones
+  (Kestrel, Tern, Harrier). All invented, with no real class names or hull numbers. Titles,
+  trainings, qualifications and tools now read like a shipyard. The app doesn't decide ship
+  versus class: the real app will get the program list from elsewhere, so it's only in the
+  name, with no field for it. No settings upgrade: only the user has opened the demo, and Admin
+  › Settings file › Reset to defaults loads the new programs.
