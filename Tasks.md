@@ -75,6 +75,8 @@
   no dot, dates only; New / Changes / Fixes)
 - [x] Change log page and avatar menu row (311 tests)
 - [ ] User checks the change log in the browser
+- [x] List by person plan written (user request: a column per category): [plans/list-by-person.md](plans/list-by-person.md)
+- [ ] User answers the 5 questions at the end of the list by person plan
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)
