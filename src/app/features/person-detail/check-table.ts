@@ -3,6 +3,7 @@ import {
   Check,
   DEFAULT_CONFIG,
   IsoDate,
+  categoryConfig,
   describeDays,
   describeSynced,
   dueLine,
@@ -31,7 +32,7 @@ export class CheckTable {
 
   protected readonly rows = computed(() =>
     this.checks().map((c) => {
-      const config = DEFAULT_CONFIG.categories.find((k) => k.id === c.category);
+      const config = categoryConfig(c.category);
       return {
         check: c,
         dueLine: dueLine(c),

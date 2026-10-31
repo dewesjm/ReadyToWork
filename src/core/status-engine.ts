@@ -1,6 +1,6 @@
 import { ReadinessConfig, STATUS_META } from './config';
 import { IsoDate, addDays, daysBetween } from './dates';
-import { formatDate } from './format';
+import { countText, formatDate } from './format';
 import { CategoryId, Check, RecordProblem, SourceRecord, Status } from './model';
 
 /** Worst of the given statuses, or null when there are none. */
@@ -114,7 +114,7 @@ function byDate(date: IsoDate, today: IsoDate, warn: number, kind: 'expires' | '
   }
   if (days <= warn) {
     const verb = kind === 'expires' ? 'Expires' : 'Due';
-    return { status: 'expiring', reason: days === 0 ? `${verb} today` : `${verb} in ${plural(days, 'day')}`, ...at };
+    return { status: 'expiring', reason: days === 0 ? `${verb} today` : `${verb} in ${countText(days, 'day')}`, ...at };
   }
   return { status: 'ready', reason: kind === 'expires' ? `Valid through ${formatDate(date)}` : `Due ${formatDate(date)}`, ...at };
 }

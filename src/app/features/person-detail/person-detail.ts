@@ -1,6 +1,12 @@
 import { Component, computed, inject, input, linkedSignal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CategoryId, DEFAULT_CONFIG, PersonDetailBuilder, STATUS_META } from '../../../core';
+import {
+  CategoryId,
+  DEFAULT_CONFIG,
+  PersonDetailBuilder,
+  STATUS_META,
+  categoryConfig,
+} from '../../../core';
 import { ClockService } from '../../services/clock-service';
 import { ReadinessService } from '../../services/readiness-service';
 import { SettingsService } from '../../services/settings-service';
@@ -48,9 +54,7 @@ export class PersonDetail {
     });
   });
 
-  protected readonly programNames = computed(
-    () => new Map(this.settings.settings().programs.map((p) => [p.id, p.name])),
-  );
+  protected readonly programNames = this.settings.programNames;
 
   /** Tile filter; cleared when another person is shown. */
   protected readonly category = linkedSignal<string, CategoryId | null>({
@@ -65,7 +69,7 @@ export class PersonDetail {
   });
 
   protected readonly categoryLabel = computed(
-    () => DEFAULT_CONFIG.categories.find((c) => c.id === this.category())?.label ?? '',
+    () => categoryConfig(this.category() ?? '')?.label ?? '',
   );
 
   protected readonly statusMeta = STATUS_META;

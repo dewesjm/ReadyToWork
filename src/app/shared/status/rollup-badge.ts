@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { Rollup, STATUSES, STATUS_META } from '../../../core';
+import { Rollup, STATUSES, STATUS_META, countText } from '../../../core';
 import { Icon } from '../icon/icon';
 import { textClass } from './status-classes';
 
@@ -22,10 +22,7 @@ import { textClass } from './status-classes';
 export class RollupBadge {
   readonly rollup = input.required<Rollup>();
 
-  protected readonly peopleLabel = computed(() => {
-    const n = this.rollup().total;
-    return `${n} ${n === 1 ? 'person' : 'people'}`;
-  });
+  protected readonly peopleLabel = computed(() => countText(this.rollup().total, 'person', 'people'));
 
   protected readonly parts = computed(() =>
     STATUSES.filter((s) => this.rollup().counts[s] > 0).map((s) => ({

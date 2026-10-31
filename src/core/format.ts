@@ -10,11 +10,15 @@ export function formatDate(date: IsoDate): string {
   return `${MONTHS[m - 1]} ${d}, ${y}`;
 }
 
+/** A count with its noun: "1 person", "1,204 people", "3 issues". */
+export function countText(n: number, singular: string, plural = `${singular}s`): string {
+  return `${n.toLocaleString('en-US')} ${n === 1 ? singular : plural}`;
+}
+
 /** Days remaining in words: "Today", "1 day", "12 days", "3 days overdue". */
 export function describeDays(days: number): string {
   if (days === 0) return 'Today';
-  const n = Math.abs(days);
-  const text = `${n} ${n === 1 ? 'day' : 'days'}`;
+  const text = countText(Math.abs(days), 'day');
   return days < 0 ? `${text} overdue` : text;
 }
 

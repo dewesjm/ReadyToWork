@@ -5,6 +5,7 @@ import { SettingsService } from '../../services/settings-service';
 import { ConfirmDialog } from '../../shared/confirm-dialog';
 import { Icon } from '../../shared/icon/icon';
 import { AdminService } from './admin-service';
+import { downloadFile } from '../../shared/download';
 
 /**
  * Export, import and reset the admin settings (programs, assignments, warning windows,
@@ -98,13 +99,7 @@ export class SettingsFile {
   protected readonly error = signal<{ file: string; message: string } | null>(null);
 
   protected exportFile(): void {
-    const blob = new Blob([this.settings.exportJson()], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `ready-to-work-settings-${this.clock.today()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadFile(`ready-to-work-settings-${this.clock.today()}.json`, this.settings.exportJson(), 'application/json');
   }
 
   protected async picked(event: Event): Promise<void> {

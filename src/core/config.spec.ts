@@ -1,4 +1,5 @@
-import { DEFAULT_CONFIG, STATUSES, STATUS_META } from './config';
+import { DEFAULT_CONFIG, STATUSES, STATUS_META, categoryConfig } from './config';
+import { countText } from './format';
 
 describe('default config', () => {
   it('has unique category ids with positive warning windows', () => {
@@ -29,5 +30,19 @@ describe('default config', () => {
     const ranks = STATUSES.map((s) => STATUS_META[s].rank);
     expect(ranks).toEqual([...ranks].sort((a, b) => b - a));
     expect(STATUSES).toEqual(['not-ready', 'expiring', 'ready']);
+  });
+});
+
+describe('small helpers', () => {
+  it('finds a category by id, in the default or a given table', () => {
+    expect(categoryConfig('tool')?.label).toBe('Tools');
+    expect(categoryConfig('mystery')).toBeUndefined();
+    expect(categoryConfig('x', [{ id: 'x', label: 'X', icon: 'info', warningDays: 1 }])?.label).toBe('X');
+  });
+
+  it('writes a count with its noun', () => {
+    expect(countText(1, 'issue')).toBe('1 issue');
+    expect(countText(0, 'issue')).toBe('0 issues');
+    expect(countText(1204, 'person', 'people')).toBe('1,204 people');
   });
 });

@@ -1,12 +1,11 @@
 import { Component, ElementRef, afterNextRender, computed, inject } from '@angular/core';
-import { DEFAULT_CONFIG, ReadinessFilter } from '../../../core';
 import { ReadinessService } from '../../services/readiness-service';
 import { Highlight } from '../../shared/highlight';
 import { Icon } from '../../shared/icon/icon';
-import { CategoryChip } from '../../shared/status/category-chip';
 import { RollupBadge } from '../../shared/status/rollup-badge';
 import { StatusBadge } from '../../shared/status/status-badge';
 import { PersonNavigator } from '../readiness/person-navigator';
+import { ItemsToggle } from '../readiness/items-toggle';
 import { OpenItemsService } from '../readiness/open-items-service';
 import { PersonItems } from '../readiness/person-items';
 import { ReadinessEmpty } from '../readiness/readiness-empty';
@@ -21,7 +20,7 @@ import { TreeStateService } from '../readiness/tree-state-service';
  */
 @Component({
   selector: 'rtw-org-tree',
-  imports: [Highlight, Icon, StatusBadge, CategoryChip, RollupBadge, ReadinessEmpty, PersonItems],
+  imports: [Highlight, Icon, StatusBadge, RollupBadge, ReadinessEmpty, PersonItems, ItemsToggle],
   templateUrl: './org-tree.html',
 })
 export class OrgTree {
@@ -34,7 +33,6 @@ export class OrgTree {
   /** The person open in the dashboard panel; that row is the selected one. */
   protected readonly selectedId = this.navigator.panelPersonId;
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly filter = new ReadinessFilter(DEFAULT_CONFIG.categories);
 
   protected readonly keyword = computed(() => this.query.keyword().trim());
 
@@ -47,7 +45,7 @@ export class OrgTree {
         ...row,
         id: p.id,
         status: statusByPerson.get(p.id) ?? 'not-ready',
-        chips: this.filter.issueCategories(checksByPerson.get(p.id) ?? []),
+        chips: this.query.issueCategories(checksByPerson.get(p.id) ?? []),
         rollup: rollups.get(p.id) ?? null,
         expandable: row.childIds.length > 0,
         expanded: this.tree.isExpanded(p.id),

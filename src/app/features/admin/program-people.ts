@@ -4,6 +4,7 @@ import {
   Person,
   assign,
   assignMany,
+  countText,
   matchesKeyword,
   programStatus,
   supervisorOptions,
@@ -187,7 +188,7 @@ export class ProgramPeople {
   });
 
   protected countLabel(n: number): string {
-    return `${n.toLocaleString('en-US')} ${n === 1 ? 'person' : 'people'}`;
+    return countText(n, 'person', 'people');
   }
 
   protected add(person: Person): void {

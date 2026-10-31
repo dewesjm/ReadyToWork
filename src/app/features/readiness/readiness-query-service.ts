@@ -3,6 +3,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CategoryId,
+  CategoryIssue,
+  Check,
   DEFAULT_CONFIG,
   FilterViewer,
   ISSUE_STATUSES,
@@ -138,6 +140,11 @@ export class ReadinessQueryService {
       query: this.query(),
     });
   });
+
+  /** Categories with a non-ready check and their worst status, for a row's chips. */
+  issueCategories(checks: readonly Check[]): CategoryIssue[] {
+    return this.filter.issueCategories(checks);
+  }
 
   /** The person open in the dashboard panel, if the viewer may see them. */
   readonly personId = computed(() => {

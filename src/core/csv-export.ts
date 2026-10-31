@@ -1,4 +1,4 @@
-import { CategoryConfig, STATUS_META } from './config';
+import { CategoryConfig, STATUS_META, categoryConfig } from './config';
 import { describeDays } from './format';
 import { PersonListResult } from './readiness-filter';
 
@@ -24,7 +24,7 @@ export function readinessExportRows(
   result: PersonListResult,
   categories: readonly CategoryConfig[],
 ): string[][] {
-  const label = (id: string) => categories.find((c) => c.id === id)?.label ?? id;
+  const label = (id: string) => categoryConfig(id, categories)?.label ?? id;
   const header = ['Name', 'Employee ID', 'Title', 'Reports to', 'Overall'];
   for (const id of result.columns) header.push(label(id), `${label(id)}: days left`);
 

@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { CategoryId, DEFAULT_CONFIG, STATUS_META, Status } from '../../../core';
+import { CategoryId, STATUS_META, Status, categoryConfig } from '../../../core';
 import { Icon } from '../icon/icon';
 import { badgeClass } from './status-classes';
 
@@ -29,9 +29,7 @@ export class CategoryChip {
   readonly category = input.required<CategoryId>();
   readonly status = input.required<Status>();
 
-  private readonly config = computed(() =>
-    DEFAULT_CONFIG.categories.find((c) => c.id === this.category()),
-  );
+  private readonly config = computed(() => categoryConfig(this.category()));
   protected readonly label = computed(() => this.config()?.label ?? this.category());
   protected readonly icon = computed(() => this.config()?.icon ?? 'info');
   protected readonly meta = computed(() => STATUS_META[this.status()]);

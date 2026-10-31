@@ -49,22 +49,14 @@
         </div>
 
         <!-- The chips open the person's items under the row; out of the tab order like Details. -->
-        <button
-          type="button"
-          class="flex flex-wrap items-center gap-1 rounded-field px-1 hover:bg-base-300 max-sm:ml-8"
-          tabindex="-1"
-          data-testid="items-toggle"
-          [attr.aria-expanded]="r.itemsOpen"
-          [attr.aria-label]="(r.itemsOpen ? 'Hide items for ' : 'Show items for ') + r.person.name"
-          (click)="items.toggle(r.id); $event.stopPropagation()"
-        >
-          @for (c of r.chips; track c.category) {
-            <rtw-category-chip [category]="c.category" [status]="c.status" />
-          } @empty {
-            <span class="text-xs opacity-70">Items</span>
-          }
-          <rtw-icon [name]="r.itemsOpen ? 'chevron-down' : 'chevron-right'" class="size-3 opacity-70" />
-        </button>
+        <rtw-items-toggle
+          class="max-sm:ml-8"
+          [name]="r.person.name"
+          [open]="r.itemsOpen"
+          [chips]="r.chips"
+          [tabbable]="false"
+          (toggle)="items.toggle(r.id)"
+        />
 
         @if (r.rollup) {
           <rtw-rollup-badge class="max-sm:ml-8 sm:ml-auto" [rollup]="r.rollup" />

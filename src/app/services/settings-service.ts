@@ -11,6 +11,10 @@ export class SettingsService {
 
   readonly settings = this.current.asReadonly();
   readonly preferences = computed(() => this.current().preferences);
+  /** Program names by id, for "Required by" and program badges. */
+  readonly programNames = computed(
+    () => new Map(this.current().programs.map((p) => [p.id, p.name])),
+  );
 
   async load(): Promise<void> {
     this.current.set(await this.store.load());

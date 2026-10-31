@@ -1,5 +1,5 @@
 import { compareByUrgency } from './check-order';
-import { CategoryConfig } from './config';
+import { CategoryConfig, categoryConfig } from './config';
 import { CategoryId, Check } from './model';
 
 /** One category of a person's items, for showing them in place under their row. */
@@ -30,7 +30,7 @@ export function itemGroups(
   return [...byCategory]
     .sort(([a], [b]) => order(a) - order(b) || a.localeCompare(b))
     .map(([category, list]) => {
-      const config = categories.find((c) => c.id === category);
+      const config = categoryConfig(category, categories);
       return {
         category,
         label: config?.label ?? category,
@@ -42,6 +42,6 @@ export function itemGroups(
 
 /** The course or qual ID to show next to a held item's name, or null (a missing item's label has it). */
 export function shownItemId(c: Check, categories: readonly CategoryConfig[]): string | null {
-  const config = categories.find((k) => k.id === c.category);
+  const config = categoryConfig(c.category, categories);
   return config?.showsItemId && c.source !== 'program' && !c.itemName.includes(c.itemId) ? c.itemId : null;
 }

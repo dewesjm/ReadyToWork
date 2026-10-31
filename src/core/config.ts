@@ -77,3 +77,11 @@ export const STATUS_META: Record<Status, StatusMeta> = {
 
 /** Worst first. */
 export const STATUSES: readonly Status[] = ['not-ready', 'expiring', 'ready'];
+
+/** A category's settings (label, icon, warning window), or undefined for an unknown id. */
+export function categoryConfig(
+  id: string,
+  categories: readonly CategoryConfig[] = DEFAULT_CONFIG.categories,
+): CategoryConfig | undefined {
+  return categories.find((c) => c.id === id);
+}

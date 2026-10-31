@@ -5,10 +5,11 @@ import {
   DEFAULT_CONFIG,
   IsoDate,
   Program,
-  Requirement,
   ProgramSetup,
   ReadinessConfig,
+  Requirement,
   announcementProblems,
+  countText,
   isAnnouncementType,
   isIsoDate,
   pruneAssignments,
@@ -185,15 +186,11 @@ export function clearWarningDays(settings: Settings, category: CategoryId): Sett
 export function describeSettings(settings: Settings): string {
   const assignments = Object.values(settings.assignments).reduce((n, ids) => n + ids.length, 0);
   return [
-    count(settings.programs.length, 'program'),
-    count(assignments, 'assignment'),
-    count(Object.keys(settings.warningDays).length, 'warning window'),
-    count(settings.announcements.length, 'announcement'),
+    countText(settings.programs.length, 'program'),
+    countText(assignments, 'assignment'),
+    countText(Object.keys(settings.warningDays).length, 'warning window'),
+    countText(settings.announcements.length, 'announcement'),
   ].join(', ');
-}
-
-function count(n: number, noun: string): string {
-  return `${n.toLocaleString('en-US')} ${noun}${n === 1 ? '' : 's'}`;
 }
 
 /**

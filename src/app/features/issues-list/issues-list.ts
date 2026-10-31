@@ -1,11 +1,11 @@
 import { Component, ElementRef, afterNextRender, computed, inject } from '@angular/core';
-import { DEFAULT_CONFIG, Person, describeDays } from '../../../core';
+import { DEFAULT_CONFIG, Person, categoryConfig, countText, describeDays } from '../../../core';
 import { ReadinessService } from '../../services/readiness-service';
 import { Highlight } from '../../shared/highlight';
 import { Icon } from '../../shared/icon/icon';
-import { CategoryChip } from '../../shared/status/category-chip';
 import { StatusBadge } from '../../shared/status/status-badge';
 import { ListStateService } from '../readiness/list-state-service';
+import { ItemsToggle } from '../readiness/items-toggle';
 import { OpenItemsService } from '../readiness/open-items-service';
 import { PersonItems } from '../readiness/person-items';
 import { PersonNavigator } from '../readiness/person-navigator';
@@ -20,7 +20,7 @@ import { ReadinessQueryService } from '../readiness/readiness-query-service';
  */
 @Component({
   selector: 'rtw-issues-list',
-  imports: [Highlight, Icon, CategoryChip, StatusBadge, ReadinessEmpty, PersonItems],
+  imports: [Highlight, Icon, StatusBadge, ReadinessEmpty, PersonItems, ItemsToggle],
   templateUrl: './issues-list.html',
 })
 export class IssuesList {
@@ -39,7 +39,7 @@ export class IssuesList {
 
   protected readonly columns = computed(() =>
     this.query.listResult().columns.map((id) => {
-      const c = DEFAULT_CONFIG.categories.find((c) => c.id === id);
+      const c = categoryConfig(id);
       return { id, label: c?.label ?? id, icon: c?.icon ?? 'info' };
     }),
   );
@@ -83,7 +83,7 @@ export class IssuesList {
   constructor() {
     // Coming back from a person page: focus the row that opened them.
     afterNextRender(() => {
-      const key = this.state.focusedKey();
+      const key = this.state.focusedPersonId();
       if (!key) return;
       // The table and the cards are both in the page; focus whichever one is displayed.
       const buttons = [...this.host.nativeElement.querySelectorAll<HTMLElement>(`[data-key="${key}"] button`)];
@@ -92,12 +92,12 @@ export class IssuesList {
   }
 
   protected open(person: Person): void {
-    this.state.focusedKey.set(person.id);
+    this.state.focusedPersonId.set(person.id);
     this.navigator.open(person.id);
   }
 
   protected issueText(n: number): string {
-    return `${n} ${n === 1 ? 'issue' : 'issues'}`;
+    return countText(n, 'issue');
   }
 
   protected showMore(): void {

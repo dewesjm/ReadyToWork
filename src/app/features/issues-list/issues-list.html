@@ -50,17 +50,13 @@
                   <span class="ml-1" [class.2xl:hidden]="!compact()" data-testid="under-manager">· under {{ r.manager.name }}</span>
                 }
               </div>
-              <button
-                type="button"
-                class="btn btn-ghost btn-xs mt-1 -ml-2"
-                data-testid="items-toggle"
-                [attr.aria-expanded]="r.itemsOpen"
-                [attr.aria-label]="(r.itemsOpen ? 'Hide items for ' : 'Show items for ') + r.person.name"
-                (click)="items.toggle(r.person.id); $event.stopPropagation()"
-              >
-                <rtw-icon [name]="r.itemsOpen ? 'chevron-down' : 'chevron-right'" class="size-3" />
-                {{ r.issues.length > 0 ? issueText(r.issueCount) : 'Items' }}
-              </button>
+              <rtw-items-toggle
+                class="mt-1 -ml-1 block"
+                [name]="r.person.name"
+                [open]="r.itemsOpen"
+                [label]="r.issueCount > 0 ? issueText(r.issueCount) : null"
+                (toggle)="items.toggle(r.person.id)"
+              />
             </td>
             @if (!compact()) {
               <td class="max-2xl:hidden">{{ r.manager?.name ?? '—' }}</td>
@@ -112,21 +108,13 @@
             · under {{ r.manager.name }}
           }
         </div>
-        <button
-          type="button"
-          class="mt-2 flex flex-wrap items-center gap-1 rounded-field"
-          data-testid="items-toggle"
-          [attr.aria-expanded]="r.itemsOpen"
-          [attr.aria-label]="(r.itemsOpen ? 'Hide items for ' : 'Show items for ') + r.person.name"
-          (click)="items.toggle(r.person.id); $event.stopPropagation()"
-        >
-          @for (i of r.issues; track i.category) {
-            <rtw-category-chip [category]="i.category" [status]="i.status" />
-          } @empty {
-            <span class="text-xs opacity-70">Items</span>
-          }
-          <rtw-icon [name]="r.itemsOpen ? 'chevron-down' : 'chevron-right'" class="size-3 opacity-70" />
-        </button>
+        <rtw-items-toggle
+          class="mt-2 block"
+          [name]="r.person.name"
+          [open]="r.itemsOpen"
+          [chips]="r.issues"
+          (toggle)="items.toggle(r.person.id)"
+        />
         @if (r.itemsOpen) {
           <div class="mt-2 border-t border-base-300 pt-2" (click)="$event.stopPropagation()">
             <rtw-person-items [personId]="r.person.id" />

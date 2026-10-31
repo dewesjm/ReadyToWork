@@ -47,7 +47,6 @@ export interface PlantedScenarios {
 export interface FakeOrg {
   people: Person[];
   records: SourceRecord[];
-  catalog: CatalogItem[];
   personas: Persona[];
   programs: Program[];
   /** Program ids per person id. */
@@ -115,7 +114,6 @@ class OrgGenerator {
     return {
       people: this.nodes.map((n) => n.person),
       records,
-      catalog: CATALOG,
       personas: this.personas(scenarios),
       programs: DEFAULT_PROGRAMS,
       assignments,

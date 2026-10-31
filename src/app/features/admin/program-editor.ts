@@ -16,6 +16,8 @@ import {
   DEFAULT_CONFIG,
   RequirementOption,
   addRequirement,
+  categoryConfig,
+  countText,
   deleteProgram,
   itemKey,
   optionLabel,
@@ -248,8 +250,7 @@ export class ProgramEditor {
   protected readonly program = computed(() => this.admin.programs().find((p) => p.id === this.id()));
   protected readonly summary = computed(() => this.admin.summaries().get(this.id()));
   protected readonly peopleCount = computed(() => {
-    const n = this.summary()?.rollup.total ?? 0;
-    return `${n} ${n === 1 ? 'person' : 'people'}`;
+    return countText(this.summary()?.rollup.total ?? 0, 'person', 'people');
   });
 
   protected readonly draftName = linkedSignal(() => this.program()?.name ?? '');
@@ -277,7 +278,7 @@ export class ProgramEditor {
   });
 
   protected category(id: string): CategoryConfig | undefined {
-    return DEFAULT_CONFIG.categories.find((c) => c.id === id);
+    return categoryConfig(id);
   }
 
   protected rename(): void {

@@ -63,7 +63,7 @@ export class PersonItems {
   protected readonly issueCount = computed(() => this.checks().filter((c) => c.status !== 'ready').length);
 
   protected readonly groups = computed(() => {
-    const programs = new Map(this.settings.settings().programs.map((p) => [p.id, p.name]));
+    const programs = this.settings.programNames();
     return itemGroups(this.checks(), DEFAULT_CONFIG.categories, !this.showAll()).map((g) => ({
       ...g,
       items: g.checks.map((c) => ({
