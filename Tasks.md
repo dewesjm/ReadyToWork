@@ -91,7 +91,9 @@
 - [ ] User checks typed requirements in the browser
 - [x] Saved settings upgrade (version 2): older saved settings get the new sample programs, no manual reset (328 tests)
 - [x] Export plan written (user request: export to Excel/CSV on both views): [plans/export-csv.md](plans/export-csv.md)
-- [ ] User answers the 3 questions at the end of the export plan
+- [x] User answers the 3 questions at the end of the export plan (recommended options; build after inline items)
+- [x] Inline items plan written (user request: expand a person to see what they're missing): [plans/inline-items.md](plans/inline-items.md)
+- [ ] User answers the 3 questions at the end of the inline items plan
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)

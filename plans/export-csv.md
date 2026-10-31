@@ -1,6 +1,7 @@
 # Plan: Export to Excel (CSV) from the Readiness page
 
-Status: **waiting on the user's answers** (questions at the end). User request 2026-10-31: an
+Status: **answered** 2026-10-31 ("your plan sounds fine": the recommended option on all three);
+built after plans/inline-items.md. User request 2026-10-31: an
 export button on both views (tree and list), likely just CSV.
 
 Acceptance ("Done when"):
