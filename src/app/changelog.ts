@@ -15,11 +15,11 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
   {
     date: '2026-10-31',
     new: ['A change log, under the avatar menu.'],
-    fixes: ['If you opened the demo before today, you now get the new ship programs without resetting anything.'],
+    fixes: ['If you opened the demo before today, you now get the new sample programs without resetting anything.'],
     changes: [
       'In the tree, only the Details button opens a person. Clicking a row opens or closes a team.',
       'The list shows one row per person, with a column for each category.',
-      'Sample data now looks like a shipyard: programs are ships and ship classes, with shipyard jobs, training and tools.',
+      'More realistic sample data: new sample programs, job titles, training and tools.',
       'Admins add program requirements by typing a course, qual or role ID. A requirement can list several IDs where any one will do.',
     ],
   },
