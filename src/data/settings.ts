@@ -14,7 +14,7 @@ import {
   pruneAssignments,
 } from '../core';
 
-export const SETTINGS_SCHEMA_VERSION = 1;
+export const SETTINGS_SCHEMA_VERSION = 2;
 
 export type Layout = 'dashboard' | 'drilldown';
 
@@ -88,7 +88,21 @@ export function readinessConfigFrom(
 
 /** Upgrades saved settings one version at a time. Key: the version being upgraded from. */
 export type Migration = (raw: Record<string, unknown>) => Record<string, unknown>;
-export const MIGRATIONS: Record<number, Migration> = {};
+
+/**
+ * For a release that changes the sample programs: drops the saved programs and assignments (and
+ * a default program that may no longer exist), so the new defaults load. Thresholds,
+ * announcements and the viewer's other preferences are kept.
+ */
+export const replaceSamplePrograms: Migration = ({ programs, assignments, ...rest }) => {
+  const prefs = rest['preferences'];
+  return isObject(prefs) ? { ...rest, preferences: { ...prefs, defaultProgramId: null } } : rest;
+};
+
+export const MIGRATIONS: Record<number, Migration> = {
+  // 2026-10-31: shipyard programs with typed "any of" requirements replaced the first samples.
+  1: replaceSamplePrograms,
+};
 
 export class SettingsError extends Error {}
 

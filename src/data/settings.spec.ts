@@ -2,6 +2,7 @@ import { DEFAULT_CONFIG } from '../core';
 import { DEFAULT_ANNOUNCEMENTS, DEFAULT_PROGRAMS } from './mock/fake-catalog';
 import {
   Settings,
+  SETTINGS_SCHEMA_VERSION,
   SettingsError,
   clearWarningDays,
   createDefaultSettings,
@@ -10,12 +11,13 @@ import {
   importSettings,
   parseSettings,
   readinessConfigFrom,
+  replaceSamplePrograms,
   resetAdminSettings,
   setWarningDays,
   warningDaysProblem,
   withProgramSetup,
 } from './settings';
-import { LocalSettingsStore } from './settings-store';
+import { LocalSettingsStore, SETTINGS_STORAGE_KEY } from './settings-store';
 
 const defaults = () => createDefaultSettings(DEFAULT_PROGRAMS, { p010: ['prog-ridgeline-r01'] }, DEFAULT_ANNOUNCEMENTS);
 
@@ -112,7 +114,7 @@ describe('export and import', () => {
 
   it('drops assignments to programs the file does not have', () => {
     const text = JSON.stringify({
-      schemaVersion: 1,
+      schemaVersion: SETTINGS_SCHEMA_VERSION,
       programs: [{ id: 'a', name: 'A', requirements: [] }],
       assignments: { p1: ['a', 'gone'], p2: ['gone'] },
     });
@@ -121,13 +123,13 @@ describe('export and import', () => {
 
   it('reads the older single-item requirement shape as a one-option requirement', () => {
     const text = JSON.stringify({
-      schemaVersion: 1,
+      schemaVersion: SETTINGS_SCHEMA_VERSION,
       programs: [{ id: 'a', name: 'A', requirements: [{ category: 'training', itemId: 'HW-210', itemName: 'Hot Work' }] }],
     });
     expect(importSettings(text, defaults(), mine).programs[0].requirements).toEqual([
       { id: 'req-1', anyOf: [{ category: 'training', itemId: 'HW-210' }] },
     ]);
-    const empty = JSON.stringify({ schemaVersion: 1, programs: [{ id: 'a', name: 'A', requirements: [{ id: 'r', anyOf: [] }] }] });
+    const empty = JSON.stringify({ schemaVersion: SETTINGS_SCHEMA_VERSION, programs: [{ id: 'a', name: 'A', requirements: [{ id: 'r', anyOf: [] }] }] });
     expect(() => importSettings(empty, defaults(), mine)).toThrowError(
       new SettingsError('programs[0].requirements[0].anyOf must be a list of at least one item.'),
     );
@@ -135,7 +137,7 @@ describe('export and import', () => {
 
   it('clears a default program the file does not have, on import and on reset', () => {
     const prefs = { ...mine, defaultProgramId: 'prog-night' };
-    const text = JSON.stringify({ schemaVersion: 1, programs: [] });
+    const text = JSON.stringify({ schemaVersion: SETTINGS_SCHEMA_VERSION, programs: [] });
     expect(importSettings(text, defaults(), prefs).preferences.defaultProgramId).toBeNull();
     const withNight = { ...defaults(), preferences: prefs };
     expect(resetAdminSettings(withNight, defaults()).preferences.defaultProgramId).toBeNull();
@@ -147,25 +149,25 @@ describe('export and import', () => {
     bad('not json', 'The file is not valid JSON.');
     bad('[1, 2]', 'Settings must be a JSON object.');
     bad('{"programs": []}', 'Settings are missing a schemaVersion number.');
-    bad('{"schemaVersion": 99}', 'These settings are from a newer version (99); this app reads up to 1.');
-    bad('{"schemaVersion": 1, "programs": [{"id": "x", "name": 5, "requirements": []}]}', 'programs[0].name must be text.');
-    bad('{"schemaVersion": 1, "warningDays": {"tool": -5}}', 'warningDays.tool must be a whole number of days (0 to 3650).');
+    bad('{"schemaVersion": 99}', 'These settings are from a newer version (99); this app reads up to 2.');
+    bad('{"schemaVersion": 2, "programs": [{"id": "x", "name": 5, "requirements": []}]}', 'programs[0].name must be text.');
+    bad('{"schemaVersion": 2, "warningDays": {"tool": -5}}', 'warningDays.tool must be a whole number of days (0 to 3650).');
     const note = (over: object) =>
-      JSON.stringify({ schemaVersion: 1, announcements: [{ ...DEFAULT_ANNOUNCEMENTS[0], ...over }] });
-    bad('{"schemaVersion": 1, "announcements": {}}', '"announcements" must be a list.');
+      JSON.stringify({ schemaVersion: SETTINGS_SCHEMA_VERSION, announcements: [{ ...DEFAULT_ANNOUNCEMENTS[0], ...over }] });
+    bad('{"schemaVersion": 2, "announcements": {}}', '"announcements" must be a list.');
     bad(note({ type: 'panic' }), 'announcements[0].type must be one of "outage", "delayed", "info".');
     bad(note({ on: 'yes' }), 'announcements[0].on must be true or false.');
     bad(note({ revision: 0 }), 'announcements[0].revision must be a whole number from 1.');
     bad(note({ message: ' ' }), 'announcements[0]: Enter a message.');
     bad(note({ startsOn: '2026-11-05', endsOn: '2026-11-01' }), 'announcements[0]: The end date is before the start date.');
     bad(
-      JSON.stringify({ schemaVersion: 1, announcements: [DEFAULT_ANNOUNCEMENTS[0], DEFAULT_ANNOUNCEMENTS[0]] }),
+      JSON.stringify({ schemaVersion: SETTINGS_SCHEMA_VERSION, announcements: [DEFAULT_ANNOUNCEMENTS[0], DEFAULT_ANNOUNCEMENTS[0]] }),
       'announcements[1].id "a1" is used twice.',
     );
   });
 
   it('fills missing sections from the defaults', () => {
-    const s = importSettings('{"schemaVersion": 1, "warningDays": {"tool": 7}}', defaults(), mine);
+    const s = importSettings('{"schemaVersion": 2, "warningDays": {"tool": 7}}', defaults(), mine);
     expect(s.programs).toEqual(defaults().programs);
     expect(s.assignments).toEqual(defaults().assignments);
     expect(s.warningDays).toEqual({ tool: 7 });
@@ -173,7 +175,7 @@ describe('export and import', () => {
   });
 
   it('gives settings saved before announcements existed the sample notice', () => {
-    const saved = { schemaVersion: 1, programs: [], preferences: { theme: 'nord' } };
+    const saved = { schemaVersion: SETTINGS_SCHEMA_VERSION, programs: [], preferences: { theme: 'nord' } };
     const s = parseSettings(saved, defaults());
     expect(s.announcements).toEqual(DEFAULT_ANNOUNCEMENTS);
     expect(s.preferences.dismissedAnnouncements).toEqual([]);
@@ -186,10 +188,10 @@ describe('export and import', () => {
 
 describe('saved preferences', () => {
   it('fill in from the defaults and are checked field by field', () => {
-    const s = parseSettings({ schemaVersion: 1, preferences: { theme: 'nord' } }, defaults());
+    const s = parseSettings({ schemaVersion: SETTINGS_SCHEMA_VERSION, preferences: { theme: 'nord' } }, defaults());
     expect(s.preferences).toEqual({ ...defaults().preferences, theme: 'nord' });
     const bad = (preferences: object, message: string) =>
-      expect(() => parseSettings({ schemaVersion: 1, preferences }, defaults())).toThrowError(
+      expect(() => parseSettings({ schemaVersion: SETTINGS_SCHEMA_VERSION, preferences }, defaults())).toThrowError(
         new SettingsError(message),
       );
     bad({ layout: 'sideways' }, 'preferences.layout must be "dashboard" or "drilldown".');
@@ -230,19 +232,48 @@ describe('admin edits on settings', () => {
 });
 
 describe('schema upgrades', () => {
-  // Pretend version 2 renamed "warningDays" to "warningWindows".
-  const v2Defaults = { ...defaults(), schemaVersion: 2 };
+  // Pretend version 3 renamed "warningDays" to "warningWindows".
+  const v3Defaults = { ...defaults(), schemaVersion: 3 };
   const migrations = {
-    1: (raw: Record<string, unknown>) => {
+    2: (raw: Record<string, unknown>) => {
       const { warningDays, ...rest } = raw;
       return { ...rest, warningWindows: warningDays };
     },
   };
 
   it('upgrades settings saved by an older version', () => {
-    const old = { schemaVersion: 1, warningDays: { tool: 10 } };
-    const upgraded = parseSettings(old, v2Defaults, migrations, 2);
-    expect(upgraded.schemaVersion).toBe(2);
+    const old = { schemaVersion: 2, warningDays: { tool: 10 } };
+    const upgraded = parseSettings(old, v3Defaults, migrations, 3);
+    expect(upgraded.schemaVersion).toBe(3);
+  });
+
+  it('replaces version 1 sample programs with the current ones, keeping everything else', () => {
+    const v1 = {
+      schemaVersion: 1,
+      programs: [{ id: 'prog-crane', name: 'Crane Operations', requirements: [] }],
+      assignments: { p020: ['prog-crane'] },
+      warningDays: { tool: 10 },
+      announcements: [],
+      preferences: { theme: 'nord', personaId: 'admin', defaultProgramId: 'prog-crane' },
+    };
+    const upgraded = parseSettings(v1, defaults());
+    expect(upgraded.schemaVersion).toBe(SETTINGS_SCHEMA_VERSION);
+    expect(upgraded.programs).toEqual(defaults().programs);
+    expect(upgraded.assignments).toEqual(defaults().assignments);
+    expect(upgraded.warningDays).toEqual({ tool: 10 });
+    expect(upgraded.announcements).toEqual([]);
+    expect(upgraded.preferences).toMatchObject({ theme: 'nord', personaId: 'admin', defaultProgramId: null });
+    expect(replaceSamplePrograms({ schemaVersion: 1 })).toEqual({ schemaVersion: 1 });
+  });
+
+  it('upgrades what is saved in the browser when the app loads', async () => {
+    const storage = new FakeStorage();
+    storage.setItem(
+      SETTINGS_STORAGE_KEY,
+      JSON.stringify({ schemaVersion: 1, programs: [{ id: 'old', name: 'Old', requirements: [] }], assignments: {} }),
+    );
+    const loaded = await new LocalSettingsStore(defaults, storage).load();
+    expect(loaded.programs.map((p) => p.id)).toEqual(DEFAULT_PROGRAMS.map((p) => p.id));
   });
 
   it('refuses a version it has no upgrade for', () => {

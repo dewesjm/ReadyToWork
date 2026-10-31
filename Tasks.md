@@ -82,13 +82,14 @@
 - [x] Shipyard sample data plan written (user request: fake ships, titles, tools, training): [plans/shipyard-data.md](plans/shipyard-data.md)
 - [x] User answers the 3 questions at the end of the shipyard data plan
 - [x] Shipyard sample data: ships and classes as programs, shipyard titles, training, quals, tools (310 tests)
-- [ ] User resets settings (Admin › Settings file › Reset to defaults) and checks the shipyard data
+- [ ] User checks the shipyard data
 - [x] Typed requirements plan written (user request: admin types the course, qualification or role): [plans/typed-requirements.md](plans/typed-requirements.md)
 - [x] User answers the 3 questions at the end of the typed requirements plan (IDs, plain text box,
   network and SAP addable; plus a new need: "any of" requirements)
 - [x] User answers the second round of 4 questions in the typed requirements plan
 - [x] Typed requirements: IDs typed in Admin, "any of" with mixed types, optional names (326 tests)
-- [ ] User checks typed requirements in the browser (Reset to defaults first)
+- [ ] User checks typed requirements in the browser
+- [x] Saved settings upgrade (version 2): older saved settings get the new sample programs, no manual reset (328 tests)
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)

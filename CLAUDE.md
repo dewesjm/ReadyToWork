@@ -50,3 +50,6 @@ feedback. Read DESIGN.md first; it is the spec and the build plan.
   screenshot another persona, serve a copy of the build whose index.html sets that key in a
   script before the app boots.
 - Git warns "LF will be replaced by CRLF" on every commit; harmless.
+- Changing the default sample programs (`DEFAULT_PROGRAMS`)? Browsers that opened the demo keep
+  their saved copy. Bump `SETTINGS_SCHEMA_VERSION` in `src/data/settings.ts` and add
+  `replaceSamplePrograms` to `MIGRATIONS` for the old version, so they get the new ones.

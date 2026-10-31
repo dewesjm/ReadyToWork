@@ -308,3 +308,9 @@
 - **Program assignment in the real app** (user, future): probably by who you work for ("you work
   for X, so you get their program") rather than one by one. Noted for later; the mockup keeps
   per-person assignment.
+- **Saved settings upgrade to version 2** (user: "resolve it, not reset by hand"; replaces the
+  earlier "no settings upgrade" call). Settings saved before the shipyard programs (version 1)
+  load with their programs, assignments and default program dropped, so the new sample
+  programs appear; thresholds, announcements and other preferences are kept. The step is a
+  reusable `replaceSamplePrograms` migration, to add again whenever the sample programs change
+  (noted in CLAUDE.md). An exported version 1 settings file imports the same way.

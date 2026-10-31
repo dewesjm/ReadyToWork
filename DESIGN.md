@@ -230,7 +230,10 @@ data/             DataSource interface      → MockDataSource (seeded fake org)
   everything as signals; `ReadinessService.result` recalculates whenever data, settings or the
   demo date change. Data and settings load before the first screen renders.
 - **Settings live in each viewer's own browser.** Someone opening the link sees the shipped
-  defaults, not the presenter's edits. That is what export/import is for.
+  defaults, not the presenter's edits. That is what export/import is for. Saved settings carry
+  a schema version; when a release changes the sample programs, the version goes up and older
+  saved settings drop their programs and assignments on load, so returning viewers get the new
+  ones without a manual reset.
 - **The fake people and checks are generated, not stored**: the same seed always gives the
   same org, so demos are repeatable. Only settings are saved.
 
