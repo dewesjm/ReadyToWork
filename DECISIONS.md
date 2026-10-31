@@ -314,3 +314,5 @@
   programs appear; thresholds, announcements and other preferences are kept. The step is a
   reusable `replaceSamplePrograms` migration, to add again whenever the sample programs change
   (noted in CLAUDE.md). An exported version 1 settings file imports the same way.
+- **AGENTS.md points to CLAUDE.md** (user). AGENTS.md, the file other coding assistants read,
+  is a one-line pointer so the project instructions have a single copy in CLAUDE.md.
