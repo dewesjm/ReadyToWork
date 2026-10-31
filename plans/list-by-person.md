@@ -1,6 +1,6 @@
 # Plan: List view with a column per category
 
-Status: **waiting on the user's answers** (questions at the end). User request 2026-10-31: "the
+Status: **done** 2026-10-31. The user took the recommended option on all five questions. User request 2026-10-31: "the
 list view, i feel like it should have a column for each type of issue for a person".
 
 Acceptance ("Done when"):

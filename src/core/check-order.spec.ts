@@ -1,4 +1,4 @@
-import { compareBySoonest, compareByUrgency } from './check-order';
+import { compareByUrgency, listDueKey } from './check-order';
 import { Check, Status } from './model';
 
 function check(itemName: string, status: Status, daysRemaining?: number): Check {
@@ -36,16 +36,9 @@ describe('check order', () => {
     ]);
   });
 
-  it('sorts soonest first for the list view: undated not ready on top, other undated last', () => {
-    const all = [...checks, check('G completed', 'ready'), check('H lost', 'not-ready')];
-    expect(names(all.sort(compareBySoonest))).toEqual([
-      'D missing',
-      'H lost',
-      'C overdue',
-      'F expiring soon',
-      'B expiring',
-      'A ready',
-      'G completed',
-    ]);
+  it('gives the list a due key: undated not ready first, other undated last', () => {
+    expect(listDueKey(check('D missing', 'not-ready'))).toBe(-Infinity);
+    expect(listDueKey(check('C overdue', 'not-ready', -3))).toBe(-3);
+    expect(listDueKey(check('G completed', 'ready'))).toBe(Infinity);
   });
 });

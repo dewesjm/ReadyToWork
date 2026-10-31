@@ -185,11 +185,11 @@ describe('Readiness page and toolbar', () => {
     expect(byTestId('shown-count').textContent).toBe(`${shownCount} of ${scopeCount} people shown`);
   });
 
-  it('counts checks and people in the list view, and mentions items in the search box', async () => {
+  it('counts people the same way in the list view', async () => {
     const { byTestId, query } = await open('/readiness?view=list');
-    const { rows, personCount } = query.listResult();
-    expect(byTestId('shown-count').textContent).toBe(`${rows.length} checks for ${personCount} people`);
-    expect(byTestId<HTMLInputElement>('keyword').placeholder).toBe('Name, title, employee ID or item');
+    const { shownCount, scopeCount } = query.result();
+    expect(query.listResult().rows.length).toBe(shownCount);
+    expect(byTestId('shown-count').textContent).toBe(`${shownCount} of ${scopeCount} people shown`);
   });
 
   it('keeps every parameter when switching between Tree and List', async () => {

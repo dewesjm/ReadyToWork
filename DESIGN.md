@@ -114,12 +114,17 @@ toolbar, so filters carry over when switching.
   structure makes sense; everything else is hidden.
 
 **List view**
-- One table of checks in the viewer's subtree, sorted soonest first (overdue at the top).
-  Not-ready checks with no date (missing, lost, revoked) sort above even the overdue ones;
-  other undated checks go last. One fixed order, no column sorting.
-- Columns: person, manager, category, item, status, due date, days remaining. Phones get
-  cards; with the Dashboard panel open, manager and category fold into other columns.
-- The same scope and issue rule as the tree, so both always show the same people.
+- One row per person, the same people as the tree (changed 2026-10-31 from one row per check).
+- Columns: person, manager, one per category, overall status. Each category cell shows the
+  worst status of the person's checks in it (ready ones too), with the soonest days left under
+  an issue; a dash when the person has nothing in that category. Picking categories (with
+  Issues only on) hides the other columns.
+- Sorted worst first, then by the soonest due issue (not-ready checks with no date count as
+  most overdue), then name. One fixed order, no column sorting.
+- Phones get cards with chips for the categories that have issues. With the Dashboard panel
+  open, the manager folds under the name and cells show the status icon only (text as a
+  tooltip and for screen readers).
+- The keyword matches people (name, title, employee ID), as in the tree.
 - 100 rows at a time, with "Show 100 more".
 - Clicking a row (or Enter on the person's name) opens that person's detail.
 

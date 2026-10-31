@@ -9,7 +9,7 @@ import { READINESS_PAGE_CONFIG } from './readiness-page-config';
 @Injectable({ providedIn: 'root' })
 export class ListStateService {
   private readonly limits = signal(new Map<string, number>());
-  /** Row key ("personId|itemId") of the last row that opened a person. */
+  /** The person whose row last opened a person. */
   readonly focusedKey = signal<string | null>(null);
 
   limit(queryKey: string): number {

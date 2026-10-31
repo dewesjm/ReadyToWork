@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+import { DEFAULT_CONFIG } from '../../../core';
 import { MockDataSource } from '../../../data';
 import { ReadinessService } from '../../services/readiness-service';
 import { SettingsService } from '../../services/settings-service';
@@ -35,69 +36,74 @@ describe('IssuesList (list view)', () => {
     TestBed.inject(ViewerService).setPersona(persona);
     const harness = await RouterTestingHarness.create(url);
     const el = () => harness.routeNativeElement as HTMLElement;
-    const rows = () => [...el().querySelectorAll<HTMLElement>('[data-testid="check-list"] tbody tr')];
-    const headers = () => [...el().querySelectorAll('[data-testid="check-list"] th')].map((h) => h.textContent!.trim());
+    const rows = () => [...el().querySelectorAll<HTMLElement>('[data-testid="person-list"] tbody tr')];
+    const headers = () => [...el().querySelectorAll('[data-testid="person-list"] th')].map((h) => h.textContent!.trim());
     const query = harness.routeDebugElement!.injector.get(ReadinessQueryService);
     const stable = () => harness.fixture.whenStable();
     return { harness, el, rows, headers, query, stable, router: TestBed.inject(Router) };
   }
 
-  it('shows the planned columns, soonest first, with status as color, icon and text', async () => {
+  const categoryLabels = DEFAULT_CONFIG.categories.map((c) => c.label);
+
+  it('shows one row per person with a column per category, worst first', async () => {
     const { rows, headers, query } = await open('/readiness?view=list', 'foreman');
-    expect(headers()).toEqual(['Person', 'Manager', 'Category', 'Item', 'Status', 'Due', 'Days left']);
+    expect(headers()).toEqual(['Person', 'Manager', ...categoryLabels, 'Overall']);
     const listed = query.listResult().rows;
     expect(rows().length).toBe(listed.length);
-    // The Foreman's tool crew: expired calibrations at the top.
-    expect(rows()[0].textContent).toContain('Tools');
-    const badge = rows()[0].querySelector('rtw-status-badge .badge')!;
-    expect(badge.className).toContain('badge-error');
-    expect(badge.textContent).toContain('Not ready');
-    expect(rows()[0].textContent).toContain('overdue');
+    expect(new Set(rows().map((r) => r.dataset['key'])).size).toBe(rows().length);
+    // The Foreman's tool crew: expired calibrations, so the first row is not ready on Tools.
+    const tools = rows()[0].querySelector('td[data-category="tool"] rtw-status-badge .badge')!;
+    expect(tools.className).toContain('badge-error');
+    expect(tools.textContent).toContain('Not ready');
+    expect(rows()[0].querySelector('td[data-category="tool"]')!.textContent).toContain('overdue');
   });
 
-  it('lists ready checks too with Issues only off', async () => {
-    const { rows, query } = await open('/readiness?view=list&issues=all', 'foreman');
-    const statuses = query.listResult().rows.map((r) => r.check.status);
+  it('shows ready categories as green cells and empty ones as a dash', async () => {
+    const { rows, query } = await open('/readiness?view=list', 'foreman');
+    const statuses = rows().flatMap((r) =>
+      [...r.querySelectorAll('td[data-category] [data-status]')].map((b) => b.getAttribute('data-status')),
+    );
     expect(statuses).toContain('ready');
-    expect(rows().some((r) => r.textContent!.includes('Ready'))).toBe(true);
+    const empty = query.listResult().rows.flatMap((r) => r.cells).filter((c) => c === null).length;
+    const dashes = rows().flatMap((r) => [...r.querySelectorAll('td[data-category]')]).filter(
+      (td) => td.textContent!.trim() === '—',
+    ).length;
+    expect(dashes).toBe(empty);
+  });
+
+  it('shows only the picked categories as columns', async () => {
+    const { headers } = await open('/readiness?view=list&cat=tool,training', 'foreman');
+    expect(headers()).toEqual(['Person', 'Manager', 'Training', 'Tools', 'Overall']);
   });
 
   it('shows 100 rows at a time with "Show more"', async () => {
     const { rows, el, stable, query } = await open('/readiness?view=list&issues=all');
     const total = query.listResult().rows.length;
     const page = READINESS_PAGE_CONFIG.listPageSize;
-    expect(total).toBeGreaterThan(2 * page);
+    expect(total).toBeGreaterThan(page);
     expect(rows().length).toBe(page);
     expect(el().querySelector('[data-testid="list-more-text"]')!.textContent).toBe(
-      `Showing ${page} of ${total.toLocaleString('en-US')} checks`,
+      `Showing ${page} of ${total.toLocaleString('en-US')} people`,
     );
     el().querySelector<HTMLButtonElement>('[data-testid="show-more"]')!.click();
     await stable();
-    expect(rows().length).toBe(2 * page);
+    expect(rows().length).toBe(Math.min(total, 2 * page));
   });
 
-  it('highlights a keyword match on the person, keeping all their checks', async () => {
+  it('highlights a keyword match on the person', async () => {
     const foreman = org().get(fakeOrg().scenarios.toolCrewForemanId)!;
     const { rows } = await open(`/readiness?view=list&issues=all&q=${encodeURIComponent(foreman.name)}`);
-    expect(rows().length).toBeGreaterThan(1);
+    expect(rows().length).toBe(1);
     expect(rows()[0].querySelector('[data-testid="open-person"] mark')!.textContent).toBe(foreman.name);
-  });
-
-  it('highlights a keyword match on the item name', async () => {
-    const { rows } = await open('/readiness?view=list&issues=all&q=multimeter');
-    expect(rows().length).toBeGreaterThan(0);
-    for (const r of rows()) {
-      expect(r.querySelectorAll('td')[3].querySelector('mark')!.textContent!.toLowerCase()).toBe('multimeter');
-    }
   });
 
   it('opens a person as a page in the drill-down layout, by click or Enter on the name', async () => {
     TestBed.inject(SettingsService).updatePreferences({ layout: 'drilldown' });
     const { rows, router, stable } = await open('/readiness?view=list', 'foreman');
-    const key = rows()[0].dataset['key']!;
+    const id = rows()[0].dataset['key']!;
     rows()[0].querySelector<HTMLButtonElement>('[data-testid="open-person"]')!.click();
     await stable();
-    expect(router.url).toBe(`/person/${key.split('|')[0]}`);
+    expect(router.url).toBe(`/person/${id}`);
   });
 
   it('puts focus back on the same row after Back', async () => {
@@ -111,17 +117,19 @@ describe('IssuesList (list view)', () => {
     expect((document.activeElement as HTMLElement).closest('tr')?.dataset['key']).toBe(key);
   });
 
-  it('opens the side panel in the dashboard, highlights that person and folds columns', async () => {
+  it('opens the side panel in the dashboard, highlights that person and shows icons only', async () => {
     const { rows, el, stable, headers, router } = await open('/readiness?view=list', 'foreman');
-    const personId = rows()[0].dataset['key']!.split('|')[0];
+    const personId = rows()[0].dataset['key']!;
     rows()[0].click();
     await stable();
     expect(router.url).toContain(`person=${personId}`);
     expect(el().querySelector('[data-testid="person-panel"] [data-person]')!.getAttribute('data-person')).toBe(personId);
-    expect(headers()).toEqual(['Person', 'Item', 'Status', 'Due', 'Days left']);
-    const selected = rows().filter((r) => r.dataset['selected']);
-    expect(selected.length).toBeGreaterThan(0);
-    expect(selected.every((r) => r.dataset['key']!.startsWith(`${personId}|`))).toBe(true);
+    // No Manager column; category labels stay for screen readers only.
+    expect(headers()).toEqual(['Person', ...categoryLabels, 'Overall']);
+    const badge = rows()[0].querySelector<HTMLElement>('td[data-category="tool"] .badge')!;
+    expect(badge.title).toBe('Not ready');
+    expect(badge.querySelector('.sr-only')!.textContent!.trim()).toBe('Not ready');
+    expect(rows().filter((r) => r.dataset['selected']).map((r) => r.dataset['key'])).toEqual([personId]);
   });
 
   it('shows the shared empty state', async () => {

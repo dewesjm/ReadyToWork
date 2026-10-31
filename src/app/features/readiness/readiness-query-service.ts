@@ -125,11 +125,11 @@ export class ReadinessQueryService {
     });
   });
 
-  /** The list view's checks, under the same query as the tree. */
+  /** The list view's people, one row each with a cell per category, under the tree's query. */
   readonly listResult = computed(() => {
     const viewer = this.viewer();
-    if (!viewer) return { rows: [], personCount: 0, scopeCount: 0 };
-    return this.filter.listChecks({
+    if (!viewer) return { columns: [], rows: [] };
+    return this.filter.listPeople({
       readiness: this.readiness.result(),
       assignments: this.settings.settings().assignments,
       viewer,

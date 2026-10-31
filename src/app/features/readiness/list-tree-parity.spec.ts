@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { isIssue } from '../../../core';
+import { worstStatus } from '../../../core';
 import { ReadinessService } from '../../services/readiness-service';
 import { ViewerService } from '../../services/viewer-service';
 import { loadAppState } from '../../testing';
 import { Readiness } from './readiness';
 import { ReadinessQueryService } from './readiness-query-service';
 
-/** M5 "Done when": the list matches the checks behind the tree for every view-as persona. */
+/** The list shows the tree's people, each category as the worst of their checks, for every persona. */
 describe('List and tree agree', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -26,23 +26,19 @@ describe('List and tree agree', () => {
 
       for (const url of ['/readiness', '/readiness?issues=all']) {
         await harness.navigateByUrl(url);
-        const issuesOnly = query.issuesOnly();
-        const treePeople = query
-          .result()
-          .rows.filter((r) => !r.context)
-          .map((r) => r.person.id)
-          .filter((id) => (checksByPerson.get(id) ?? []).length > 0);
-        const listRows = query.listResult().rows;
+        const treePeople = query.result().rows.filter((r) => !r.context).map((r) => r.person.id);
+        const { columns, rows } = query.listResult();
         expect(treePeople.length).toBeGreaterThan(0);
 
         // Same people...
-        expect(new Set(listRows.map((r) => r.person.id))).toEqual(new Set(treePeople));
-        // ...and for each, exactly their issue checks (or every check with Issues only off).
-        for (const id of treePeople) {
-          const expected = (checksByPerson.get(id) ?? []).filter((c) => !issuesOnly || isIssue(c, query.query()));
-          const listed = listRows.filter((r) => r.person.id === id).map((r) => r.check);
-          expect(listed.length).toBe(expected.length);
-          expect(new Set(listed)).toEqual(new Set(expected));
+        expect(rows.map((r) => r.person.id).sort()).toEqual([...treePeople].sort());
+        // ...and each cell is the worst status of that person's checks in the category.
+        for (const row of rows) {
+          const checks = checksByPerson.get(row.person.id) ?? [];
+          columns.forEach((category, i) => {
+            const worst = worstStatus(checks.filter((c) => c.category === category).map((c) => c.status));
+            expect(row.cells[i]?.status ?? null).toBe(worst);
+          });
         }
       }
     });

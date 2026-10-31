@@ -1,8 +1,9 @@
-import { compareBySoonest } from './check-order';
+import { listDueKey } from './check-order';
 import { CategoryConfig, STATUS_META } from './config';
 import { CategoryId, Check, Person, Status } from './model';
 import { OrgIndex } from './org-index';
 import { ReadinessResult } from './readiness-evaluator';
+import { compareStatus, worstStatus } from './status-engine';
 
 /** What the Readiness page is asked to show. Kept in the URL by the page. */
 export interface ReadinessQuery {
@@ -78,23 +79,31 @@ export interface FilterResult {
   narrowed: boolean;
 }
 
-/** One check in the list view. */
-export interface ListRow {
-  check: Check;
+/** One category for one person in the list view. */
+export interface CategoryCell {
+  /** Worst status of the person's checks in the category. */
+  status: Status;
+  /** Soonest days left among the checks with that status; undefined when none is dated. */
+  daysRemaining?: number;
+}
+
+/** One person in the list view. */
+export interface PersonListRow {
   person: Person;
   /** The person's direct manager, or null at the top of the org. */
   manager: Person | null;
-  /** What the keyword matched: the person's name, title or ID, and/or the item name. */
-  match: { person: boolean; item: boolean };
+  status: Status;
+  /** One per column, in column order; null when the person has nothing in that category. */
+  cells: (CategoryCell | null)[];
+  /** The keyword matched the person's name, title or ID. */
+  match: boolean;
 }
 
-export interface ListResult {
-  /** Soonest first; see compareBySoonest. */
-  rows: ListRow[];
-  /** Distinct people with at least one row. */
-  personCount: number;
-  /** People in scope (supervisor, direct only, program) before Issues only and keyword. */
-  scopeCount: number;
+export interface PersonListResult {
+  /** Categories shown as columns, in config order. */
+  columns: CategoryId[];
+  /** Worst first, then soonest due; see listPeople. */
+  rows: PersonListRow[];
 }
 
 export interface SupervisorOption {
@@ -176,36 +185,40 @@ export class ReadinessFilter {
   }
 
   /**
-   * The list view: the checks of everyone in scope, filtered by Issues only (with its category
-   * and status filters) and the keyword, soonest first. A keyword matching a person's name,
-   * title or employee ID keeps all their checks; one matching an item name keeps that check.
+   * The list view: the same people as the tree (context rows left out), one row each, with a
+   * cell per category. Picking categories (with Issues only on) narrows the columns. Worst first,
+   * then by the soonest due issue in the columns shown, then name.
    */
-  listChecks(input: FilterInput): ListResult {
-    const { org, checksByPerson } = input.readiness;
+  listPeople(input: FilterInput): PersonListResult {
+    const { org, checksByPerson, statusByPerson } = input.readiness;
     const { query } = input;
-    const { scoped } = scope(input);
-    const keyword = query.keyword.trim();
-    const lower = keyword.toLowerCase();
+    const picked = query.issuesOnly ? query.categories : [];
+    const columns = this.categories
+      .map((c) => c.id)
+      .filter((id) => picked.length === 0 || picked.includes(id));
 
-    const rows: ListRow[] = [];
-    for (const person of scoped) {
-      let checks = checksByPerson.get(person.id) ?? [];
-      if (query.issuesOnly) checks = checks.filter((c) => isIssue(c, query));
-      const personMatch = keyword !== '' && matchesKeyword(person, keyword);
-      const manager = person.managerId === null ? null : (org.get(person.managerId) ?? null);
-      for (const check of checks) {
-        const itemMatch = keyword !== '' && check.itemName.toLowerCase().includes(lower);
-        if (keyword && !personMatch && !itemMatch) continue;
-        rows.push({ check, person, manager, match: { person: personMatch, item: itemMatch } });
-      }
-    }
-    rows.sort((a, b) => compareBySoonest(a.check, b.check) || a.person.name.localeCompare(b.person.name));
-
-    return {
-      rows,
-      personCount: new Set(rows.map((r) => r.person.id)).size,
-      scopeCount: scoped.length,
-    };
+    const sorted = this.apply(input)
+      .rows.filter((r) => !r.context)
+      .map((r) => {
+        const checks = checksByPerson.get(r.person.id) ?? [];
+        const shown = checks.filter((c) => columns.includes(c.category));
+        const due = Math.min(...shown.filter((c) => c.status !== 'ready').map(listDueKey));
+        const row: PersonListRow = {
+          person: r.person,
+          manager: r.person.managerId === null ? null : (org.get(r.person.managerId) ?? null),
+          status: statusByPerson.get(r.person.id) ?? 'not-ready',
+          cells: columns.map((id) => cell(checks.filter((c) => c.category === id))),
+          match: r.match,
+        };
+        return { row, due };
+      });
+    sorted.sort(
+      (a, b) =>
+        compareStatus(a.row.status, b.row.status) ||
+        (a.due === b.due ? 0 : a.due < b.due ? -1 : 1) ||
+        a.row.person.name.localeCompare(b.row.person.name),
+    );
+    return { columns, rows: sorted.map((s) => s.row) };
   }
 
   /** Categories with a non-ready check, each with its worst status, in config order. */
@@ -226,6 +239,15 @@ export class ReadinessFilter {
       .sort(([a], [b]) => order(a) - order(b) || a.localeCompare(b))
       .map(([category, status]) => ({ category, status }));
   }
+}
+
+function cell(checks: readonly Check[]): CategoryCell | null {
+  const status = worstStatus(checks.map((c) => c.status));
+  if (!status) return null;
+  const days = checks
+    .filter((c) => c.status === status && c.daysRemaining !== undefined)
+    .map((c) => c.daysRemaining!);
+  return days.length > 0 ? { status, daysRemaining: Math.min(...days) } : { status };
 }
 
 /** The supervisor id if the viewer may scope to it, otherwise the viewer. */

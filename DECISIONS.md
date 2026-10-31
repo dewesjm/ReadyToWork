@@ -279,3 +279,10 @@
   has no "new" marker, and groups each day under New, Changes and Fixes. Lines stay short and
   human readable, with no heavy detail. The entries are a typed data file, not Markdown, so no
   parser is needed and a test checks the dates are newest first.
+- **List view: one row per person, a column per category** (user; replaces the M5 one row per
+  check). The user took the recommended option on all five plan questions: replace the old
+  list; a cell shows the worst status plus the soonest days left; ready categories show as
+  green cells even with Issues only on; picked categories hide the other columns; with the side
+  panel open, cells show icons only. Two follow-ons: the list now shows exactly the tree's
+  people (including someone with no records, all dashes), so the count line is the tree's
+  "N of M people shown"; and the keyword no longer matches item names, since rows are people.

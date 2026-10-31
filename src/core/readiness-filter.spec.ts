@@ -184,79 +184,78 @@ describe('ReadinessFilter', () => {
   });
 });
 
-describe('ReadinessFilter.listChecks', () => {
-  function list(query: Partial<ReadinessQuery>, viewer: FilterViewer = director) {
-    return filter.listChecks({
-      readiness: { org, checksByPerson, statusByPerson },
+describe('ReadinessFilter.listPeople', () => {
+  function list(query: Partial<ReadinessQuery>, viewer: FilterViewer = director, checks = checksByPerson) {
+    return filter.listPeople({
+      readiness: { org, checksByPerson: checks, statusByPerson },
       assignments,
       viewer,
       query: { ...DEFAULT_QUERY, issuesOnly: false, ...query },
     });
   }
-  const items = (r: ReturnType<typeof list>) => r.rows.map((row) => `${row.person.id}:${row.check.category}`);
+  const ids = (r: ReturnType<typeof list>) => r.rows.map((row) => row.person.id);
+  const cellOf = (r: ReturnType<typeof list>, personId: string, category: CategoryId) =>
+    r.rows.find((row) => row.person.id === personId)!.cells[r.columns.indexOf(category)];
 
-  it('lists only issue checks with Issues only on, red first', () => {
+  it('lists one row per person, worst first, with a column for every category', () => {
     const r = list({ issuesOnly: true });
-    expect(items(r)).toEqual(['c2:tool', 'f2:training', 'c1:sap-password', 'c2:sap-password']);
-    expect(r.personCount).toBe(3);
-    expect(r.scopeCount).toBe(8);
+    expect(r.columns).toEqual(DEFAULT_CONFIG.categories.map((c) => c.id));
+    expect(new Set(ids(r))).toEqual(new Set(['c1', 'c2', 'f2', 'f3']));
+    expect(r.rows.map((row) => row.status)).toEqual(['not-ready', 'not-ready', 'not-ready', 'expiring']);
+    // Undated not-ready issues count as most overdue; f3 has no checks, so nothing is due.
+    expect(ids(r)[2]).toBe('f3');
   });
 
-  it('lists every check, ready ones included, with Issues only off', () => {
-    const total = [...checksByPerson.values()].reduce((n, c) => n + c.length, 0);
-    expect(list({}).rows.length).toBe(total);
+  it('shows each category as its worst status, ready ones included, and a gap when empty', () => {
+    const r = list({ issuesOnly: true });
+    expect(cellOf(r, 'c2', 'tool')).toEqual({ status: 'not-ready' });
+    expect(cellOf(r, 'c2', 'sap-password')).toEqual({ status: 'expiring' });
+    expect(cellOf(r, 'c2', 'network')).toEqual({ status: 'ready' });
+    expect(cellOf(r, 'c2', 'device')).toBeNull();
+    expect(r.rows.find((row) => row.person.id === 'f3')!.cells.every((c) => c === null)).toBe(true);
   });
 
-  it('gives each row its person and direct manager', () => {
-    const row = list({ issuesOnly: true }).rows[0];
-    expect(row.person.id).toBe('c2');
-    expect(row.manager?.id).toBe('f1');
-    expect(list({ supervisorId: 'dir' }).rows.find((r) => r.person.id === 'dir')!.manager).toBeNull();
+  it("gives a cell the soonest days left among its worst checks", () => {
+    const dated = (category: CategoryId, status: Status, daysRemaining: number): Check => ({
+      ...checksByPerson.get('c1')![0],
+      itemId: `${category}:${daysRemaining}`,
+      category,
+      status,
+      daysRemaining,
+    });
+    const checks = new Map(checksByPerson);
+    checks.set('c1', [dated('sap-password', 'expiring', 10), dated('sap-password', 'expiring', 4), dated('sap-password', 'ready', 1)]);
+    expect(cellOf(list({}, director, checks), 'c1', 'sap-password')).toEqual({ status: 'expiring', daysRemaining: 4 });
   });
 
-  it('applies the category and status filters only with Issues only on', () => {
-    expect(items(list({ issuesOnly: true, categories: ['sap-password'] }))).toEqual([
-      'c1:sap-password',
-      'c2:sap-password',
-    ]);
-    expect(items(list({ issuesOnly: true, statuses: ['not-ready'] }))).toEqual(['c2:tool', 'f2:training']);
-    expect(list({ categories: ['tool'], statuses: ['not-ready'] }).rows.length).toBe(list({}).rows.length);
+  it('narrows the columns to the picked categories, only with Issues only on', () => {
+    const r = list({ issuesOnly: true, categories: ['tool', 'sap-password'] });
+    expect(r.columns).toEqual(['sap-password', 'tool']);
+    expect(r.rows[0].cells.length).toBe(2);
+    expect(list({ categories: ['tool'] }).columns.length).toBe(DEFAULT_CONFIG.categories.length);
   });
 
-  it("keeps all of a matched person's checks, but only the matching item otherwise", () => {
-    const byPerson = list({ keyword: 'ana' });
-    expect(items(byPerson)).toEqual(['c1:sap-password', 'c1:network']);
-    expect(byPerson.rows.every((r) => r.match.person && !r.match.item)).toBe(true);
-
-    const byItem = list({ keyword: 'TOOL' });
-    expect(items(byItem)).toEqual(['c2:tool']);
-    expect(byItem.rows[0].match).toEqual({ person: false, item: true });
+  it('gives each row its direct manager and keyword match', () => {
+    const r = list({ keyword: 'ana' });
+    expect(ids(r)).toEqual(['c1']);
+    expect(r.rows[0].match).toBe(true);
+    expect(r.rows[0].manager?.id).toBe('f1');
+    expect(list({ supervisorId: 'dir' }).rows.find((row) => row.person.id === 'dir')!.manager).toBeNull();
   });
 
-  it('scopes by supervisor, direct reports and program like the tree', () => {
-    expect(new Set(list({ supervisorId: 'm2' }).rows.map((r) => r.person.id))).toEqual(new Set(['m2']));
-    expect(new Set(list({ supervisorId: 'm1', directOnly: true }).rows.map((r) => r.person.id))).toEqual(
-      new Set(['m1', 'f1', 'f2']),
-    );
-    expect(new Set(list({ programId: 'crane' }).rows.map((r) => r.person.id))).toEqual(new Set(['c1']));
-    expect(list({ supervisorId: 'dir' }, { personId: 'm2', isAdmin: false }).scopeCount).toBe(2);
-  });
-
-  it("agrees with the tree: same people, and each person's issue checks", () => {
+  it('agrees with the tree: the same people', () => {
     const queries: Partial<ReadinessQuery>[] = [
       { issuesOnly: true },
       { issuesOnly: true, categories: ['sap-password'] },
       { issuesOnly: true, statuses: ['not-ready'] },
       { issuesOnly: true, supervisorId: 'm1', directOnly: true },
       { issuesOnly: true, programId: 'crane' },
+      { keyword: 'ana' },
       {},
     ];
     for (const q of queries) {
       const treePeople = run(q).rows.filter((r) => !r.context).map((r) => r.person.id);
-      // People with no checks at all show in the tree as not ready but have no list rows.
-      const withChecks = treePeople.filter((id) => (checksByPerson.get(id) ?? []).length > 0);
-      const listPeople = new Set(list(q).rows.map((r) => r.person.id));
-      expect([...listPeople].sort()).toEqual([...withChecks].sort());
+      expect(ids(list(q)).sort()).toEqual([...treePeople].sort());
     }
   });
 });

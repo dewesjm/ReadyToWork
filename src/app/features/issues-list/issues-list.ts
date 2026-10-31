@@ -1,7 +1,8 @@
 import { Component, ElementRef, afterNextRender, computed, inject } from '@angular/core';
-import { DEFAULT_CONFIG, ListRow, describeDays, formatDate } from '../../../core';
-import { SettingsService } from '../../services/settings-service';
+import { DEFAULT_CONFIG, Person, describeDays } from '../../../core';
 import { Highlight } from '../../shared/highlight';
+import { Icon } from '../../shared/icon/icon';
+import { CategoryChip } from '../../shared/status/category-chip';
 import { StatusBadge } from '../../shared/status/status-badge';
 import { ListStateService } from '../readiness/list-state-service';
 import { PersonNavigator } from '../readiness/person-navigator';
@@ -10,43 +11,51 @@ import { READINESS_PAGE_CONFIG } from '../readiness/readiness-page-config';
 import { ReadinessQueryService } from '../readiness/readiness-query-service';
 
 /**
- * The Readiness page's list view: one row per check, soonest first, under the same query as the
- * tree. A table on wide screens, cards on phones. Shows a page of rows at a time.
+ * The Readiness page's list view: one row per person (the same people as the tree), worst first,
+ * with a column per category showing its worst status. A table on wide screens, cards on phones.
+ * Shows a page of rows at a time.
  */
 @Component({
   selector: 'rtw-issues-list',
-  imports: [Highlight, StatusBadge, ReadinessEmpty],
+  imports: [Highlight, Icon, CategoryChip, StatusBadge, ReadinessEmpty],
   templateUrl: './issues-list.html',
 })
 export class IssuesList {
   protected readonly query = inject(ReadinessQueryService);
   private readonly navigator = inject(PersonNavigator);
   private readonly state = inject(ListStateService);
-  private readonly settings = inject(SettingsService);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   protected readonly keyword = computed(() => this.query.keyword().trim());
-  /** The person open in the dashboard panel; their rows are highlighted. */
+  /** The person open in the dashboard panel; their row is highlighted. */
   protected readonly selectedId = this.navigator.panelPersonId;
-  /** With the panel open the list is narrower: manager and category fold into other columns. */
+  /** With the panel open the list is narrower: manager folds under the name, cells show icons. */
   protected readonly compact = computed(() => this.selectedId() !== null);
+
+  protected readonly columns = computed(() =>
+    this.query.listResult().columns.map((id) => {
+      const c = DEFAULT_CONFIG.categories.find((c) => c.id === id);
+      return { id, label: c?.label ?? id, icon: c?.icon ?? 'info' };
+    }),
+  );
 
   private readonly limit = computed(() => this.state.limit(this.query.queryKey()));
   protected readonly total = computed(() => this.query.listResult().rows.length);
 
   protected readonly rows = computed(() => {
-    const programs = new Map(this.settings.settings().programs.map((p) => [p.id, p.name]));
+    const columns = this.columns();
     return this.query
       .listResult()
       .rows.slice(0, this.limit())
       .map((r) => ({
         ...r,
-        key: rowKey(r),
-        category:
-          DEFAULT_CONFIG.categories.find((c) => c.id === r.check.category)?.label ?? r.check.category,
-        due: r.check.dueDate ? formatDate(r.check.dueDate) : '—',
-        days: r.check.daysRemaining === undefined ? '—' : describeDays(r.check.daysRemaining),
-        requiredBy: r.check.requiredBy.map((id) => programs.get(id) ?? id).join(', '),
+        cells: r.cells.map((c) => ({
+          cell: c,
+          days: c && c.status !== 'ready' && c.daysRemaining !== undefined ? describeDays(c.daysRemaining) : '',
+        })),
+        issues: r.cells.flatMap((c, i) =>
+          c && c.status !== 'ready' ? [{ category: columns[i].id, status: c.status }] : [],
+        ),
       }));
   });
 
@@ -57,7 +66,7 @@ export class IssuesList {
 
   protected readonly moreText = computed(() => {
     const shown = this.rows().length;
-    return `Showing ${shown.toLocaleString('en-US')} of ${this.total().toLocaleString('en-US')} checks`;
+    return `Showing ${shown.toLocaleString('en-US')} of ${this.total().toLocaleString('en-US')} people`;
   });
 
   constructor() {
@@ -71,16 +80,12 @@ export class IssuesList {
     });
   }
 
-  protected open(row: ListRow): void {
-    this.state.focusedKey.set(rowKey(row));
-    this.navigator.open(row.person.id);
+  protected open(person: Person): void {
+    this.state.focusedKey.set(person.id);
+    this.navigator.open(person.id);
   }
 
   protected showMore(): void {
     this.state.showMore(this.query.queryKey());
   }
-}
-
-function rowKey(r: ListRow): string {
-  return `${r.person.id}|${r.check.itemId}`;
 }

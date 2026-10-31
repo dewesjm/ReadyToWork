@@ -26,21 +26,12 @@ export class ReadinessToolbar {
     supervisorChoices(this.query.supervisorOptions(), this.viewer.viewer()?.personId),
   );
 
-  /** Tree: "21 of 201 people shown". List: "38 checks for 21 people". */
+  /** "21 of 201 people shown"; the tree and the list show the same people. */
   protected readonly shownText = computed(() => {
     const people = (n: number) => `${n.toLocaleString('en-US')} ${n === 1 ? 'person' : 'people'}`;
-    if (this.query.view() === 'list') {
-      const { rows, personCount } = this.query.listResult();
-      const checks = `${rows.length.toLocaleString('en-US')} ${rows.length === 1 ? 'check' : 'checks'}`;
-      return `${checks} for ${people(personCount)}`;
-    }
     const { shownCount, scopeCount } = this.query.result();
     return shownCount === scopeCount ? `${people(shownCount)} shown` : `${shownCount} of ${people(scopeCount)} shown`;
   });
-
-  protected readonly placeholder = computed(() =>
-    this.query.view() === 'list' ? 'Name, title, employee ID or item' : 'Name, title or employee ID',
-  );
 
   protected statusChipClass(status: Status): string {
     return this.query.statuses().includes(status) ? buttonClass(status) : 'btn-outline';
