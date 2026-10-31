@@ -329,3 +329,5 @@
   to" column instead of the tree's context rows, the same file from both views. Each category
   gets two columns (status, days left) so Excel can filter on status. Plain CSV built in the
   core, no library; values that would start a spreadsheet formula get an apostrophe.
+- **General Foreman persona** (user). Added to View as, between Foreman and Superintendent: the
+  tool crew foreman's own general foreman, so the demo can walk one chain upward.

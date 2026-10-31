@@ -25,7 +25,7 @@ describe('ReadinessService (wired through DI)', () => {
   it('evaluates the whole fake org', () => {
     expect(readiness.loaded()).toBe(true);
     expect(readiness.result().statusByPerson.size).toBe(mock.fakeOrg().people.length);
-    expect(readiness.personas()).toHaveLength(4);
+    expect(readiness.personas()).toHaveLength(5);
   });
 
   it('turns the crane candidate red as soon as they are assigned the program', () => {

@@ -36,7 +36,7 @@ describe('Admin', () => {
     const el = harness.routeNativeElement as HTMLElement;
     expect(el.querySelector('rtw-thresholds')).not.toBeNull();
 
-    for (const persona of ['foreman', 'superintendent', 'director']) {
+    for (const persona of ['foreman', 'general-foreman', 'superintendent', 'director']) {
       viewer.setPersona(persona);
       await harness.fixture.whenStable();
       expect(el.querySelector('[data-testid="admins-only"]')?.textContent).toContain('View as');

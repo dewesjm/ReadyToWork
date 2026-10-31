@@ -407,8 +407,16 @@ class OrgGenerator {
     const director = this.nodes[0].person;
     const superintendent = this.nodes.find((n) => n.level === 'manager')!.person;
     const foreman = this.nodes.find((n) => n.person.id === s.toolCrewForemanId)!.person;
+    // The tool crew foreman's own general foreman, so the demo can walk one chain upward.
+    const generalForeman = this.nodes.find((n) => n.person.id === foreman.managerId)!.person;
     return [
       { id: 'foreman', label: `Foreman: ${foreman.name}`, personId: foreman.id, isAdmin: false },
+      {
+        id: 'general-foreman',
+        label: `General Foreman: ${generalForeman.name}`,
+        personId: generalForeman.id,
+        isAdmin: false,
+      },
       { id: 'superintendent', label: `Superintendent: ${superintendent.name}`, personId: superintendent.id, isAdmin: false },
       { id: 'director', label: `Director: ${director.name}`, personId: director.id, isAdmin: false },
       { id: 'admin', label: `Admin: ${director.name}`, personId: director.id, isAdmin: true },

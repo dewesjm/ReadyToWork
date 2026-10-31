@@ -17,7 +17,7 @@ describe('List and tree agree', () => {
     await loadAppState();
   });
 
-  for (const persona of ['foreman', 'superintendent', 'director', 'admin']) {
+  for (const persona of ['foreman', 'general-foreman', 'superintendent', 'director', 'admin']) {
     it(`for the ${persona}, with Issues only on and off`, async () => {
       TestBed.inject(ViewerService).setPersona(persona);
       const harness = await RouterTestingHarness.create('/readiness');

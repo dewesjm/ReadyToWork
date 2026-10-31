@@ -310,7 +310,7 @@ src/
 A small panel (toggle with a button or keyboard shortcut) for the presenter:
 
 - **Today**: date picker plus "+1 week / +1 month" buttons. Statuses update live.
-- **View as**: switch between a sample foreman, superintendent, director and admin. Shows
+- **View as**: switch between a sample foreman, general foreman, superintendent, director and admin. Shows
   subtree scoping and the admin screens without a real login. Also under Preferences in the
   avatar menu (from M6).
 - **Layout**: Dashboard or Drill-down.
