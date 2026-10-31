@@ -9,7 +9,7 @@ import {
   addDays,
   isIsoDate,
 } from '../../core';
-import { CRANE_PROGRAM_ID } from './fake-catalog';
+import { CRANE_PROGRAM_ID, TITLES, TRADES } from './fake-catalog';
 import { MOCK_CONFIG } from './mock-config';
 import { FakeOrg, generateOrg } from './org-generator';
 
@@ -31,6 +31,42 @@ describe('generateOrg', () => {
 
   it('is the same every time for the same seed and date', () => {
     expect(generateOrg(ANCHOR)).toEqual(org);
+  });
+
+  describe('crews by trade', () => {
+    const managers = index.childrenOf(org.people[0].id);
+    const crewUnder = (managerId: string) =>
+      index.subtree(managerId).filter((p) => index.childrenOf(p.id).length === 0);
+    const tradeOf = (title: string) => TRADES.find((t) => t.titles.includes(title));
+
+    it('keeps foreman and above on their usual titles', () => {
+      for (const m of managers) {
+        expect(TITLES.manager).toContain(m.title);
+        for (const p of index.subtree(m.id).filter((x) => index.childrenOf(x.id).length > 0 && x.id !== m.id)) {
+          expect([TITLES.generalForeman, TITLES.foreman]).toContain(p.title);
+        }
+      }
+    });
+
+    it("gives each superintendent's crews their trade, with the odd person on loan", () => {
+      managers.forEach((m, i) => {
+        const crew = crewUnder(m.id);
+        const own = crew.filter((p) => tradeOf(p.title) === TRADES[i % TRADES.length]);
+        expect(crew.every((p) => tradeOf(p.title))).toBe(true);
+        expect(own.length / crew.length).toBeGreaterThan(0.85);
+      });
+      const loans = managers.flatMap((m, i) => crewUnder(m.id).filter((p) => tradeOf(p.title) !== TRADES[i % TRADES.length]));
+      expect(loans.length).toBeGreaterThan(0);
+    });
+
+    it("mostly gives crew members their own trade's qualifications", () => {
+      const crew = managers.flatMap((m) => crewUnder(m.id));
+      const holdsTradeQual = crew.filter((p) => {
+        const quals = org.records.filter((r) => r.personId === p.id && r.category === 'qualification');
+        return quals.some((q) => tradeOf(p.title)!.quals.includes(q.itemId));
+      });
+      expect(holdsTradeQual.length / crew.length).toBeGreaterThan(0.75);
+    });
   });
 
   it('differs for another seed', () => {

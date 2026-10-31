@@ -19,6 +19,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
       "Click a person's issue chips (or \"3 issues\" in the list) to see what they're missing right under their row.",
       'Export: download the people shown as a file for Excel, from the tree or the list.',
       'A General Foreman under View as in the avatar menu.',
+      "Each superintendent's crews now share a trade (welding, electrical, pipefitting, shipfitting), with matching job titles and qualifications.",
     ],
     fixes: [
       'If you opened the demo before today, you now get the new sample programs without resetting anything.',

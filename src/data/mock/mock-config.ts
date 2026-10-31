@@ -17,6 +17,10 @@ export interface MockConfig {
   programAssignmentRate: number;
   /** Planted scenario: how many in the tool crew have expired calibrations. */
   expiredToolPeople: number;
+  /** Share of crew members on loan from another trade (their title and quals are that trade's). */
+  loanRate: number;
+  /** Share of crew members holding one of their trade's qualifications. */
+  tradeQualRate: number;
 }
 
 export const MOCK_CONFIG: MockConfig = {
@@ -31,4 +35,6 @@ export const MOCK_CONFIG: MockConfig = {
   crewHealthSpread: 1.2,
   programAssignmentRate: 0.3,
   expiredToolPeople: 4,
+  loanRate: 0.05,
+  tradeQualRate: 0.85,
 };

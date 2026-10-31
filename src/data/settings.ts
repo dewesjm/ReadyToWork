@@ -14,7 +14,7 @@ import {
   pruneAssignments,
 } from '../core';
 
-export const SETTINGS_SCHEMA_VERSION = 2;
+export const SETTINGS_SCHEMA_VERSION = 3;
 
 export type Layout = 'dashboard' | 'drilldown';
 
@@ -102,6 +102,8 @@ export const replaceSamplePrograms: Migration = ({ programs, assignments, ...res
 export const MIGRATIONS: Record<number, Migration> = {
   // 2026-10-31: shipyard programs with typed "any of" requirements replaced the first samples.
   1: replaceSamplePrograms,
+  // 2026-10-31: crews by trade regenerated the fake org and its default assignments.
+  2: replaceSamplePrograms,
 };
 
 export class SettingsError extends Error {}

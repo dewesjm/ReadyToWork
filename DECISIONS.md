@@ -331,3 +331,14 @@
   core, no library; values that would start a spreadsheet formula get an apostrophe.
 - **General Foreman persona** (user). Added to View as, between Foreman and Superintendent: the
   tool crew foreman's own general foreman, so the demo can walk one chain upward.
+- **Crews by trade** (user). Each superintendent's people are one trade; only the crew level
+  gets trade titles, with the odd person on loan from another trade (5%). Foreman and above
+  keep their titles. Qualifications generally follow the trade (85% hold their trade's qual,
+  plus sometimes a general one: crane, rigging, competent person, fire watch). Four trades, one
+  per superintendent, since the user didn't pick a different set; two new trade quals
+  (Pipefitter Certification, Shipfitter Certification). The regenerated org changes the
+  default assignments, so saved settings go to version 3 with the same sample-program upgrade.
+- **Trade-specific quals within a program** (user, future): a program may later need different
+  qualifications per trade. Not built.
+- **Department per person** (user): planned, then put on hold to do trades first. The draft is
+  plans/department.md.

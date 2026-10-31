@@ -23,16 +23,56 @@ export const LAST_NAMES = [
   'Martinez', 'Rodriguez', 'Lopez', 'Hernandez', 'Gonzalez', 'Sullivan', 'Russell', 'Hayes',
 ];
 
+/** Titles from foreman up. Crew titles come from their superintendent's trade (TRADES). */
 export const TITLES = {
   director: 'Director of Production',
   manager: ['Superintendent', 'Production Manager'],
   generalForeman: 'General Foreman',
   foreman: 'Foreman',
-  crew: [
-    'Shipfitter', 'Pipefitter', 'Welder', 'Marine Electrician', 'Rigger', 'Outside Machinist',
-    'Painter', 'Insulator', 'Sheet Metal Worker', 'Apprentice',
-  ],
 };
+
+/**
+ * One trade per superintendent, in order (a fifth superintendent would start again at the
+ * top). Everyone in their crews has a title from the trade, except the odd person on loan from
+ * another one. A title listed twice is picked twice as often.
+ */
+export interface Trade {
+  id: string;
+  name: string;
+  titles: string[];
+  /** Qualifications people in the trade generally hold (IDs in QUALIFICATIONS). */
+  quals: string[];
+}
+
+export const TRADES: Trade[] = [
+  {
+    id: 'welding',
+    name: 'Welding',
+    titles: ['Welder', 'Welder', 'Welder', 'Welder Helper', 'Welding Apprentice'],
+    quals: ['QL-WLD-01', 'QL-PWL-01'],
+  },
+  {
+    id: 'electrical',
+    name: 'Electrical',
+    titles: ['Marine Electrician', 'Marine Electrician', 'Marine Electrician', 'Electrician Helper', 'Electrical Apprentice'],
+    quals: ['QL-MEL-01'],
+  },
+  {
+    id: 'pipefitting',
+    name: 'Pipefitting',
+    titles: ['Pipefitter', 'Pipefitter', 'Pipefitter', 'Pipefitter Helper', 'Pipefitting Apprentice'],
+    quals: ['QL-PFT-01'],
+  },
+  {
+    id: 'shipfitting',
+    name: 'Shipfitting',
+    titles: ['Shipfitter', 'Shipfitter', 'Shipfitter', 'Shipfitter Helper', 'Shipfitting Apprentice'],
+    quals: ['QL-SFT-01'],
+  },
+];
+
+/** Qualifications anyone in any trade may hold (crane, rigging, safety roles). */
+export const GENERAL_QUALS = ['QL-CRN-01', 'QL-RIG-01', 'QL-SCP-01', 'QL-FW-01'];
 
 const item = (category: string, itemId: string, itemName: string): CatalogItem => ({
   category,
@@ -65,6 +105,8 @@ export const QUALIFICATIONS: CatalogItem[] = [
   item('qualification', 'QL-WLD-01', 'Structural Welding'),
   item('qualification', 'QL-PWL-01', 'Pipe Welding'),
   item('qualification', 'QL-MEL-01', 'Marine Electrician'),
+  item('qualification', 'QL-PFT-01', 'Pipefitter Certification'),
+  item('qualification', 'QL-SFT-01', 'Shipfitter Certification'),
   item('qualification', 'QL-SCP-01', 'Shipyard Competent Person'),
   item('qualification', 'QL-FW-01', 'Fire Watch'),
 ];

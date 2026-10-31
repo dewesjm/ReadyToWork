@@ -149,12 +149,12 @@ describe('export and import', () => {
     bad('not json', 'The file is not valid JSON.');
     bad('[1, 2]', 'Settings must be a JSON object.');
     bad('{"programs": []}', 'Settings are missing a schemaVersion number.');
-    bad('{"schemaVersion": 99}', 'These settings are from a newer version (99); this app reads up to 2.');
-    bad('{"schemaVersion": 2, "programs": [{"id": "x", "name": 5, "requirements": []}]}', 'programs[0].name must be text.');
-    bad('{"schemaVersion": 2, "warningDays": {"tool": -5}}', 'warningDays.tool must be a whole number of days (0 to 3650).');
+    bad('{"schemaVersion": 99}', 'These settings are from a newer version (99); this app reads up to 3.');
+    bad('{"schemaVersion": 3, "programs": [{"id": "x", "name": 5, "requirements": []}]}', 'programs[0].name must be text.');
+    bad('{"schemaVersion": 3, "warningDays": {"tool": -5}}', 'warningDays.tool must be a whole number of days (0 to 3650).');
     const note = (over: object) =>
       JSON.stringify({ schemaVersion: SETTINGS_SCHEMA_VERSION, announcements: [{ ...DEFAULT_ANNOUNCEMENTS[0], ...over }] });
-    bad('{"schemaVersion": 2, "announcements": {}}', '"announcements" must be a list.');
+    bad('{"schemaVersion": 3, "announcements": {}}', '"announcements" must be a list.');
     bad(note({ type: 'panic' }), 'announcements[0].type must be one of "outage", "delayed", "info".');
     bad(note({ on: 'yes' }), 'announcements[0].on must be true or false.');
     bad(note({ revision: 0 }), 'announcements[0].revision must be a whole number from 1.');
@@ -167,7 +167,7 @@ describe('export and import', () => {
   });
 
   it('fills missing sections from the defaults', () => {
-    const s = importSettings('{"schemaVersion": 2, "warningDays": {"tool": 7}}', defaults(), mine);
+    const s = importSettings('{"schemaVersion": 3, "warningDays": {"tool": 7}}', defaults(), mine);
     expect(s.programs).toEqual(defaults().programs);
     expect(s.assignments).toEqual(defaults().assignments);
     expect(s.warningDays).toEqual({ tool: 7 });
@@ -232,22 +232,22 @@ describe('admin edits on settings', () => {
 });
 
 describe('schema upgrades', () => {
-  // Pretend version 3 renamed "warningDays" to "warningWindows".
-  const v3Defaults = { ...defaults(), schemaVersion: 3 };
+  // Pretend version 4 renamed "warningDays" to "warningWindows".
+  const v4Defaults = { ...defaults(), schemaVersion: 4 };
   const migrations = {
-    2: (raw: Record<string, unknown>) => {
+    3: (raw: Record<string, unknown>) => {
       const { warningDays, ...rest } = raw;
       return { ...rest, warningWindows: warningDays };
     },
   };
 
   it('upgrades settings saved by an older version', () => {
-    const old = { schemaVersion: 2, warningDays: { tool: 10 } };
-    const upgraded = parseSettings(old, v3Defaults, migrations, 3);
-    expect(upgraded.schemaVersion).toBe(3);
+    const old = { schemaVersion: 3, warningDays: { tool: 10 } };
+    const upgraded = parseSettings(old, v4Defaults, migrations, 4);
+    expect(upgraded.schemaVersion).toBe(4);
   });
 
-  it('replaces version 1 sample programs with the current ones, keeping everything else', () => {
+  it('replaces older sample programs with the current ones, keeping everything else', () => {
     const v1 = {
       schemaVersion: 1,
       programs: [{ id: 'prog-crane', name: 'Crane Operations', requirements: [] }],

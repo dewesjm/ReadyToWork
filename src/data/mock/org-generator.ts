@@ -19,6 +19,7 @@ import {
   DEFAULT_ANNOUNCEMENTS,
   DEFAULT_PROGRAMS,
   FIRST_NAMES,
+  GENERAL_QUALS,
   LAST_NAMES,
   NETWORK_ACCOUNT,
   QUALIFICATIONS,
@@ -27,7 +28,9 @@ import {
   SAP_PASSWORD,
   TITLES,
   TOOL_TYPES,
+  TRADES,
   TRAININGS,
+  Trade,
 } from './fake-catalog';
 import { MOCK_CONFIG, MockConfig } from './mock-config';
 
@@ -62,6 +65,8 @@ interface Node {
   person: Person;
   level: Level;
   crewHealth: number;
+  /** Crew members only: their own trade (another one when on loan). */
+  trade?: Trade;
 }
 
 /** What kind of record a slot is; decides how ready / expiring / not-ready dates look. */
@@ -127,6 +132,7 @@ class OrgGenerator {
     const director = this.addPerson('director', null, TITLES.director);
     for (let m = 0; m < shape.managers; m++) {
       const manager = this.addPerson('manager', director, TITLES.manager[m % TITLES.manager.length]);
+      const trade = TRADES[m % TRADES.length];
       for (let g = 0; g < this.rng.int(...shape.generalForemenPerManager); g++) {
         const gf = this.addPerson('generalForeman', manager, TITLES.generalForeman);
         for (let f = 0; f < this.rng.int(...shape.foremenPerGeneralForeman); f++) {
@@ -136,8 +142,12 @@ class OrgGenerator {
           foreman.crewHealth = health;
           const crew: Node[] = [];
           for (let c = 0; c < this.rng.int(...shape.crewPerForeman); c++) {
-            const member = this.addPerson('crew', foreman, this.rng.pick(TITLES.crew));
+            const own = this.rng.chance(this.config.loanRate)
+              ? this.rng.pick(TRADES.filter((t) => t !== trade))
+              : trade;
+            const member = this.addPerson('crew', foreman, this.rng.pick(own.titles));
             member.crewHealth = health;
+            member.trade = own;
             crew.push(member);
           }
           this.crews.set(foreman.person.id, crew);
@@ -227,6 +237,15 @@ class OrgGenerator {
 
   // Records
 
+  /** Generally one of the trade's qualifications, sometimes a general one as well. */
+  private crewQuals(trade: Trade): CatalogItem[] {
+    const qual = (id: string) => QUALIFICATIONS.find((q) => q.itemId === id)!;
+    const quals: CatalogItem[] = [];
+    if (this.rng.chance(this.config.tradeQualRate)) quals.push(qual(this.rng.pick(trade.quals)));
+    for (const id of this.rng.sample(GENERAL_QUALS, this.rng.int(0, 1))) quals.push(qual(id));
+    return quals;
+  }
+
   private recordsFor(
     node: Node,
     target: Status,
@@ -259,7 +278,7 @@ class OrgGenerator {
     }
 
     const trainings = new Set([SAFETY_REFRESHER, ...this.rng.sample(TRAININGS.slice(1), this.rng.int(2, 4))]);
-    const quals = new Set(leader ? [] : this.rng.sample(QUALIFICATIONS, this.rng.int(0, 2)));
+    const quals = new Set(leader ? [] : this.crewQuals(node.trade!));
     const roles = new Set(this.rng.sample(ROLES, leader ? this.rng.int(1, 2) : this.rng.int(0, 1)));
     for (const r of required) {
       if (r.category === 'training') trainings.add(r);

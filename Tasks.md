@@ -98,6 +98,9 @@
 - [ ] User checks the inline items in the browser and revises
 - [x] Export to CSV from both views, per plans/export-csv.md (339 tests)
 - [ ] User opens an export in Excel
+- [x] Crews by trade: crew titles and quals follow their superintendent's trade, odd person on loan (343 tests)
+- [ ] Decide: search should look through everyone in scope, ignoring Issues only (asked 2026-10-31)
+- [ ] Department per person: on hold, draft in [plans/department.md](plans/department.md)
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)
@@ -131,3 +134,4 @@
   get their program")
 - Notifications / weekly digest email
 - History and audit trail
+- Trade-specific qualifications within a program (a program may need different quals per trade)
