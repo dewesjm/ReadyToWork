@@ -123,6 +123,11 @@ toolbar, so filters carry over when switching.
   one column), for managers a roll-up badge with counts, and a Details button.
 - Clicking a manager's row opens or closes it; only Details (or Enter) opens the person.
   Clicking the row of someone with no one under them does nothing.
+- **A person's items open in place**: clicking a row's issue chips (or "Items" when there are
+  none) shows that person's issues under the row, grouped by category, worst first, with status,
+  reason, due date and "Required by"; "Show all N items" adds the ready ones. A manager's chips
+  open their own items, separate from opening their team. Several can be open at once. No
+  keyboard shortcut (user): Enter on a row opens Details, which lists everything.
 - **Issues only keeps the path**: managers above a person with an issue stay visible so the
   structure makes sense; everything else is hidden.
 
@@ -138,6 +143,8 @@ toolbar, so filters carry over when switching.
   open, the manager folds under the name and cells show the status icon only (text as a
   tooltip and for screen readers).
 - The keyword matches people (name, title, employee ID), as in the tree.
+- Under each name, "3 issues" (or "Items") opens the person's items in a row below, the same
+  view as in the tree; on phones the card's chips do it.
 - 100 rows at a time, with "Show 100 more".
 - Clicking a row (or Enter on the person's name) opens that person's detail.
 

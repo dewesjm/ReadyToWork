@@ -7,6 +7,8 @@ import { CategoryChip } from '../../shared/status/category-chip';
 import { RollupBadge } from '../../shared/status/rollup-badge';
 import { StatusBadge } from '../../shared/status/status-badge';
 import { PersonNavigator } from '../readiness/person-navigator';
+import { OpenItemsService } from '../readiness/open-items-service';
+import { PersonItems } from '../readiness/person-items';
 import { ReadinessEmpty } from '../readiness/readiness-empty';
 import { ReadinessQueryService } from '../readiness/readiness-query-service';
 import { TreeModel } from '../readiness/tree-model';
@@ -19,12 +21,13 @@ import { TreeStateService } from '../readiness/tree-state-service';
  */
 @Component({
   selector: 'rtw-org-tree',
-  imports: [Highlight, Icon, StatusBadge, CategoryChip, RollupBadge, ReadinessEmpty],
+  imports: [Highlight, Icon, StatusBadge, CategoryChip, RollupBadge, ReadinessEmpty, PersonItems],
   templateUrl: './org-tree.html',
 })
 export class OrgTree {
   protected readonly query = inject(ReadinessQueryService);
   protected readonly tree = inject(TreeModel);
+  protected readonly items = inject(OpenItemsService);
   private readonly state = inject(TreeStateService);
   private readonly readiness = inject(ReadinessService);
   private readonly navigator = inject(PersonNavigator);
@@ -48,6 +51,7 @@ export class OrgTree {
         rollup: rollups.get(p.id) ?? null,
         expandable: row.childIds.length > 0,
         expanded: this.tree.isExpanded(p.id),
+        itemsOpen: this.items.isOpen(p.id),
         /** The employee ID is shown only when the keyword matches it. */
         showEmployeeId: keyword !== '' && p.employeeId.toLowerCase().includes(keyword.toLowerCase()),
       };

@@ -8,6 +8,7 @@ export * from './model';
 export * from './names';
 export * from './org-index';
 export * from './person-detail';
+export * from './person-items';
 export * from './program-edits';
 export * from './program-rules';
 export * from './readiness-evaluator';

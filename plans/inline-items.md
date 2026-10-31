@@ -1,6 +1,7 @@
 # Plan: Expand a person to see what they're missing, in place
 
-Status: **waiting on the user's answers** (questions at the end). User request 2026-10-31: "I
+Status: **done** 2026-10-31. Answers: the recommended options, except no keyboard shortcut
+(the user doesn't want a specific key press to control anything); the user will help revise. User request 2026-10-31: "I
 really think I need to be able to expand an individual to see a tree of what they are missing."
 Comes before the export (plans/export-csv.md, answered with the recommended options; built
 after this).

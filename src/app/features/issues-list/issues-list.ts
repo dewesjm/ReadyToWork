@@ -1,10 +1,13 @@
 import { Component, ElementRef, afterNextRender, computed, inject } from '@angular/core';
 import { DEFAULT_CONFIG, Person, describeDays } from '../../../core';
+import { ReadinessService } from '../../services/readiness-service';
 import { Highlight } from '../../shared/highlight';
 import { Icon } from '../../shared/icon/icon';
 import { CategoryChip } from '../../shared/status/category-chip';
 import { StatusBadge } from '../../shared/status/status-badge';
 import { ListStateService } from '../readiness/list-state-service';
+import { OpenItemsService } from '../readiness/open-items-service';
+import { PersonItems } from '../readiness/person-items';
 import { PersonNavigator } from '../readiness/person-navigator';
 import { ReadinessEmpty } from '../readiness/readiness-empty';
 import { READINESS_PAGE_CONFIG } from '../readiness/readiness-page-config';
@@ -17,7 +20,7 @@ import { ReadinessQueryService } from '../readiness/readiness-query-service';
  */
 @Component({
   selector: 'rtw-issues-list',
-  imports: [Highlight, Icon, CategoryChip, StatusBadge, ReadinessEmpty],
+  imports: [Highlight, Icon, CategoryChip, StatusBadge, ReadinessEmpty, PersonItems],
   templateUrl: './issues-list.html',
 })
 export class IssuesList {
@@ -25,6 +28,8 @@ export class IssuesList {
   private readonly navigator = inject(PersonNavigator);
   private readonly state = inject(ListStateService);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly readiness = inject(ReadinessService);
+  protected readonly items = inject(OpenItemsService);
 
   protected readonly keyword = computed(() => this.query.keyword().trim());
   /** The person open in the dashboard panel; their row is highlighted. */
@@ -39,11 +44,15 @@ export class IssuesList {
     }),
   );
 
+  /** Person and manager, the category columns, and overall: for an item row spanning them all. */
+  protected readonly columnCount = computed(() => this.columns().length + (this.compact() ? 2 : 3));
+
   private readonly limit = computed(() => this.state.limit(this.query.queryKey()));
   protected readonly total = computed(() => this.query.listResult().rows.length);
 
   protected readonly rows = computed(() => {
     const columns = this.columns();
+    const { checksByPerson } = this.readiness.result();
     return this.query
       .listResult()
       .rows.slice(0, this.limit())
@@ -56,6 +65,8 @@ export class IssuesList {
         issues: r.cells.flatMap((c, i) =>
           c && c.status !== 'ready' ? [{ category: columns[i].id, status: c.status }] : [],
         ),
+        issueCount: (checksByPerson.get(r.person.id) ?? []).filter((c) => c.status !== 'ready').length,
+        itemsOpen: this.items.isOpen(r.person.id),
       }));
   });
 
@@ -83,6 +94,10 @@ export class IssuesList {
   protected open(person: Person): void {
     this.state.focusedKey.set(person.id);
     this.navigator.open(person.id);
+  }
+
+  protected issueText(n: number): string {
+    return `${n} ${n === 1 ? 'issue' : 'issues'}`;
   }
 
   protected showMore(): void {

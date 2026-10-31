@@ -5,7 +5,9 @@ import {
   IsoDate,
   describeDays,
   describeSynced,
+  dueLine,
   formatDate,
+  shownItemId,
   sourceLabel,
 } from '../../../core';
 import { StatusBadge } from '../../shared/status/status-badge';
@@ -34,9 +36,7 @@ export class CheckTable {
         check: c,
         dueLine: dueLine(c),
         category: config?.label ?? c.category,
-        // The course or qual ID of a held item (a missing item's label already has it).
-        itemId:
-          config?.showsItemId && c.source !== 'program' && !c.itemName.includes(c.itemId) ? c.itemId : null,
+        itemId: shownItemId(c, DEFAULT_CONFIG.categories),
         due: c.dueDate ? formatDate(c.dueDate) : '—',
         days: c.daysRemaining === undefined ? '—' : describeDays(c.daysRemaining),
         source: sourceLabel(c.source),
@@ -46,14 +46,4 @@ export class CheckTable {
       };
     }),
   );
-}
-
-/** Card line under the reason: "Due Dec 1, 2026 · 12 days", or just "12 days left" when the
- *  reason already names the date. Null when there is no due date. */
-function dueLine(c: Check): string | null {
-  if (!c.dueDate || c.daysRemaining === undefined) return null;
-  const due = formatDate(c.dueDate);
-  const days = describeDays(c.daysRemaining);
-  if (!c.reason.includes(due)) return `Due ${due} · ${days}`;
-  return c.daysRemaining > 0 ? `${days} left` : days;
 }

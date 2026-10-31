@@ -176,4 +176,53 @@ describe('OrgTree', () => {
     await stable();
     expect(router.url).toBe('/readiness?issues=all'); // only the Details button opens a person
   });
+
+  describe("a person's items in place", () => {
+    const items = (el: HTMLElement, id: string) =>
+      el.querySelector<HTMLElement>(`[data-testid="person-items"][data-person="${id}"]`);
+
+    it('opens issues under the row from the chips, shows all on request, and closes again', async () => {
+      const { el, row, tree, stable, router } = await open('/readiness?issues=all');
+      tree.expandAll();
+      await stable();
+      const { checksByPerson } = readiness();
+      const id = fakeOrg().people.find(
+        (p) =>
+          readiness().org.childrenOf(p.id).length === 0 &&
+          (checksByPerson.get(p.id) ?? []).some((c) => c.status !== 'ready'),
+      )!.id;
+      const checks = checksByPerson.get(id)!;
+      const toggle = () => row(id)!.querySelector<HTMLButtonElement>('[data-testid="items-toggle"]')!;
+      expect(toggle().getAttribute('aria-expanded')).toBe('false');
+      expect(items(el(), id)).toBeNull();
+
+      toggle().click();
+      await stable();
+      expect(router.url).toBe('/readiness?issues=all'); // it doesn't open the person
+      expect(toggle().getAttribute('aria-expanded')).toBe('true');
+      const shown = () => [...items(el(), id)!.querySelectorAll('[data-item]')];
+      expect(shown().length).toBe(checks.filter((c) => c.status !== 'ready').length);
+      expect(shown()[0].querySelector('rtw-status-badge [data-status]')!.getAttribute('data-status')).not.toBe('ready');
+
+      items(el(), id)!.querySelector<HTMLButtonElement>('[data-testid="show-all-items"]')!.click();
+      await stable();
+      expect(shown().length).toBe(checks.length);
+
+      toggle().click();
+      await stable();
+      expect(items(el(), id)).toBeNull();
+    });
+
+    it("opens a manager's own items without opening or closing their team", async () => {
+      const { el, row, tree, stable } = await open('/readiness?issues=all');
+      const manager = fakeOrg().scenarios.toolCrewForemanId;
+      tree.expandAll();
+      await stable();
+      const expandedBefore = row(manager)!.getAttribute('aria-expanded');
+      row(manager)!.querySelector<HTMLButtonElement>('[data-testid="items-toggle"]')!.click();
+      await stable();
+      expect(row(manager)!.getAttribute('aria-expanded')).toBe(expandedBefore);
+      expect(items(el(), manager)).not.toBeNull();
+    });
+  });
 });

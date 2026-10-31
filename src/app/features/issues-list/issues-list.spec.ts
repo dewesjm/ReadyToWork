@@ -136,4 +136,24 @@ describe('IssuesList (list view)', () => {
     const { el } = await open('/readiness?view=list&q=zzzz-nobody');
     expect(el().querySelector('[data-testid="empty"]')!.textContent).toContain('No one matches these filters');
   });
+
+  it("opens a person's issues under their row without opening the person", async () => {
+    const { rows, el, stable, router, query } = await open('/readiness?view=list', 'foreman');
+    const id = rows()[0].dataset['key']!;
+    const toggle = rows()[0].querySelector<HTMLButtonElement>('[data-testid="items-toggle"]')!;
+    const issues = TestBed.inject(ReadinessService)
+      .result()
+      .checksByPerson.get(id)!
+      .filter((c) => c.status !== 'ready').length;
+    expect(toggle.textContent!.trim()).toBe(`${issues} ${issues === 1 ? 'issue' : 'issues'}`);
+
+    toggle.click();
+    await stable();
+    expect(router.url).toBe('/readiness?view=list');
+    const itemsRow = el().querySelector<HTMLTableRowElement>(`[data-testid="person-list"] tr[data-items-for="${id}"]`)!;
+    expect(itemsRow.cells[0].colSpan).toBe(query.listResult().columns.length + 3);
+    expect(itemsRow.querySelectorAll('[data-item]').length).toBe(issues);
+    // Item rows aren't people: the people rows still match the list.
+    expect(rows().filter((r) => r.dataset['key']).length).toBe(query.listResult().rows.length);
+  });
 });

@@ -48,6 +48,17 @@
                   · under {{ r.manager.name }}
                 }
               </div>
+              <button
+                type="button"
+                class="btn btn-ghost btn-xs mt-1 -ml-2"
+                data-testid="items-toggle"
+                [attr.aria-expanded]="r.itemsOpen"
+                [attr.aria-label]="(r.itemsOpen ? 'Hide items for ' : 'Show items for ') + r.person.name"
+                (click)="items.toggle(r.person.id); $event.stopPropagation()"
+              >
+                <rtw-icon [name]="r.itemsOpen ? 'chevron-down' : 'chevron-right'" class="size-3" />
+                {{ r.issues.length > 0 ? issueText(r.issueCount) : 'Items' }}
+              </button>
             </td>
             @if (!compact()) {
               <td>{{ r.manager?.name ?? '—' }}</td>
@@ -66,6 +77,13 @@
             }
             <td><rtw-status-badge [status]="r.status" [compact]="true" [iconOnly]="compact()" /></td>
           </tr>
+          @if (r.itemsOpen) {
+            <tr [attr.data-items-for]="r.person.id">
+              <td [attr.colspan]="columnCount()" class="bg-base-200/50">
+                <rtw-person-items [personId]="r.person.id" />
+              </td>
+            </tr>
+          }
         }
       </tbody>
     </table>
@@ -92,11 +110,24 @@
             · under {{ r.manager.name }}
           }
         </div>
-        @if (r.issues.length > 0) {
-          <div class="mt-2 flex flex-wrap gap-1">
-            @for (i of r.issues; track i.category) {
-              <rtw-category-chip [category]="i.category" [status]="i.status" />
-            }
+        <button
+          type="button"
+          class="mt-2 flex flex-wrap items-center gap-1 rounded-field"
+          data-testid="items-toggle"
+          [attr.aria-expanded]="r.itemsOpen"
+          [attr.aria-label]="(r.itemsOpen ? 'Hide items for ' : 'Show items for ') + r.person.name"
+          (click)="items.toggle(r.person.id); $event.stopPropagation()"
+        >
+          @for (i of r.issues; track i.category) {
+            <rtw-category-chip [category]="i.category" [status]="i.status" />
+          } @empty {
+            <span class="text-xs opacity-70">Items</span>
+          }
+          <rtw-icon [name]="r.itemsOpen ? 'chevron-down' : 'chevron-right'" class="size-3 opacity-70" />
+        </button>
+        @if (r.itemsOpen) {
+          <div class="mt-2 border-t border-base-300 pt-2" (click)="$event.stopPropagation()">
+            <rtw-person-items [personId]="r.person.id" />
           </div>
         }
       </li>

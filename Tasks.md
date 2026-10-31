@@ -93,7 +93,10 @@
 - [x] Export plan written (user request: export to Excel/CSV on both views): [plans/export-csv.md](plans/export-csv.md)
 - [x] User answers the 3 questions at the end of the export plan (recommended options; build after inline items)
 - [x] Inline items plan written (user request: expand a person to see what they're missing): [plans/inline-items.md](plans/inline-items.md)
-- [ ] User answers the 3 questions at the end of the inline items plan
+- [x] User answers the 3 questions at the end of the inline items plan (recommended, no keyboard shortcut)
+- [x] Inline items: open a person's items under their row in the tree and the list (335 tests)
+- [ ] User checks the inline items in the browser and revises
+- [ ] Export to CSV, per plans/export-csv.md
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)

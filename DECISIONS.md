@@ -316,3 +316,11 @@
   (noted in CLAUDE.md). An exported version 1 settings file imports the same way.
 - **AGENTS.md points to CLAUDE.md** (user). AGENTS.md, the file other coding assistants read,
   is a one-line pointer so the project instructions have a single copy in CLAUDE.md.
+- **A person's items open in place, in the tree and the list** (user: "expand an individual to
+  see what they are missing"). The recommended options: issues first with "Show all N items";
+  both views. No keyboard shortcut for it (user: no specific key press should control
+  anything); the toggle is a plain button out of the tab order like Details, and Enter on a row
+  still opens Details. Open items are remembered while switching views. The due-line wording
+  and which item IDs to show moved into the core so Details and the inline view match.
+- **Export is next** (user): the export plan's recommended options, built after the inline
+  items.

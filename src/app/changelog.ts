@@ -14,7 +14,10 @@ export interface ChangelogEntry {
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
     date: '2026-10-31',
-    new: ['A change log, under the avatar menu.'],
+    new: [
+      'A change log, under the avatar menu.',
+      "Click a person's issue chips (or \"3 issues\" in the list) to see what they're missing right under their row.",
+    ],
     fixes: ['If you opened the demo before today, you now get the new sample programs without resetting anything.'],
     changes: [
       'In the tree, only the Details button opens a person. Clicking a row opens or closes a team.',
