@@ -84,7 +84,9 @@
 - [x] Shipyard sample data: ships and classes as programs, shipyard titles, training, quals, tools (310 tests)
 - [ ] User resets settings (Admin › Settings file › Reset to defaults) and checks the shipyard data
 - [x] Typed requirements plan written (user request: admin types the course, qualification or role): [plans/typed-requirements.md](plans/typed-requirements.md)
-- [ ] User answers the 3 questions at the end of the typed requirements plan
+- [x] User answers the 3 questions at the end of the typed requirements plan (IDs, plain text box,
+  network and SAP addable; plus a new need: "any of" requirements)
+- [ ] User answers the second round of 4 questions in the typed requirements plan
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)

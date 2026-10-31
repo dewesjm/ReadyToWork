@@ -293,3 +293,8 @@
   versus class: the real app will get the program list from elsewhere, so it's only in the
   name, with no field for it. No settings upgrade: only the user has opened the demo, and Admin
   › Settings file › Reset to defaults loads the new programs.
+- **Requirements are typed IDs, with "any of"** (user). An admin types a course ID, qual ID or
+  role name in a plain text box (no suggestions; admins know their systems), and can list
+  several IDs where any one fulfills the requirement. A program's requirements together stay
+  "all of". Network account and SAP password stay addable, since some programs may not use
+  computers. Details wait on the second round of questions in plans/typed-requirements.md.

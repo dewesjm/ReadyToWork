@@ -1,66 +1,88 @@
-# Plan: Requirements typed in by the admin
+# Plan: Requirements typed in by the admin, with "any of"
 
-Status: **waiting on the user's answers** (questions at the end). User request 2026-10-31: in
-reality the admin types the course, qualification or role name to make it a requirement; it
-isn't picked from a predefined list. It matches up with something in an external system.
+Status: **waiting on the user's answers** to the second round of questions (end). User request
+2026-10-31: the admin types the course, qualification or role ID to make it a requirement; it
+isn't picked from a predefined list, and it matches something in an external system. A
+requirement can also be met by any one of several items ("electrical course 1 or course 2
+fulfills the electrical requirement").
+
+First answers (2026-10-31): the admin types an **ID** (course ID, qual ID, role name); a
+**plain text box**, no suggestions (admins know what they're doing); **network account and SAP
+password stay addable**, since some programs may not use computers.
 
 Acceptance ("Done when"):
 
-> On a program, an admin adds a training, qualification or role requirement by typing it; people
-> who hold a matching record in the (fake) source system count as holding it, everyone else on
-> the program turns red; a typed item nobody holds is allowed, with a note saying so.
+> On a program, an admin adds a requirement by typing one ID, or several IDs of which any one
+> will do. People holding a matching record count as holding it; everyone else on the program
+> turns red. A program's requirements together are "all of". An ID nobody holds is allowed,
+> with a note saying so.
 
 ## Starting point
 
-- A requirement is `{ category, itemId, itemName }`. The program rule matches a person's
-  records by `itemId`; no match means "Missing, required by <program>" (red).
-- The Admin "Add requirement" picker lists the data source's **catalog**
-  (`DataSource.getCatalog()`): a fixed list of the fake trainings, qualifications and SAP roles.
-  Nothing outside that list can be added.
-- Network account and SAP password are in the catalog too, but they aren't things an admin
-  would add per program in reality.
+- A requirement is `{ category, itemId, itemName }`, picked from the data source's fixed
+  catalog. The program rule matches records by `itemId`. A program's requirements are "all of";
+  there is no "any of".
+- The fake records use internal ids ("trn:hot-work") that look nothing like a real course or
+  qual ID.
 
 ## What the user sees
 
-- **Add requirement** opens a small form instead of the list: a **type** (Training,
-  Qualification or Role) and a **text box** for the name or code as it appears in that system.
-- As the admin types, matching names already seen in the source data are **suggested**, so a
-  typo is less likely, but anything can be added (question 2).
-- After adding, the requirement shows how many people on the program hold it. If **no one
-  anywhere holds it**, a note says so ("No records match 'Hot Work Refresher' in the learning
-  system yet. Check the spelling."), since that usually means a typo, though it may be a new
-  course.
-- Matching ignores upper and lower case and extra spaces (question 1).
+**In Admin › a program › Add requirement**, a small form:
+- **Type**: Network account, SAP password, Training, Qualification or Role.
+- **ID**: a text box ("HW-210").
+- **Or**: "Add another ID (any one will do)" adds a second box, then a third. With more than one
+  ID the admin also types a short **name** for the requirement ("Electrical safety").
+- The program lists its requirements as: "Electrical safety: any of ELEC-101, ELEC-201" or
+  "Crane Operator (QL-CRN-01)". If no one anywhere holds an ID, a note sits next to it: "No
+  records with ID ELEC-201 yet. Check the ID."
+
+**On a person**:
+- Holding one of the IDs: the check shows the record they hold, as now, with "Required by".
+  Holding several: the best one counts.
+- Holding none: one red check, "Electrical safety: Missing (any of ELEC-101, ELEC-201), required
+  by Tern class (patrol boat)".
 
 ## How it works
 
-- A requirement keeps `category` and a typed **key** (the name or code). The program rule
-  matches a person's record when the category is the same and the key matches the record's
-  name or code.
-- The catalog goes away as a fixed list. Suggestions come from the names in the records the
-  data source already returns.
-- Saved settings keep working: today's requirements already carry an item id and name, so they
-  read as typed keys.
+- A requirement becomes `{ id, category, name?, anyOf: string[] }`; one ID is an "any of" with
+  one entry. Program requirements stay "all of".
+- The program rule: a requirement is met when the person has a record of that type whose ID is
+  in `anyOf` (question 3); its status is the best of the matching records.
+- The fixed catalog goes away. The "no records with this ID" note checks the IDs in the records
+  the data source returns.
+- **Fake data gets realistic IDs**: courses like "HW-210 Hot Work and Fire Watch", quals like
+  "QL-CRN-01 Crane Operator", roles keep their SAP names (PS_PLANNER). Person detail shows the ID
+  next to the name. One sample "any of" goes in: Tern class requires "Electrical safety: any of
+  ELEC-101, ELEC-201", with a second electrical course added to the fake training list.
+- Saved settings: requirements change shape. Only the user has opened the demo, so Reset to
+  defaults after this ships; no upgrade code.
 
 ## Steps
 
-1. Core: the requirement key and matching rule, with tests (case, spaces, nobody holds it).
-2. The Admin form: type, text box with suggestions, the "no records" note; tests.
-3. Check and document: desktop and phone; DESIGN.md, DECISIONS.md; a change log line.
+1. Core: the new requirement shape, the any-of rule (best match wins, one red check when none),
+   admin edits (add, add an ID to a requirement, remove), with tests.
+2. Fake data: realistic IDs, the sample any-of, ID shown on checks; settings file parsing.
+3. Admin form: type, ID box(es), name for any-of, the "no records" note; tests.
+4. Check and document: desktop and phone; DESIGN.md, DECISIONS.md; a change log line.
 
-## Questions for the user
+## Questions for the user (second round)
 
-1. **What does the admin type, and what does it match?**
-   - **The name, or the code if the system has one (recommended).** We match either against a
-     record's name and its code, ignoring case and spaces. Works for courses with codes
-     ("SAF-101") and for SAP roles, whose technical name is the code.
-   - The exact code only. Safest match (names get renamed), but admins must look up codes.
-   - The exact name only, as it appears in the source system.
-2. **Suggestions while typing.**
-   - **Suggest names seen in the source data, but allow anything (recommended).**
-   - No suggestions: a plain text box.
-   - Only allow names that exist in the source (a search over the external system, closest to a
-     picker; needs a lookup the real app may not have).
-3. **Network account and SAP password**: everyone already gets them as standard checks.
-   - **Leave them out of Add requirement; only Training, Qualification and Role (recommended).**
-   - Keep them addable.
+1. **Can one "any of" mix types?** For example "Course ELEC-101 or the Electrical qualification".
+   - **No: one type per requirement (recommended).** Simpler to set up and to read; your example
+     (two courses) fits.
+   - Yes: each ID gets its own type.
+2. **Naming requirements.**
+   - **Only "any of" requirements get a name; a single ID shows the ID plus the item's name from
+     the records when one exists (recommended).**
+   - Every requirement gets a name the admin types.
+3. **Matching IDs.**
+   - **Exact, but ignoring upper/lower case and spaces around it (recommended).** "hw-210 " still
+     matches "HW-210".
+   - Exactly as typed.
+4. **Network account and SAP password for people on no program.** Today everyone gets these two
+   checks.
+   - **Keep giving them to everyone for now; adding them to a program just marks them required by
+     it (recommended).** No change to who sees them, and the "no computers" case is noted for the
+     real app.
+   - Check them only for people whose program requires them. Fits "some programs don't use
+     computers", but most people are on no program, so most would lose these checks in the demo.
