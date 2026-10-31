@@ -274,3 +274,8 @@
   with no one under them now does nothing, and only manager rows show the pointer cursor.
   Enter on a row still opens the person, since the Details button is out of the tab order. The
   List view has no Details button and still opens the person on a row click.
+- **Change log on its own page** (user). A Change log row in the avatar menu opens
+  `/changelog`. It starts empty from today (no backfill), uses dates only (no version numbers),
+  has no "new" marker, and groups each day under New, Changes and Fixes. Lines stay short and
+  human readable, with no heavy detail. The entries are a typed data file, not Markdown, so no
+  parser is needed and a test checks the dates are newest first.

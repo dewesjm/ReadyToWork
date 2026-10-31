@@ -20,6 +20,18 @@
       <div class="text-sm opacity-70">{{ viewer.viewer()?.title }}</div>
     </div>
 
+    <div class="border-b border-base-300 p-2">
+      <a
+        routerLink="/changelog"
+        class="flex items-center gap-2 rounded-field px-2 py-2 hover:bg-base-200 focus-visible:bg-base-200"
+        data-testid="changelog-link"
+        (click)="close()"
+      >
+        <rtw-icon name="history" class="size-5" />
+        Change log
+      </a>
+    </div>
+
     <div class="space-y-2 border-b border-base-300 px-4 py-3" data-testid="preferences">
       <div class="text-xs font-semibold uppercase opacity-60">Preferences</div>
       <label class="flex flex-col gap-1 text-xs font-medium">

@@ -1,6 +1,7 @@
 # Plan: Change log in the avatar menu
 
-Status: **waiting on the user's answers** (questions at the end). User request 2026-10-31: "a
+Status: **done** 2026-10-31. Answers: its own page, start from today, no dot, dates only;
+entries grouped under New, Changes and Fixes, kept short and human readable. User request 2026-10-31: "a
 little submenu like this, with a changelog we maintain as we go. can go under the profile
 avatar thingie" (screenshot: a menu with icon rows "Change Log" and "Manage Quick Links").
 Comes before M7 (demo controls).

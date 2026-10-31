@@ -3,6 +3,7 @@ import { Router, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { MockDataSource } from '../../../data';
 import { CRANE_PROGRAM_ID } from '../../../data/mock/fake-catalog';
+import { ChangelogPage } from '../../features/changelog/changelog-page';
 import { Readiness } from '../../features/readiness/readiness';
 import { ReadinessQueryService } from '../../features/readiness/readiness-query-service';
 import { SettingsService } from '../../services/settings-service';
@@ -16,7 +17,12 @@ import { AvatarMenu } from './avatar-menu';
 describe('AvatarMenu', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      providers: [provideRouter([{ path: 'readiness', component: Readiness }])],
+      providers: [
+        provideRouter([
+          { path: 'readiness', component: Readiness },
+          { path: 'changelog', component: ChangelogPage },
+        ]),
+      ],
     });
     await loadAppState();
   });
@@ -157,5 +163,19 @@ describe('AvatarMenu', () => {
     TestBed.resetTestingModule();
     await TestBed.inject(SettingsService).load();
     expect(TestBed.inject(SettingsService).preferences().layout).toBe('drilldown');
+  });
+
+  it('links to the change log and closes', async () => {
+    const { fixture, el, toggle } = await setup();
+    toggle.click();
+    await fixture.whenStable();
+    const link = el.querySelector<HTMLAnchorElement>('[data-testid="changelog-link"]')!;
+    expect(link.getAttribute('href')).toBe('/changelog');
+    expect(link.querySelector('[data-icon="history"]')).not.toBeNull();
+
+    link.click();
+    await fixture.whenStable();
+    expect(TestBed.inject(Router).url).toBe('/changelog');
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
   });
 });

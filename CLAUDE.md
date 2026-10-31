@@ -23,6 +23,9 @@ feedback. Read DESIGN.md first; it is the spec and the build plan.
 - Every commit carries its doc updates (Tasks.md, DECISIONS.md, README.md, DESIGN.md).
 - Record tech decisions and user decisions in DECISIONS.md with date and reasoning.
 - Tasks.md is the one task list.
+- Any change users would notice gets a line in the change log (`src/app/changelog.ts`) in the
+  same commit, under New, Changes or Fixes for that day. Keep it short and plain: what changed
+  for the user, not how. Internal work (tests, docs, refactors) stays out.
 - Write tests alongside the code. Typecheck with `npm run build`.
 - After every change, summarize: files touched, behavior changed, anything unverified.
 

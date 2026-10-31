@@ -1,21 +1,23 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { Component, ElementRef, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { supervisorOptions } from '../../../core';
 import { Layout } from '../../../data';
 import { ReadinessService } from '../../services/readiness-service';
 import { SettingsService } from '../../services/settings-service';
 import { ThemeService } from '../../services/theme-service';
 import { ViewerService } from '../../services/viewer-service';
+import { Icon } from '../icon/icon';
 import { supervisorChoices } from '../supervisor-choices';
 import { BRAND_THEMES, BUILT_IN_THEMES } from '../themes';
 
 /**
- * Top-right button with the viewer's initials; opens a menu with who you are, Preferences
- * (View as, default scope for the Readiness page, layout) and the theme list.
+ * Top-right button with the viewer's initials; opens a menu with who you are, links (Change
+ * log), Preferences (View as, default scope for the Readiness page, layout) and the theme list.
  */
 @Component({
   selector: 'rtw-avatar-menu',
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, RouterLink, Icon],
   templateUrl: './avatar-menu.html',
   host: {
     class: 'relative',

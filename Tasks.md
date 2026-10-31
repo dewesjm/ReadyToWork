@@ -71,7 +71,10 @@
   - [x] 4. Check and document (screenshots desktop, dark and 390px phone)
 - [x] Tree: only the Details button opens a person; leaf row clicks do nothing (user request; 307 tests)
 - [x] Change log plan written (user request: change log in the avatar menu): [plans/changelog.md](plans/changelog.md)
-- [ ] User answers the 4 questions at the end of the change log plan
+- [x] User answers the 4 questions at the end of the change log plan (own page, start today,
+  no dot, dates only; New / Changes / Fixes)
+- [x] Change log page and avatar menu row (311 tests)
+- [ ] User checks the change log in the browser
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)

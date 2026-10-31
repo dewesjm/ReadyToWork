@@ -19,6 +19,12 @@ export const routes: Routes = [
     loadChildren: () => import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   {
+    path: 'changelog',
+    title: 'Change log · Ready to Work',
+    loadComponent: () =>
+      import('./features/changelog/changelog-page').then((m) => m.ChangelogPage),
+  },
+  {
     path: '**',
     title: 'Not found · Ready to Work',
     loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
