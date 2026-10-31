@@ -1,15 +1,16 @@
 import { Component, computed, inject } from '@angular/core';
-import { ISSUE_STATUSES, STATUS_META, Status } from '../../../core';
+import { DEFAULT_CONFIG, ISSUE_STATUSES, STATUS_META, Status, readinessExportRows, toCsv } from '../../../core';
 import { Icon } from '../../shared/icon/icon';
 import { Legend } from '../../shared/status/legend';
 import { buttonClass } from '../../shared/status/status-classes';
 import { supervisorChoices } from '../../shared/supervisor-choices';
+import { ClockService } from '../../services/clock-service';
 import { ViewerService } from '../../services/viewer-service';
 import { CategoryFilter } from './category-filter';
 import { ReadinessQueryService } from './readiness-query-service';
 import { TreeModel } from './tree-model';
 
-/** The Readiness page's shared toolbar: scope, view, search, Issues only and filters. */
+/** The Readiness page's shared toolbar: scope, view, export, search, Issues only and filters. */
 @Component({
   selector: 'rtw-readiness-toolbar',
   imports: [Icon, Legend, CategoryFilter],
@@ -19,6 +20,7 @@ export class ReadinessToolbar {
   protected readonly query = inject(ReadinessQueryService);
   protected readonly tree = inject(TreeModel);
   private readonly viewer = inject(ViewerService);
+  private readonly clock = inject(ClockService);
   protected readonly issueStatuses = ISSUE_STATUSES;
   protected readonly statusMeta = STATUS_META;
 
@@ -35,5 +37,16 @@ export class ReadinessToolbar {
 
   protected statusChipClass(status: Status): string {
     return this.query.statuses().includes(status) ? buttonClass(status) : 'btn-outline';
+  }
+
+  /** Downloads the people the page shows (both views show the same ones) as a CSV for Excel. */
+  protected exportCsv(): void {
+    const csv = toCsv(readinessExportRows(this.query.listResult(), DEFAULT_CONFIG.categories));
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `readiness-${this.clock.today()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 }

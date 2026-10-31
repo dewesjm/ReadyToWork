@@ -50,6 +50,16 @@
         List
       </button>
     </div>
+
+    <button
+      type="button"
+      class="btn btn-sm"
+      data-testid="export"
+      title="Download the people shown as a CSV file for Excel"
+      (click)="exportCsv()"
+    >
+      <rtw-icon name="download" /> Export
+    </button>
   </div>
 
   <!-- Search and filters -->

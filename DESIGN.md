@@ -143,6 +143,13 @@ toolbar, so filters carry over when switching.
   open, the manager folds under the name and cells show the status icon only (text as a
   tooltip and for screen readers).
 - The keyword matches people (name, title, employee ID), as in the tree.
+
+**Export** (both views)
+- An Export button next to Tree / List downloads `readiness-<date>.csv` for Excel: one row per
+  person the page shows (the same people in both views, context managers left out), with name,
+  employee ID, title, reports to, overall status, then a status column and a days-left column
+  per category shown. UTF-8 with a byte-order mark so Excel reads it correctly; cells that
+  would start a formula get an apostrophe.
 - Under each name, "3 issues" (or "Items") opens the person's items in a row below, the same
   view as in the tree; on phones the card's chips do it.
 - 100 rows at a time, with "Show 100 more".

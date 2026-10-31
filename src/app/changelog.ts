@@ -17,6 +17,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     new: [
       'A change log, under the avatar menu.',
       "Click a person's issue chips (or \"3 issues\" in the list) to see what they're missing right under their row.",
+      'Export: download the people shown as a file for Excel, from the tree or the list.',
     ],
     fixes: ['If you opened the demo before today, you now get the new sample programs without resetting anything.'],
     changes: [

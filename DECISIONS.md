@@ -324,3 +324,8 @@
   and which item IDs to show moved into the core so Details and the inline view match.
 - **Export is next** (user): the export plan's recommended options, built after the inline
   items.
+- **Export to CSV** (user: "export to Excel, likely just CSV"; the plan's recommended options).
+  One row per person, exactly the people the page shows under the current filters, a "Reports
+  to" column instead of the tree's context rows, the same file from both views. Each category
+  gets two columns (status, days left) so Excel can filter on status. Plain CSV built in the
+  core, no library; values that would start a spreadsheet formula get an apostrophe.

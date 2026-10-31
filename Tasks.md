@@ -96,7 +96,8 @@
 - [x] User answers the 3 questions at the end of the inline items plan (recommended, no keyboard shortcut)
 - [x] Inline items: open a person's items under their row in the tree and the list (335 tests)
 - [ ] User checks the inline items in the browser and revises
-- [ ] Export to CSV, per plans/export-csv.md
+- [x] Export to CSV from both views, per plans/export-csv.md (339 tests)
+- [ ] User opens an export in Excel
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)

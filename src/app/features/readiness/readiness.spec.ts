@@ -185,7 +185,34 @@ describe('Readiness page and toolbar', () => {
     expect(byTestId('shown-count').textContent).toBe(`${shownCount} of ${scopeCount} people shown`);
   });
 
-  it('counts people the same way in the list view', async () => {
+  it('exports the people shown, in either view, as a CSV named for the day', async () => {
+    const saved: { name: string; blob: Blob }[] = [];
+    const blobs = new Map<string, Blob>();
+    vi.spyOn(URL, 'createObjectURL').mockImplementation((b) => {
+      blobs.set('blob:x', b as Blob);
+      return 'blob:x';
+    });
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (this: HTMLAnchorElement) {
+      saved.push({ name: this.download, blob: blobs.get(this.href)! });
+    });
+
+    const { harness, byTestId, query, stable } = await open('/readiness');
+    for (const url of ['/readiness', '/readiness?view=list']) {
+      await harness.navigateByUrl(url);
+      await stable();
+      byTestId('export').click();
+      const { name, blob } = saved.at(-1)!;
+      expect(name).toMatch(/^readiness-\d{4}-\d{2}-\d{2}\.csv$/);
+      const lines = splitCsv(await blob.text());
+      expect(lines[0]).toMatch(/^Name,Employee ID,Title,Reports to,Overall,Network access,/);
+      expect(lines.length - 1).toBe(query.result().shownCount);
+      expect(lines[1]).toContain(query.listResult().rows[0].person.employeeId);
+    }
+    vi.restoreAllMocks();
+  });
+
+    it('counts people the same way in the list view', async () => {
     const { byTestId, query } = await open('/readiness?view=list');
     const { shownCount, scopeCount } = query.result();
     expect(query.listResult().rows.length).toBe(shownCount);
@@ -205,3 +232,8 @@ describe('Readiness page and toolbar', () => {
     expect(params()).toEqual(before);
   });
 });
+
+/** A downloaded CSV's lines, without the byte-order mark and the final line break. */
+function splitCsv(text: string): string[] {
+  return text.replace(/^\uFEFF/, '').trimEnd().split('\r\n');
+}
