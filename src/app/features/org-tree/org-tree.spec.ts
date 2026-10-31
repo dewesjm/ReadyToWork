@@ -167,13 +167,13 @@ describe('OrgTree', () => {
     expect(expanded).not.toBeNull();
   });
 
-  it('opens a person with no one under them when their row is clicked', async () => {
+  it('does not open a person with no one under them when their row is clicked', async () => {
     const { rows, row, tree, stable, router } = await open('/readiness?issues=all');
     tree.expandAll();
     await stable();
     const leaf = rows().find((r) => !r.hasAttribute('aria-expanded'))!.dataset['id']!;
     row(leaf)!.click();
     await stable();
-    expect(router.url).toBe(`/person/${leaf}`);
+    expect(router.url).toBe('/readiness?issues=all'); // only the Details button opens a person
   });
 });

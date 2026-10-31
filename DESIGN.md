@@ -108,8 +108,8 @@ toolbar, so filters carry over when switching.
   siblings). Focus returns to the same row after Back.
 - Each row: status icon, name, title, small chips for the categories with issues (lined up in
   one column), for managers a roll-up badge with counts, and a Details button.
-- Clicking a manager's row opens or closes it; Details (or Enter) opens the person. Clicking
-  the row of someone with no one under them opens the person.
+- Clicking a manager's row opens or closes it; only Details (or Enter) opens the person.
+  Clicking the row of someone with no one under them does nothing.
 - **Issues only keeps the path**: managers above a person with an issue stay visible so the
   structure makes sense; everything else is hidden.
 

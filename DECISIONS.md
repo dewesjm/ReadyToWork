@@ -242,8 +242,8 @@
   main click should expand and collapse). The whole row toggles a manager's branch, so the
   chevron is no longer a separate target. Each row ends with a Details button. It is out of
   the tab order because the row is the tree's one tab stop and Enter on it still opens the
-  person. A row with no one under it has nothing to toggle, so clicking it opens the person
-  (our default; easy to change to "Details only").
+  person. ~~A row with no one under it has nothing to toggle, so clicking it opens the person
+  (our default; easy to change to "Details only").~~ (Replaced 2026-10-31: Details only.)
 - **A "new version is available" notice with Refresh** (user request). With the service worker,
   a plain refresh first shows the cached old build and only downloads the new one in the
   background, so people think nothing changed; open dashboards may never refresh at all. The
@@ -270,3 +270,7 @@
   Chosen over Vercel's Password Protection (paid add-on), Vercel Authentication (every viewer
   needs a Vercel account on the team) and an in-app password screen (cosmetic only, bypassable
   from the JavaScript). Free on the Hobby plan and a real server-side check.
+- **Only the Details button opens a person from the tree** (user). Clicking the row of someone
+  with no one under them now does nothing, and only manager rows show the pointer cursor.
+  Enter on a row still opens the person, since the Details button is out of the tab order. The
+  List view has no Details button and still opens the person on a row click.

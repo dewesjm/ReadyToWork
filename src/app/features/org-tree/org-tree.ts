@@ -73,11 +73,10 @@ export class OrgTree {
     this.state.focusedId.set(id);
   }
 
-  /** A row click opens or closes a manager's row; a row with no one under it opens details. */
+  /** A row click opens or closes a manager's row; only the Details button opens a person. */
   protected onRowClick(row: { id: string; expandable: boolean }): void {
     this.state.focusedId.set(row.id);
     if (row.expandable) this.tree.toggle(row.id);
-    else this.navigator.open(row.id);
   }
 
   protected openPerson(id: string): void {

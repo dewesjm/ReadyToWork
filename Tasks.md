@@ -69,6 +69,7 @@
   - [x] 2. The banner (298 tests)
   - [x] 3. Admin › Announcements tab (307 tests)
   - [x] 4. Check and document (screenshots desktop, dark and 390px phone)
+- [x] Tree: only the Details button opens a person; leaf row clicks do nothing (user request; 307 tests)
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)

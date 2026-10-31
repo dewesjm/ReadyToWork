@@ -50,7 +50,7 @@ describe('PersonPage (drill-down)', () => {
     const { harness, el, router, click } = await start(url);
     const rowsBefore = el().querySelectorAll('[role="treeitem"]').length;
 
-    await click(`[role="treeitem"][data-id="${sapForeman}"]`);
+    await click(`[role="treeitem"][data-id="${sapForeman}"] [data-testid="details"]`);
     expect(router.url).toBe(`/person/${sapForeman}`);
     expect(el().querySelector('[data-testid="person-name"]')!.textContent!.trim()).toBe(
       org().get(sapForeman)!.name,
