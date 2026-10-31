@@ -261,3 +261,12 @@
 - **Announcements don't change the settings schema version.** Saved settings with no
   `announcements` section already fall back to the defaults, so older saved settings pick up the
   sample notice and no migration is needed (the plan had assumed version 2).
+
+## 2026-10-31
+
+- **Password protection, when we add it, will be basic-auth middleware** (user; not built
+  yet). A small `middleware.ts` at the project root checks a username and password held in
+  Vercel environment variables before serving any page; the browser shows its own login box.
+  Chosen over Vercel's Password Protection (paid add-on), Vercel Authentication (every viewer
+  needs a Vercel account on the team) and an in-app password screen (cosmetic only, bypassable
+  from the JavaScript). Free on the Hobby plan and a real server-side check.

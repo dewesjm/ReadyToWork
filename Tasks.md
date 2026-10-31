@@ -93,6 +93,9 @@
 - Demo: ask admins whether "Add everyone under" should be a standing rule (new people under that
   supervisor join the program) rather than a one-time add.
 
+- Hosting: password-protect the Vercel site with basic-auth middleware (`middleware.ts`,
+  credentials in Vercel environment variables). Decided, not built; see DECISIONS.md 2026-10-31.
+
 ## Later (real app, not this mockup)
 - Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)
 - Where real program assignments come from
