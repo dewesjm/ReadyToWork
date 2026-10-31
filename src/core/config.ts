@@ -7,6 +7,8 @@ export interface CategoryConfig {
   icon: string;
   /** Days before the due date that an item turns yellow. */
   warningDays: number;
+  /** Show the item's ID (course ID, qual ID) next to its name. */
+  showsItemId?: boolean;
 }
 
 export interface ReadinessConfig {
@@ -26,12 +28,12 @@ export interface ReadinessConfig {
 
 export const DEFAULT_CONFIG: ReadinessConfig = {
   categories: [
-    { id: 'network', label: 'Network access', icon: 'network', warningDays: 30 },
-    { id: 'sap-password', label: 'SAP password', icon: 'key-round', warningDays: 14 },
+    { id: 'network', label: 'Network access', icon: 'network', warningDays: 30, showsItemId: true },
+    { id: 'sap-password', label: 'SAP password', icon: 'key-round', warningDays: 14, showsItemId: true },
     { id: 'device', label: 'Devices', icon: 'laptop', warningDays: 14 },
-    { id: 'training', label: 'Training', icon: 'graduation-cap', warningDays: 30 },
+    { id: 'training', label: 'Training', icon: 'graduation-cap', warningDays: 30, showsItemId: true },
     { id: 'access-role', label: 'Access and roles', icon: 'shield-check', warningDays: 30 },
-    { id: 'qualification', label: 'Qualifications', icon: 'award', warningDays: 60 },
+    { id: 'qualification', label: 'Qualifications', icon: 'award', warningDays: 60, showsItemId: true },
     { id: 'yubikey', label: 'Yubikeys', icon: 'usb', warningDays: 30 },
     { id: 'tool', label: 'Tools', icon: 'wrench', warningDays: 30 },
   ],

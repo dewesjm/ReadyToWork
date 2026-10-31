@@ -23,7 +23,7 @@ function sap(personId: string, expires: string): SourceRecord {
 const crane: Program = {
   id: 'crane',
   name: 'Crane program',
-  requirements: [{ category: 'qualification', itemId: 'q:crane', itemName: 'Crane Operator' }],
+  requirements: [{ id: 'req-1', anyOf: [{ category: 'qualification', itemId: 'q:crane' }] }],
 };
 
 function input(overrides: Partial<ReadinessInput> = {}): ReadinessInput {
@@ -67,7 +67,7 @@ describe('ReadinessEvaluator', () => {
   it('turns a person red when assigned a program they lack, and updates roll-ups', () => {
     const r = evaluator.evaluate(input({ assignments: { c2: ['crane'] } }));
     expect(r.statusByPerson.get('c2')).toBe('not-ready');
-    expect(r.checksByPerson.get('c2')?.find((c) => c.itemId === 'q:crane')?.reason).toBe(
+    expect(r.checksByPerson.get('c2')?.find((c) => c.source === 'program')?.reason).toBe(
       'Missing, required by Crane program',
     );
     expect(r.rollups.get('f1')?.worst).toBe('not-ready');

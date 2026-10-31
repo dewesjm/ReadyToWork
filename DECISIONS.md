@@ -298,3 +298,13 @@
   several IDs where any one fulfills the requirement. A program's requirements together stay
   "all of". Network account and SAP password stay addable, since some programs may not use
   computers. Details wait on the second round of questions in plans/typed-requirements.md.
+- **Typed requirements, second round** (user). One "any of" can mix types (for example a course
+  or a qualification), for flexibility. Any requirement can have a name; none needs one. IDs
+  match ignoring case and surrounding spaces. The sample data starts with network account and
+  SAP password required where the work uses computers; from scratch, a program requires nothing
+  until an admin adds it. The fixed catalog behind the old picker is gone; item names for labels
+  and the "no records with this ID" note come from the records themselves. Older saved settings
+  (one item per requirement) still load, as one-option requirements.
+- **Program assignment in the real app** (user, future): probably by who you work for ("you work
+  for X, so you get their program") rather than one by one. Noted for later; the mockup keeps
+  per-person assignment.

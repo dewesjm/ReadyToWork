@@ -15,6 +15,7 @@ import { SeededRandom } from '../random';
 import {
   CATALOG,
   CRANE_PROGRAM_ID,
+  CRANE_QUALIFICATION_ID,
   DEFAULT_ANNOUNCEMENTS,
   DEFAULT_PROGRAMS,
   FIRST_NAMES,
@@ -238,9 +239,17 @@ class OrgGenerator {
     const add = (item: CatalogItem, source: string, kind: SlotKind) =>
       slots.push({ record: this.record(id, item, source), kind });
 
+    // One item per requirement: the only option, or a random one of an "any of".
+    const required = programIds
+      .flatMap((pid) => DEFAULT_PROGRAMS.find((p) => p.id === pid)?.requirements ?? [])
+      .map((r) => this.rng.pick(r.anyOf).itemId)
+      .map((itemId) => CATALOG.find((c) => c.itemId === itemId)!);
+
     add(NETWORK_ACCOUNT, 'ad', 'expiry');
     const onSapCrew = this.inCrew(id, s.sapCrewForemanId);
-    if (leader || onSapCrew || this.rng.chance(0.6)) add(SAP_PASSWORD, 'sap', 'expiry');
+    if (leader || onSapCrew || required.includes(SAP_PASSWORD) || this.rng.chance(0.6)) {
+      add(SAP_PASSWORD, 'sap', 'expiry');
+    }
 
     const devices = leader ? 1 + (this.rng.chance(0.3) ? 1 : 0) : this.rng.chance(0.7) ? 1 : 0;
     for (let d = 0; d < devices; d++) {
@@ -249,17 +258,15 @@ class OrgGenerator {
       add({ category: 'device', itemId: `dev:${tag}`, itemName: `${laptop ? 'Laptop' : 'Tablet'} ${tag}` }, 'mdm', 'device');
     }
 
-    const required = programIds.flatMap(
-      (pid) => DEFAULT_PROGRAMS.find((p) => p.id === pid)?.requirements ?? [],
-    );
     const trainings = new Set([SAFETY_REFRESHER, ...this.rng.sample(TRAININGS.slice(1), this.rng.int(2, 4))]);
     const quals = new Set(leader ? [] : this.rng.sample(QUALIFICATIONS, this.rng.int(0, 2)));
     const roles = new Set(this.rng.sample(ROLES, leader ? this.rng.int(1, 2) : this.rng.int(0, 1)));
     for (const r of required) {
-      const set = r.category === 'training' ? trainings : r.category === 'qualification' ? quals : roles;
-      set.add(CATALOG.find((c) => c.itemId === r.itemId)!);
+      if (r.category === 'training') trainings.add(r);
+      else if (r.category === 'qualification') quals.add(r);
+      else if (r.category === 'access-role') roles.add(r);
     }
-    if (id === s.craneCandidateId) quals.delete(QUALIFICATIONS.find((q) => q.itemId === 'qual:crane')!);
+    if (id === s.craneCandidateId) quals.delete(QUALIFICATIONS.find((q) => q.itemId === CRANE_QUALIFICATION_ID)!);
     for (const t of trainings) add(t, 'lms', 'training');
     for (const q of quals) add(q, 'quals', 'expiry');
     for (const r of roles) add(r, 'sap', 'role');

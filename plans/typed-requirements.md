@@ -1,6 +1,8 @@
 # Plan: Requirements typed in by the admin, with "any of"
 
-Status: **waiting on the user's answers** to the second round of questions (end). User request
+Status: **done** 2026-10-31. Second-round answers: "any of" can mix types; a name is allowed
+on any requirement, never required; IDs ignore case; the sample data starts with network and
+SAP requirements, a new program with none. User request
 2026-10-31: the admin types the course, qualification or role ID to make it a requirement; it
 isn't picked from a predefined list, and it matches something in an external system. A
 requirement can also be met by any one of several items ("electrical course 1 or course 2

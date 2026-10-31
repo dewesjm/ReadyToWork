@@ -2,6 +2,7 @@ import { IsoDate } from './dates';
 import { Check, Person, Program, Rollup, SourceRecord, Status } from './model';
 import { OrgIndex } from './org-index';
 import { ProgramRules } from './program-rules';
+import { itemNames } from './requirements';
 import { RollupCalculator } from './rollup-calculator';
 import { StatusEngine, worstStatus } from './status-engine';
 
@@ -40,6 +41,7 @@ export class ReadinessEvaluator {
       recordsByPerson.set(r.personId, list);
     }
 
+    const names = itemNames(input.records);
     const checksByPerson = new Map<string, Check[]>();
     const statusByPerson = new Map<string, Status>();
     for (const person of input.people) {
@@ -49,7 +51,7 @@ export class ReadinessEvaluator {
       const programs = (input.assignments[person.id] ?? [])
         .map((id) => programsById.get(id))
         .filter((p): p is Program => p !== undefined);
-      const checks = this.programRules.apply(person.id, evaluated, programs);
+      const checks = this.programRules.apply(person.id, evaluated, programs, names);
       checksByPerson.set(person.id, checks);
       // No checks at all is "not ready", never "ready".
       statusByPerson.set(person.id, worstStatus(checks.map((c) => c.status)) ?? 'not-ready');

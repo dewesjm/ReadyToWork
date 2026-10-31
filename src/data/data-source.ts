@@ -1,6 +1,6 @@
 import { CategoryId, Person, SourceRecord } from '../core';
 
-/** An item admins can pick when adding a program requirement. */
+/** An item in the fake data: its type, ID and name. */
 export interface CatalogItem {
   category: CategoryId;
   itemId: string;
@@ -23,7 +23,5 @@ export interface Persona {
 export interface DataSource {
   getPeople(): Promise<Person[]>;
   getRecords(): Promise<SourceRecord[]>;
-  /** Known items per category, for the program requirement picker. */
-  getCatalog(): Promise<CatalogItem[]>;
   getPersonas(): Promise<Persona[]>;
 }

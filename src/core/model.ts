@@ -68,13 +68,23 @@ export interface Check {
   requiredBy: string[];
 }
 
-export interface Requirement {
+/** One item that can fulfill a requirement: its type and its ID in the source system. */
+export interface RequirementOption {
   category: CategoryId;
+  /** Course ID, qual ID, role name and so on, as the admin typed it. */
   itemId: string;
-  itemName: string;
 }
 
-/** A program's requirements are "all of". */
+/** Fulfilled by holding any one of its options. */
+export interface Requirement {
+  /** Unique within its program. */
+  id: string;
+  /** Optional name the admin gives it, e.g. "Electrical safety". */
+  name?: string;
+  anyOf: RequirementOption[];
+}
+
+/** A program's requirements are "all of"; each requirement is "any of" its options. */
 export interface Program {
   id: string;
   name: string;

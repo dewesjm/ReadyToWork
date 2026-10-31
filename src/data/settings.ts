@@ -5,6 +5,7 @@ import {
   DEFAULT_CONFIG,
   IsoDate,
   Program,
+  Requirement,
   ProgramSetup,
   ReadinessConfig,
   announcementProblems,
@@ -234,17 +235,34 @@ function programs(value: unknown): Program[] {
     return {
       id: str(p['id'], `${at}.id`),
       name: str(p['name'], `${at}.name`),
-      requirements: p['requirements'].map((r, j) => {
-        const rat = `${at}.requirements[${j}]`;
-        if (!isObject(r)) throw new SettingsError(`${rat} must be an object.`);
-        return {
-          category: str(r['category'], `${rat}.category`),
-          itemId: str(r['itemId'], `${rat}.itemId`),
-          itemName: str(r['itemName'], `${rat}.itemName`),
-        };
-      }),
+      requirements: p['requirements'].map((r, j) => requirement(r, j, `${at}.requirements[${j}]`)),
     };
   });
+}
+
+/** Also reads the older single-item shape ({ category, itemId, itemName }) as a one-option requirement. */
+function requirement(r: unknown, index: number, at: string): Requirement {
+  if (!isObject(r)) throw new SettingsError(`${at} must be an object.`);
+  if (!('anyOf' in r)) {
+    return {
+      id: `req-${index + 1}`,
+      anyOf: [{ category: str(r['category'], `${at}.category`), itemId: str(r['itemId'], `${at}.itemId`) }],
+    };
+  }
+  const anyOf = r['anyOf'];
+  if (!Array.isArray(anyOf) || anyOf.length === 0) {
+    throw new SettingsError(`${at}.anyOf must be a list of at least one item.`);
+  }
+  const name = r['name'] === undefined ? undefined : str(r['name'], `${at}.name`);
+  return {
+    id: str(r['id'], `${at}.id`),
+    ...(name ? { name } : {}),
+    anyOf: anyOf.map((o, k) => {
+      const oat = `${at}.anyOf[${k}]`;
+      if (!isObject(o)) throw new SettingsError(`${oat} must be an object.`);
+      return { category: str(o['category'], `${oat}.category`), itemId: str(o['itemId'], `${oat}.itemId`) };
+    }),
+  };
 }
 
 function assignments(value: unknown): Record<string, string[]> {

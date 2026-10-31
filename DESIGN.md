@@ -71,11 +71,20 @@ Four statuses, always shown as **color plus icon plus text** (never color alone)
   smaller, modular builds the whole class. The real app gets the list of programs from
   elsewhere and doesn't decide which is which; the name says it ("Ridgeline R-01 (supply
   ship)", "Kestrel class (patrol boat)").
-- A program has a name and a list of requirements. Each requirement is a category plus an
-  item, e.g. "Training: Export Control Basics" or "Qualification: Crane Operator."
-- Requirements are "all of" in the mockup (no AND/OR logic). Optional later: "any one of."
+- A program has a name and a list of requirements, which are "all of". Each requirement is
+  **"any of" one or more items**, each a type plus the ID the admin types as it appears in the
+  source system: a course ID ("HW-210"), qual ID ("QL-CRN-01"), SAP role name, or the network
+  account / SAP password. Types can be mixed ("Electrical safety: any of ELEC-101, ELEC-201,
+  QL-MEL-01"), and any requirement can have an optional name.
+- IDs match ignoring upper/lower case and spaces around them. Of several matching records the
+  best one counts; none means one red "missing" check. An ID no record has is allowed, with a
+  note in Admin to check it (it may be a typo, or a new course).
+- No fixed list of items: admins know their systems, so it is a plain text box. Network account
+  and SAP password are addable like the rest; the sample programs require them except where the
+  work has no computers, and a new program starts with nothing.
 - People are **assigned to programs** by admins in the mockup. Where real assignments come from
-  is an open question for the real app.
+  is an open question for the real app (likely by who you work for: "you work for X, so you
+  get their program").
 - Each requirement a person's programs bring produces a check. Missing means red. Held but
   expiring within the window means yellow.
 
@@ -151,8 +160,8 @@ Four tabs, each its own URL: Programs (`/admin/programs`, each program at
 `/admin/announcements/:id`, a new one at `new`) and Settings file. The Admin link shows only for the admin
 persona; anyone else opening `/admin` is told it is for admins.
 
-- **Programs**: create, rename, delete programs; add and remove requirements from a picker of
-  known items per category.
+- **Programs**: create, rename, delete programs; add requirements by typing one or more IDs
+  (type plus ID per row, "any one will do" for several, optional name) and remove them.
 - **Program assignments**: on each program's page, assign people (search and pick, or add
   everyone under a supervisor in one go) and remove them one by one.
 - **Thresholds**: warning window in days per category, applied as you type.

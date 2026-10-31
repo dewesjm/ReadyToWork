@@ -28,17 +28,22 @@ export class CheckTable {
   readonly wide = input(true);
 
   protected readonly rows = computed(() =>
-    this.checks().map((c) => ({
-      check: c,
-      dueLine: dueLine(c),
-      category: DEFAULT_CONFIG.categories.find((k) => k.id === c.category)?.label ?? c.category,
-      due: c.dueDate ? formatDate(c.dueDate) : '—',
-      days: c.daysRemaining === undefined ? '—' : describeDays(c.daysRemaining),
-      source: sourceLabel(c.source),
-      synced: c.lastSynced ? describeSynced(c.lastSynced, this.today()) : '—',
-      syncedDate: c.lastSynced ? formatDate(c.lastSynced) : null,
-      requiredBy: c.requiredBy.map((id) => this.programNames().get(id) ?? id).join(', '),
-    })),
+    this.checks().map((c) => {
+      const config = DEFAULT_CONFIG.categories.find((k) => k.id === c.category);
+      return {
+        check: c,
+        dueLine: dueLine(c),
+        category: config?.label ?? c.category,
+        // The course or qual ID of a held item (a missing item's label already has it).
+        itemId: config?.showsItemId && c.source !== 'program' && c.itemId !== c.itemName ? c.itemId : null,
+        due: c.dueDate ? formatDate(c.dueDate) : '—',
+        days: c.daysRemaining === undefined ? '—' : describeDays(c.daysRemaining),
+        source: sourceLabel(c.source),
+        synced: c.lastSynced ? describeSynced(c.lastSynced, this.today()) : '—',
+        syncedDate: c.lastSynced ? formatDate(c.lastSynced) : null,
+        requiredBy: c.requiredBy.map((id) => this.programNames().get(id) ?? id).join(', '),
+      };
+    }),
   );
 }
 

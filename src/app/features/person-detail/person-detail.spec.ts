@@ -118,6 +118,16 @@ describe('PersonDetail', () => {
     expect(text('[data-testid="check-table"] tbody tr')).toContain('Ridgeline R-01 (supply ship)');
   });
 
+  it('shows the course or qual ID under the item name, not for devices', async () => {
+    const id = fakeOrg().scenarios.craneCandidateId;
+    const { el } = await render(id);
+    const row = (itemId: string) => el.querySelector(`[data-testid="check-table"] tr[data-item="${itemId}"]`);
+    expect(row('SAF-100')!.querySelector('[data-testid="item-id"]')!.textContent).toBe('SAF-100');
+    expect(row('NET-DOMAIN')!.querySelector('[data-testid="item-id"]')!.textContent).toBe('NET-DOMAIN');
+    const device = el.querySelector('[data-testid="check-table"] tr[data-item^="dev:"]');
+    if (device) expect(device.querySelector('[data-testid="item-id"]')).toBeNull();
+  });
+
   it('says so for someone outside the viewer subtree', async () => {
     const { el } = await render(fakeOrg().people[0].id, 'foreman');
     expect(el.querySelector('[data-testid="not-available"]')).not.toBeNull();

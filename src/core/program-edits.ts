@@ -1,4 +1,5 @@
-import { Check, Program, Requirement, Rollup, Status } from './model';
+import { Check, Program, Requirement, RequirementOption, Rollup, Status } from './model';
+import { requirementKey } from './requirements';
 import { ReadinessResult } from './readiness-evaluator';
 import { toRollup, emptyCounts } from './rollup-calculator';
 import { worstStatus } from './status-engine';
@@ -36,20 +37,57 @@ export function deleteProgram(setup: ProgramSetup, programId: string): ProgramSe
   };
 }
 
-/** Does nothing when the program already requires the item. */
-export function addRequirement(setup: ProgramSetup, programId: string, req: Requirement): ProgramSetup {
-  return mapProgram(setup, programId, (p) =>
-    p.requirements.some((r) => r.itemId === req.itemId)
-      ? p
-      : { ...p, requirements: [...p.requirements, { ...req }] },
-  );
+/** What an admin fills in to add a requirement: an optional name and one or more options. */
+export interface RequirementDraft {
+  name?: string;
+  anyOf: RequirementOption[];
 }
 
-export function removeRequirement(setup: ProgramSetup, programId: string, itemId: string): ProgramSetup {
+/** Why a draft can't be added, or null when it can. Blank IDs are ignored. */
+export function requirementProblem(draft: RequirementDraft, program: Program): string | null {
+  const clean = cleanDraft(draft);
+  if (clean.anyOf.length === 0) return 'Enter an ID.';
+  const key = requirementKey(clean);
+  return program.requirements.some((r) => requirementKey(r) === key)
+    ? 'The program already has this requirement.'
+    : null;
+}
+
+/**
+ * Adds the draft with a new id, trimming IDs and dropping blank and repeated ones. Does nothing
+ * when the draft has no IDs or the program already has the same requirement.
+ */
+export function addRequirement(setup: ProgramSetup, programId: string, draft: RequirementDraft): ProgramSetup {
+  const clean = cleanDraft(draft);
+  return mapProgram(setup, programId, (p) => {
+    if (requirementProblem(clean, p)) return p;
+    const taken = new Set(p.requirements.map((r) => r.id));
+    let n = p.requirements.length + 1;
+    while (taken.has(`req-${n}`)) n++;
+    const req: Requirement = { id: `req-${n}`, ...(clean.name ? { name: clean.name } : {}), anyOf: clean.anyOf };
+    return { ...p, requirements: [...p.requirements, req] };
+  });
+}
+
+export function removeRequirement(setup: ProgramSetup, programId: string, requirementId: string): ProgramSetup {
   return mapProgram(setup, programId, (p) => ({
     ...p,
-    requirements: p.requirements.filter((r) => r.itemId !== itemId),
+    requirements: p.requirements.filter((r) => r.id !== requirementId),
   }));
+}
+
+function cleanDraft(draft: RequirementDraft): RequirementDraft {
+  const seen = new Set<string>();
+  const anyOf: RequirementOption[] = [];
+  for (const o of draft.anyOf) {
+    const itemId = o.itemId.trim();
+    const key = requirementKey({ anyOf: [{ category: o.category, itemId }] });
+    if (!itemId || seen.has(key)) continue;
+    seen.add(key);
+    anyOf.push({ category: o.category, itemId });
+  }
+  const name = draft.name?.trim();
+  return name ? { name, anyOf } : { anyOf };
 }
 
 /** Puts each person on the program; people already on it are left as they are. */

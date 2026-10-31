@@ -12,5 +12,6 @@ export * from './program-edits';
 export * from './program-rules';
 export * from './readiness-evaluator';
 export * from './readiness-filter';
+export * from './requirements';
 export * from './rollup-calculator';
 export * from './status-engine';

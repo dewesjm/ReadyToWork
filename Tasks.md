@@ -86,7 +86,9 @@
 - [x] Typed requirements plan written (user request: admin types the course, qualification or role): [plans/typed-requirements.md](plans/typed-requirements.md)
 - [x] User answers the 3 questions at the end of the typed requirements plan (IDs, plain text box,
   network and SAP addable; plus a new need: "any of" requirements)
-- [ ] User answers the second round of 4 questions in the typed requirements plan
+- [x] User answers the second round of 4 questions in the typed requirements plan
+- [x] Typed requirements: IDs typed in Admin, "any of" with mixed types, optional names (326 tests)
+- [ ] User checks typed requirements in the browser (Reset to defaults first)
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)
@@ -116,6 +118,7 @@
 
 ## Later (real app, not this mockup)
 - Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)
-- Where real program assignments come from
+- Where real program assignments come from (likely by who you work for: "you work for X, so you
+  get their program")
 - Notifications / weekly digest email
 - History and audit trail

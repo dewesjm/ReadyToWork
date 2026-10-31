@@ -116,7 +116,7 @@ describe('generateOrg', () => {
       expect(result.statusByPerson.get(id)).toBe('ready');
       const assigned = evaluate(org, ANCHOR, { ...org.assignments, [id]: [CRANE_PROGRAM_ID] });
       expect(assigned.statusByPerson.get(id)).toBe('not-ready');
-      expect(assigned.checksByPerson.get(id)?.find((c) => c.itemId === 'qual:crane')?.reason).toBe(
+      expect(assigned.checksByPerson.get(id)?.find((c) => c.source === 'program' && c.category === 'qualification')?.reason).toBe(
         'Missing, required by Ridgeline R-01 (supply ship)',
       );
     });

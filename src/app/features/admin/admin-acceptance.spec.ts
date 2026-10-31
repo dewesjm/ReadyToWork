@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { addRequirement } from '../../../core';
-import { CatalogItem } from '../../../data';
 import { CRANE_PROGRAM_ID } from '../../../data/mock/fake-catalog';
 import { ReadinessService } from '../../services/readiness-service';
 import { SettingsService } from '../../services/settings-service';
@@ -27,13 +26,12 @@ describe('M6 acceptance', () => {
   }
 
   it('adding a requirement turns exactly the people on the program who lack it red, at once', async () => {
-    const hearing = TestBed.inject(ReadinessService).catalog().find((c) => c.itemId === 'trn:hearing')!;
-    const hold = await holders(hearing.itemId);
+    const hold = await holders(HEARING);
     const before = statuses();
     const shouldTurnRed = [...before.keys()].filter((id) => onCrane(id) && !hold.has(id));
     expect(shouldTurnRed.length).toBeGreaterThan(0);
 
-    add(hearing);
+    add(HEARING);
     const after = statuses();
 
     for (const id of shouldTurnRed) expect(after.get(id)).toBe('not-ready');
@@ -42,13 +40,13 @@ describe('M6 acceptance', () => {
     expect(changed.every((id) => shouldTurnRed.includes(id))).toBe(true);
     expect(changed.length).toBe(shouldTurnRed.filter((id) => before.get(id) !== 'not-ready').length);
     const checks = TestBed.inject(ReadinessService).result().checksByPerson.get(shouldTurnRed[0])!;
-    expect(checks.find((c) => c.itemId === hearing.itemId)).toEqual(
-      expect.objectContaining({ status: 'not-ready', source: 'program', requiredBy: [CRANE_PROGRAM_ID] }),
+    expect(checks.find((c) => c.source === 'program')).toEqual(
+      expect.objectContaining({ itemName: 'Hearing Conservation (HC-260)', status: 'not-ready', requiredBy: [CRANE_PROGRAM_ID] }),
     );
   });
 
   it('keeps the change after a reload', async () => {
-    add(TestBed.inject(ReadinessService).catalog().find((c) => c.itemId === 'trn:hearing')!);
+    add(HEARING);
     const settings = TestBed.inject(SettingsService).settings();
     const red = statuses();
 
@@ -59,7 +57,7 @@ describe('M6 acceptance', () => {
   });
 
   it('survives an export, reset and import round trip', async () => {
-    add(TestBed.inject(ReadinessService).catalog().find((c) => c.itemId === 'trn:hearing')!);
+    add(HEARING);
     const admin = TestBed.inject(AdminService);
     admin.edit((s) => ({ ...s, warningDays: { 'sap-password': 21 } }));
     const settings = TestBed.inject(SettingsService);
@@ -76,6 +74,11 @@ describe('M6 acceptance', () => {
   });
 });
 
-function add(item: CatalogItem): void {
-  TestBed.inject(AdminService).editPrograms((s) => addRequirement(s, CRANE_PROGRAM_ID, item));
+/** A course in the fake data that some people on the program hold and some don't. */
+const HEARING = 'HC-260';
+
+function add(itemId: string): void {
+  TestBed.inject(AdminService).editPrograms((s) =>
+    addRequirement(s, CRANE_PROGRAM_ID, { anyOf: [{ category: 'training', itemId }] }),
+  );
 }

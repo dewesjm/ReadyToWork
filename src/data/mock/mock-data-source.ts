@@ -1,6 +1,6 @@
 import { IsoDate, Person, SourceRecord } from '../../core';
 import { localToday } from '../clock';
-import { CatalogItem, DataSource, Persona } from '../data-source';
+import { DataSource, Persona } from '../data-source';
 import { MOCK_CONFIG, MockConfig } from './mock-config';
 import { FakeOrg, generateOrg } from './org-generator';
 
@@ -25,10 +25,6 @@ export class MockDataSource implements DataSource {
 
   async getRecords(): Promise<SourceRecord[]> {
     return this.fakeOrg().records;
-  }
-
-  async getCatalog(): Promise<CatalogItem[]> {
-    return this.fakeOrg().catalog;
   }
 
   async getPersonas(): Promise<Persona[]> {

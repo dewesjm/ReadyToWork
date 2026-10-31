@@ -6,8 +6,9 @@ import {
   RollupCalculator,
   SourceRecord,
   StatusEngine,
+  itemNames,
 } from '../../core';
-import { CatalogItem, Persona, readinessConfigFrom } from '../../data';
+import { Persona, readinessConfigFrom } from '../../data';
 import { ClockService } from './clock-service';
 import { SettingsService } from './settings-service';
 import { DATA_SOURCE } from './tokens';
@@ -24,7 +25,6 @@ export class ReadinessService {
 
   private readonly people = signal<Person[]>([]);
   private readonly records = signal<SourceRecord[]>([]);
-  readonly catalog = signal<CatalogItem[]>([]);
   readonly personas = signal<Persona[]>([]);
   readonly loaded = signal(false);
 
@@ -36,6 +36,9 @@ export class ReadinessService {
         new RollupCalculator(),
       ),
   );
+
+  /** Item names seen in the records, by itemKey: labels typed IDs and tells Admin which are held. */
+  readonly itemNames = computed(() => itemNames(this.records()));
 
   readonly result = computed(() => {
     const settings = this.settings.settings();
@@ -49,15 +52,13 @@ export class ReadinessService {
   });
 
   async load(): Promise<void> {
-    const [people, records, catalog, personas] = await Promise.all([
+    const [people, records, personas] = await Promise.all([
       this.source.getPeople(),
       this.source.getRecords(),
-      this.source.getCatalog(),
       this.source.getPersonas(),
     ]);
     this.people.set(people);
     this.records.set(records);
-    this.catalog.set(catalog);
     this.personas.set(personas);
     this.loaded.set(true);
   }

@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { Program, createProgram, programNameProblem } from '../../../core';
+import { Program, createProgram, programNameProblem, requirementLabel } from '../../../core';
 import { Icon } from '../../shared/icon/icon';
 import { RollupBadge } from '../../shared/status/rollup-badge';
 import { AdminService } from './admin-service';
@@ -76,7 +76,8 @@ export class ProgramList {
   protected readonly problem = signal<string | null>(null);
 
   protected itemNames(p: Program): string {
-    return p.requirements.map((r) => r.itemName).join(', ');
+    const names = this.admin.itemNames();
+    return p.requirements.map((r) => requirementLabel(r, names)).join('; ');
   }
 
   protected create(event: Event): void {

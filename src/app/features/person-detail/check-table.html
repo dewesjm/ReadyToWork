@@ -20,7 +20,12 @@
         <tbody>
           @for (r of rows(); track r.check.itemId) {
             <tr [attr.data-item]="r.check.itemId">
-              <td class="font-medium">{{ r.check.itemName }}</td>
+              <td>
+                <span class="font-medium">{{ r.check.itemName }}</span>
+                @if (r.itemId) {
+                  <span class="block text-xs opacity-70" data-testid="item-id">{{ r.itemId }}</span>
+                }
+              </td>
               <td>{{ r.category }}</td>
               <td><rtw-status-badge [status]="r.check.status" [compact]="true" /></td>
               <td>{{ r.check.reason }}</td>
@@ -45,7 +50,12 @@
     @for (r of rows(); track r.check.itemId) {
       <li class="rounded-box border border-base-300 p-3 text-sm" [attr.data-item]="r.check.itemId">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <span class="font-medium">{{ r.check.itemName }}</span>
+          <span class="font-medium">
+            {{ r.check.itemName }}
+            @if (r.itemId) {
+              <span class="text-xs font-normal opacity-70">· {{ r.itemId }}</span>
+            }
+          </span>
           <rtw-status-badge [status]="r.check.status" [compact]="true" />
         </div>
         <div class="mt-1">{{ r.check.reason }}</div>

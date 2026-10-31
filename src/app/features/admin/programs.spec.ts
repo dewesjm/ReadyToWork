@@ -45,7 +45,9 @@ describe('Admin programs', () => {
     expect(cards.map((c) => c.dataset['program'])).toEqual(settings().programs.map((p) => p.id));
     const card = el().querySelector(`[data-program="${CRANE_PROGRAM_ID}"]`)!;
     expect(card.textContent).toContain('Ridgeline R-01 (supply ship)');
-    expect(card.textContent).toContain('Requires: Crane Operator, Qualified Rigger, Hot Work and Fire Watch');
+    expect(card.textContent).toContain(
+      'Requires: Crane Operator (QL-CRN-01); Qualified Rigger (QL-RIG-01); Hot Work and Fire Watch (HW-210)',
+    );
     const total = TestBed.inject(AdminService).summaries().get(CRANE_PROGRAM_ID)!.rollup.total;
     expect(total).toBeGreaterThan(0);
     expect(card.querySelector('rtw-rollup-badge')?.textContent).toContain(`${total} people:`);
@@ -95,38 +97,102 @@ describe('Admin programs', () => {
     expect($('[data-testid="program-name"]').closest('rtw-admin')?.querySelector('[data-testid="saved-note"]')?.textContent).toContain('Saved');
   });
 
-  it('adds a requirement from the picker and the summary updates at once', async () => {
-    const { $, el, type, stable } = await open(`/admin/programs/${CRANE_PROGRAM_ID}`);
-    const before = TestBed.inject(AdminService).summaries().get(CRANE_PROGRAM_ID)!.rollup;
-
+  /** Fills in the Add requirement form: an optional name and one or more [type, ID] rows. */
+  async function addTyped(
+    page: Awaited<ReturnType<typeof open>>,
+    options: [string, string][],
+    name = '',
+  ) {
+    const { $, el, stable, type } = page;
     $<HTMLButtonElement>('[data-testid="add-requirement"]').click();
     await stable();
-    const offered = () => [...el().querySelectorAll<HTMLElement>('[data-testid="picker"] [data-item]')].map((b) => b.dataset['item']);
-    expect(offered()).not.toContain('qual:crane');
-    expect(offered()).toContain('trn:hearing');
-    expect(offered()).not.toContain(undefined);
-    expect(document.activeElement).toBe($('[data-testid="picker-search"]'));
-
-    await type('[data-testid="picker-search"]', 'hearing');
-    expect(offered()).toEqual(['trn:hearing']);
-    $<HTMLButtonElement>('[data-item="trn:hearing"]').click();
+    expect(document.activeElement).toBe($('[data-testid="requirement-name"]'));
+    if (name) await type('[data-testid="requirement-name"]', name);
+    for (let i = 0; i < options.length; i++) {
+      if (i > 0) {
+        $<HTMLButtonElement>('[data-testid="add-option"]').click();
+        await stable();
+      }
+      const row = el().querySelectorAll('[data-testid="option"]')[i];
+      const select = row.querySelector<HTMLSelectElement>('[data-testid="option-type"]')!;
+      select.value = options[i][0];
+      select.dispatchEvent(new Event('change'));
+      const input = row.querySelector<HTMLInputElement>('[data-testid="option-id"]')!;
+      input.value = options[i][1];
+      input.dispatchEvent(new Event('input'));
+      await stable();
+    }
+    $<HTMLButtonElement>('[data-testid="save-requirement"]').click();
     await stable();
+  }
 
-    expect(crane().requirements.map((r) => r.itemId)).toEqual(['qual:crane', 'qual:rigging', 'trn:hot-work', 'trn:hearing']);
-    expect(offered()).toEqual([]);
-    expect($('[data-testid="picker"]').textContent).toContain('No items match "hearing".');
+  it('adds a typed ID as a requirement and the summary updates at once', async () => {
+    const page = await open(`/admin/programs/${CRANE_PROGRAM_ID}`);
+    const before = TestBed.inject(AdminService).summaries().get(CRANE_PROGRAM_ID)!.rollup;
+
+    // Case doesn't matter: the course is HC-260 in the learning system.
+    await addTyped(page, [['training', 'hc-260']]);
+
+    const added = crane().requirements.at(-1)!;
+    expect(added).toEqual({ id: `req-${crane().requirements.length}`, anyOf: [{ category: 'training', itemId: 'hc-260' }] });
+    expect(page.$('[data-testid="requirement-form"]')).toBeNull();
+    expect(page.$(`[data-requirement="${added.id}"]`).textContent).toContain('Hearing Conservation (hc-260)');
     const after = TestBed.inject(AdminService).summaries().get(CRANE_PROGRAM_ID)!.rollup;
     expect(after.total).toBe(before.total);
     expect(after.counts['not-ready']).toBeGreaterThan(before.counts['not-ready']);
-    expect($('[data-testid="program-summary"]').textContent).toContain(`${after.counts['not-ready']} not ready`);
+    expect(page.$('[data-testid="program-summary"]').textContent).toContain(`${after.counts['not-ready']} not ready`);
+  });
+
+  it('adds an "any of" requirement mixing types, with a name', async () => {
+    const page = await open(`/admin/programs/${CRANE_PROGRAM_ID}`);
+    await addTyped(page, [['training', 'ELEC-101'], ['qualification', 'QL-MEL-01']], 'Electrical safety');
+
+    const added = crane().requirements.at(-1)!;
+    expect(added).toEqual({
+      id: added.id,
+      name: 'Electrical safety',
+      anyOf: [
+        { category: 'training', itemId: 'ELEC-101' },
+        { category: 'qualification', itemId: 'QL-MEL-01' },
+      ],
+    });
+    const row = page.$(`[data-requirement="${added.id}"]`).textContent!.replace(/\s+/g, ' ');
+    expect(row).toContain('Electrical safety: any of ELEC-101, QL-MEL-01');
+    expect(row).toContain('Electrical Safety Basics (ELEC-101) · Training');
+    expect(row).toContain('Marine Electrician (QL-MEL-01) · Qualifications');
+  });
+
+  it('explains a missing ID or a repeat, and keeps the form open', async () => {
+    const page = await open(`/admin/programs/${CRANE_PROGRAM_ID}`);
+    const count = crane().requirements.length;
+    await addTyped(page, [['training', '  ']]);
+    expect(page.$('[data-testid="requirement-problem"]').textContent).toContain('Enter an ID.');
+
+    // Fix the same form: the crane qualification is already required (case doesn't matter).
+    const select = page.$<HTMLSelectElement>('[data-testid="option-type"]');
+    select.value = 'qualification';
+    select.dispatchEvent(new Event('change'));
+    await page.type('[data-testid="option-id"]', 'ql-crn-01');
+    expect(page.$('[data-testid="requirement-problem"]')).toBeNull();
+    page.$<HTMLButtonElement>('[data-testid="save-requirement"]').click();
+    await page.stable();
+    expect(page.$('[data-testid="requirement-problem"]').textContent).toContain('The program already has this requirement.');
+    expect(crane().requirements.length).toBe(count);
+  });
+
+  it('allows an ID no one holds yet, with a note to check it', async () => {
+    const page = await open(`/admin/programs/${CRANE_PROGRAM_ID}`);
+    expect(page.el().querySelectorAll('[data-testid="unknown-id"]').length).toBe(0);
+    await addTyped(page, [['training', 'HW-999']]);
+    expect(page.$('[data-testid="unknown-id"]').textContent).toContain('No records with ID HW-999 yet. Check the ID.');
   });
 
   it('removes a requirement', async () => {
     const { $, stable } = await open(`/admin/programs/${CRANE_PROGRAM_ID}`);
-    $<HTMLButtonElement>('[data-requirement="qual:rigging"] button').click();
+    $<HTMLButtonElement>('[data-requirement="req-2"] button').click();
     await stable();
-    expect(crane().requirements.map((r) => r.itemId)).toEqual(['qual:crane', 'trn:hot-work']);
-    expect($('[data-requirement="qual:rigging"]')).toBeNull();
+    expect(crane().requirements.map((r) => r.id)).toEqual(['req-1', 'req-3', 'req-4', 'req-5']);
+    expect($('[data-requirement="req-2"]')).toBeNull();
   });
 
   it('asks before deleting, and deleting removes the program and its assignments', async () => {

@@ -13,6 +13,7 @@ import {
   pruneAssignments,
   removeRequirement,
   renameProgram,
+  requirementProblem,
   unassign,
 } from './program-edits';
 import { ProgramRules } from './program-rules';
@@ -22,8 +23,8 @@ import { StatusEngine } from './status-engine';
 import { TEST_ORG } from './test-org';
 
 const TODAY = '2026-11-01';
-const CRANE_QUAL = { category: 'qualification', itemId: 'q:crane', itemName: 'Crane Operator' };
-const RIGGER_QUAL = { category: 'qualification', itemId: 'q:rigger', itemName: 'Qualified Rigger' };
+const CRANE_QUAL = { id: 'req-1', anyOf: [{ category: 'qualification', itemId: 'q:crane' }] };
+const RIGGER_QUAL = { anyOf: [{ category: 'qualification', itemId: 'q:rigger' }] };
 
 function setup(): ProgramSetup {
   return {
@@ -55,11 +56,47 @@ describe('program edits', () => {
     expect(s.assignments).toEqual({ c2: ['export'], f3: ['export'] });
   });
 
-  it('adds a requirement once and removes it', () => {
+  it('adds a requirement once, with a new id, and removes it', () => {
     const added = addRequirement(setup(), 'export', RIGGER_QUAL);
-    expect(added.programs[1].requirements).toEqual([RIGGER_QUAL]);
+    expect(added.programs[1].requirements).toEqual([{ id: 'req-1', ...RIGGER_QUAL }]);
     expect(addRequirement(added, 'export', RIGGER_QUAL)).toEqual(added);
-    expect(removeRequirement(added, 'export', 'q:rigger').programs[1].requirements).toEqual([]);
+    const twice = addRequirement(added, 'export', { anyOf: [{ category: 'training', itemId: 'T-1' }] });
+    expect(twice.programs[1].requirements.map((r) => r.id)).toEqual(['req-1', 'req-2']);
+    expect(removeRequirement(added, 'export', 'req-1').programs[1].requirements).toEqual([]);
+  });
+
+  it('cleans a draft: trims IDs, drops blank and repeated ones, keeps a name only when given', () => {
+    const draft = {
+      name: '  Electrical safety ',
+      anyOf: [
+        { category: 'training', itemId: ' ELEC-101 ' },
+        { category: 'training', itemId: '' },
+        { category: 'training', itemId: 'elec-101' },
+        { category: 'qualification', itemId: 'QL-MEL-01' },
+      ],
+    };
+    expect(addRequirement(setup(), 'export', draft).programs[1].requirements).toEqual([
+      {
+        id: 'req-1',
+        name: 'Electrical safety',
+        anyOf: [
+          { category: 'training', itemId: 'ELEC-101' },
+          { category: 'qualification', itemId: 'QL-MEL-01' },
+        ],
+      },
+    ]);
+    const unnamed = addRequirement(setup(), 'export', { name: '  ', anyOf: [{ category: 'training', itemId: 'X' }] });
+    expect(unnamed.programs[1].requirements[0]).toEqual({ id: 'req-1', anyOf: [{ category: 'training', itemId: 'X' }] });
+  });
+
+  it('explains why a requirement cannot be added', () => {
+    const crane = setup().programs[0];
+    expect(requirementProblem({ anyOf: [{ category: 'training', itemId: '  ' }] }, crane)).toBe('Enter an ID.');
+    // Same options in another order or case is the same requirement.
+    expect(requirementProblem({ anyOf: [{ category: 'qualification', itemId: 'Q:CRANE' }] }, crane)).toBe(
+      'The program already has this requirement.',
+    );
+    expect(requirementProblem(RIGGER_QUAL, crane)).toBeNull();
   });
 
   it('assigns and unassigns people', () => {
@@ -102,7 +139,9 @@ describe('program readiness', () => {
   function records(): SourceRecord[] {
     return TEST_ORG.filter((p) => p.id !== 'c1').map((p) => ({
       personId: p.id,
-      ...CRANE_QUAL,
+      category: 'qualification',
+      itemId: 'q:crane',
+      itemName: 'Crane Operator',
       source: 'quals',
       lastSynced: TODAY,
       expires: p.id === 'c2' ? '2026-12-01' : '2028-01-01',

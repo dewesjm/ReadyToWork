@@ -22,7 +22,7 @@ const defaults = () => createDefaultSettings(DEFAULT_PROGRAMS, { p010: ['prog-ri
 function edited(): Settings {
   const s = defaults();
   s.programs[0].name = 'Renamed program';
-  s.programs[0].requirements.push({ category: 'qualification', itemId: 'qual:forklift', itemName: 'Forklift' });
+  s.programs[0].requirements.push({ id: 'req-9', name: 'Lifting', anyOf: [{ category: 'qualification', itemId: 'QL-FORK-01' }] });
   s.assignments['p020'] = ['prog-bastion-b01', 'prog-tern'];
   s.warningDays['sap-password'] = 21;
   s.announcements.unshift({
@@ -117,6 +117,20 @@ describe('export and import', () => {
       assignments: { p1: ['a', 'gone'], p2: ['gone'] },
     });
     expect(importSettings(text, defaults(), mine).assignments).toEqual({ p1: ['a'] });
+  });
+
+  it('reads the older single-item requirement shape as a one-option requirement', () => {
+    const text = JSON.stringify({
+      schemaVersion: 1,
+      programs: [{ id: 'a', name: 'A', requirements: [{ category: 'training', itemId: 'HW-210', itemName: 'Hot Work' }] }],
+    });
+    expect(importSettings(text, defaults(), mine).programs[0].requirements).toEqual([
+      { id: 'req-1', anyOf: [{ category: 'training', itemId: 'HW-210' }] },
+    ]);
+    const empty = JSON.stringify({ schemaVersion: 1, programs: [{ id: 'a', name: 'A', requirements: [{ id: 'r', anyOf: [] }] }] });
+    expect(() => importSettings(empty, defaults(), mine)).toThrowError(
+      new SettingsError('programs[0].requirements[0].anyOf must be a list of at least one item.'),
+    );
   });
 
   it('clears a default program the file does not have, on import and on reset', () => {

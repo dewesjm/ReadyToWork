@@ -23,7 +23,7 @@ export class AdminService {
     return { programs, assignments };
   });
   readonly announcements = computed(() => this.settings.settings().announcements);
-  readonly catalog = this.readiness.catalog;
+  readonly itemNames = this.readiness.itemNames;
   readonly saved = signal(false);
 
   /** People on each program and their readiness for it, by program id. */
