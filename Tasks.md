@@ -42,6 +42,8 @@
 - Items in place repeat the days ("Expires in 28 days · Due Nov 28, 2026 · 28 days"), as Details
   does; revise the wording with the user.
 - The list's "Show 100 more" test failed once in a full run and passed on reruns; watch it.
+- Announcements: remove the viewer's ability to close (dismiss) Info and Delayed notices (user,
+  2026-10-31: probably not a good thing to have). Noted for later, not changed yet.
 
 ## Later (real app, not this mockup)
 - Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)

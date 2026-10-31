@@ -357,3 +357,5 @@
   `downloadFile` for both downloads, `SettingsService.programNames`, and one `ItemsToggle`
   component for the tree, list and phone cards. Docs brought in line with what is built;
   replaced decisions above are marked.
+- **Dismissing announcements is probably a mistake** (user, for later): viewers can close Info
+  and Delayed notices today; the user expects to remove that. Noted in Tasks.md; not changed.
