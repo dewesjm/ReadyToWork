@@ -90,6 +90,8 @@
 - [x] Typed requirements: IDs typed in Admin, "any of" with mixed types, optional names (326 tests)
 - [ ] User checks typed requirements in the browser
 - [x] Saved settings upgrade (version 2): older saved settings get the new sample programs, no manual reset (328 tests)
+- [x] Export plan written (user request: export to Excel/CSV on both views): [plans/export-csv.md](plans/export-csv.md)
+- [ ] User answers the 3 questions at the end of the export plan
 - [ ] M7 plan: demo controls
 
 ## Open questions (user's to decide)
