@@ -1,19 +1,15 @@
+import Papa from 'papaparse';
 import { CategoryConfig, STATUS_META, categoryConfig } from './config';
 import { describeDays } from './format';
 import { PersonListResult } from './readiness-filter';
 
 /**
- * One text cell. Quotes values with commas, quotes, line breaks or edge spaces; a leading
- * = + - or @ gets an apostrophe so a spreadsheet never runs it as a formula.
+ * CSV text Excel opens as UTF-8: a byte-order mark, then rows joined with CRLF. Papa Parse does
+ * the quoting; `escapeFormulae` puts an apostrophe before a leading = + - or @ so a spreadsheet
+ * never runs a value as a formula.
  */
-export function csvCell(value: string): string {
-  const safe = /^[=+\-@]/.test(value) ? `'${value}` : value;
-  return /[",\r\n]|^\s|\s$/.test(safe) ? `"${safe.replace(/"/g, '""')}"` : safe;
-}
-
-/** CSV text Excel opens as UTF-8: a byte-order mark, then rows joined with CRLF. */
 export function toCsv(rows: readonly (readonly string[])[]): string {
-  return '\uFEFF' + rows.map((r) => r.map(csvCell).join(',')).join('\r\n') + '\r\n';
+  return '﻿' + Papa.unparse(rows as string[][], { escapeFormulae: true, newline: '\r\n' }) + '\r\n';
 }
 
 /**

@@ -410,4 +410,8 @@
 - **Icons through `lucide-angular`** (replaces "Icons are inline SVG copied from Lucide" above).
   `<rtw-icon name>` stays as a thin wrapper, because the config tables in `src/core/` name icons
   as plain strings; `icons.ts` maps those names to Lucide's icon imports.
+- **CSV through Papa Parse** (replaces "Plain CSV built in the core, no library" above). `toCsv`
+  calls `Papa.unparse` with `escapeFormulae` (the same apostrophe guard) and keeps the byte-order
+  mark and CRLF for Excel. Papa Parse is CommonJS, so angular.json allows it, and the initial
+  bundle warning moves from 500 to 600 kB (Papa Parse put it 9 kB over).
 

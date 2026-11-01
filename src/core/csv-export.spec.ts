@@ -1,5 +1,5 @@
 import { DEFAULT_CONFIG } from './config';
-import { csvCell, readinessExportRows, toCsv } from './csv-export';
+import { readinessExportRows, toCsv } from './csv-export';
 import { Person } from './model';
 import { PersonListResult } from './readiness-filter';
 
@@ -13,14 +13,8 @@ const person = (id: string, name: string, title: string): Person => ({
 
 describe('csv export', () => {
   it('quotes only what needs it and never starts a formula', () => {
-    expect(csvCell('Hot Work')).toBe('Hot Work');
-    expect(csvCell('Smith, Jo')).toBe('"Smith, Jo"');
-    expect(csvCell('the "best"')).toBe('"the ""best"""');
-    expect(csvCell('two\nlines')).toBe('"two\nlines"');
-    expect(csvCell(' padded')).toBe('" padded"');
-    expect(csvCell('=SUM(A1)')).toBe("'=SUM(A1)");
-    expect(csvCell('-5')).toBe("'-5");
-    expect(csvCell('')).toBe('');
+    const cells = ['Hot Work', 'Smith, Jo', 'the "best"', 'two\nlines', ' padded', '=SUM(A1)', '-5', ''];
+    expect(toCsv([cells])).toBe(`﻿Hot Work,"Smith, Jo","the ""best""","two\nlines"," padded","'=SUM(A1)","'-5",\r\n`);
   });
 
   it('starts with a byte-order mark and uses CRLF line ends', () => {
