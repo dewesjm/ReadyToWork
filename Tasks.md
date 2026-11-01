@@ -38,6 +38,9 @@
 - Desktop tree: on a row with a wide roll-up (the director's), Details wraps to the start of
   the next line instead of the right edge (seen 2026-11-01).
 
+- When moving to Angular 22 (needs a newer Node): remove the glob and minimatch `overrides` from
+  package.json (DECISIONS.md 2026-11-01).
+
 ## Later (real app, not this mockup)
 - Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)
 - Where real program assignments come from (likely by who you work for: "you work for X, so you

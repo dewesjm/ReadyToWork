@@ -429,4 +429,11 @@
   outside (a transparent backdrop); our own document-click and Escape listeners are gone. The
   overlay stylesheet is in angular.json's styles. Panels render at the end of the page, so the
   avatar menu caps its height and scrolls, and tests look for panels in the whole document.
+- **npm overrides for glob and minimatch** (user: "you can fix those two"). `npm audit` flagged
+  16 moderate warnings, all inside Angular's own tooling (`@angular/cli` through pacote, cacache
+  and sigstore), never in the shipped site, and already there before today. npm's suggested fix
+  downgrades to Angular CLI 16; Angular 22 fixes it but needs a newer Node. `overrides` in
+  package.json pins glob ^14.0.3 and minimatch ^11.0.3 (one major past what the tooling asks
+  for; they're only used by `ng add` / `ng update`). Build, unit tests, browser checks and
+  `ng update`'s listing all work. Remove the overrides when moving to Angular 22.
 
