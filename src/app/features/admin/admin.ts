@@ -21,10 +21,10 @@ import { AdminService } from './admin-service';
       </span>
     </div>
     @if (viewer.isAdmin()) {
-      <nav class="tabs tabs-border mt-3 mb-5" aria-label="Admin sections">
+      <nav class="tabs tabs-border mt-3 mb-5 flex-nowrap overflow-x-auto" aria-label="Admin sections">
         @for (s of sections; track s.path) {
           <a
-            class="tab"
+            class="tab shrink-0 text-base-content/80"
             [routerLink]="s.path"
             routerLinkActive="tab-active"
             ariaCurrentWhenActive="page"

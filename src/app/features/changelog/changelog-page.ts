@@ -18,7 +18,7 @@ const SECTIONS = [
         <section [attr.aria-labelledby]="'log-' + e.date" data-testid="entry">
           <h2 [id]="'log-' + e.date" class="text-lg font-semibold">{{ e.title }}</h2>
           @for (s of e.sections; track s.label) {
-            <h3 class="mt-2 text-xs font-semibold uppercase opacity-60">{{ s.label }}</h3>
+            <h3 class="mt-2 text-xs font-semibold uppercase opacity-70">{{ s.label }}</h3>
             <ul class="mt-1 list-disc pl-5">
               @for (item of s.items; track $index) {
                 <li>{{ item }}</li>

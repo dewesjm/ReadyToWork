@@ -18,11 +18,14 @@ import { CategoryChip } from '../../shared/status/category-chip';
       data-testid="items-toggle"
       [attr.tabindex]="tabbable() ? null : -1"
       [attr.aria-expanded]="open()"
-      [attr.aria-label]="(open() ? 'Hide items for ' : 'Show items for ') + name()"
       (click)="toggle.emit(); $event.stopPropagation()"
     >
+      <!-- Tab stops say whose items they open; in the tree the row's name already does. -->
+      @if (tabbable()) {
+        <span class="sr-only">{{ open() ? 'Hide' : 'Show' }} items for {{ name() }}: </span>
+      }
       @if (label(); as text) {
-        <span class="text-xs">{{ text }}</span>
+        <span class="text-xs" data-testid="items-label">{{ text }}</span>
       } @else {
         @for (c of chips(); track c.category) {
           <rtw-category-chip [category]="c.category" [status]="c.status" />
@@ -35,7 +38,7 @@ import { CategoryChip } from '../../shared/status/category-chip';
   `,
 })
 export class ItemsToggle {
-  /** The person's name, for the accessible label. */
+  /** The person's name, for screen readers. */
   readonly name = input.required<string>();
   readonly open = input.required<boolean>();
   readonly chips = input<readonly CategoryIssue[]>([]);

@@ -16,7 +16,7 @@ import { StatusBadge } from '../../shared/status/status-badge';
         <button
           type="button"
           class="flex flex-col items-start gap-1 rounded-box border bg-base-100 p-2 text-left text-sm hover:bg-base-200 disabled:cursor-default disabled:hover:bg-base-100"
-          [class]="t.status === null ? 'border-base-300 opacity-60' : selected() === t.category.id ? 'border-primary ring-2 ring-primary' : 'border-base-300'"
+          [class]="t.status === null ? 'border-base-300 opacity-70' : selected() === t.category.id ? 'border-primary ring-2 ring-primary' : 'border-base-300'"
           [disabled]="t.status === null"
           [attr.aria-pressed]="t.status === null ? null : selected() === t.category.id"
           [attr.data-category]="t.category.id"

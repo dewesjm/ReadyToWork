@@ -8,7 +8,6 @@
         class="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-field py-1.5 pr-2 pl-[calc(0.25rem+var(--depth)*0.75rem)] sm:pl-1 outline-offset-[-2px] hover:bg-base-200 focus-visible:bg-base-200 focus-visible:outline-2 focus-visible:outline-primary"
         [style.--depth]="r.depth"
         [class.cursor-pointer]="r.expandable"
-        [class.opacity-60]="r.context"
         [attr.data-id]="r.id"
         [attr.data-context]="r.context || null"
         [attr.aria-level]="r.depth + 1"
@@ -33,7 +32,7 @@
           }
           <rtw-status-badge class="w-24 shrink-0" [status]="r.status" [compact]="true" />
           <span class="min-w-0">
-            <rtw-highlight class="font-medium" data-testid="name" [text]="r.person.name" [keyword]="keyword()" />
+            <rtw-highlight class="font-medium" [class.opacity-70]="r.context" data-testid="name" [text]="r.person.name" [keyword]="keyword()" />
             <span class="text-sm opacity-70">
               · <rtw-highlight [text]="r.person.title" [keyword]="keyword()" />
             </span>
@@ -74,17 +73,20 @@
         >
           Details
         </button>
+
+        @if (r.itemsOpen) {
+          <!-- Inside the row (a tree holds only tree items); clicks here stay out of the row. -->
+          <div class="basis-full sm:pl-[calc(2rem+var(--depth)*1.25rem)]" (click)="$event.stopPropagation()">
+            <div
+              role="group"
+              class="mb-1 rounded-box border border-base-300 bg-base-100 p-3"
+              [attr.aria-label]="'Items for ' + r.person.name"
+            >
+              <rtw-person-items [personId]="r.id" />
+            </div>
+          </div>
+        }
       </div>
-      @if (r.itemsOpen) {
-        <div
-          role="group"
-          class="mb-1 ml-[calc(2rem+var(--depth)*1.25rem)] rounded-box border border-base-300 bg-base-100 p-3"
-          [style.--depth]="r.depth"
-          [attr.aria-label]="'Items for ' + r.person.name"
-        >
-          <rtw-person-items [personId]="r.id" />
-        </div>
-      }
     }
   </div>
 }

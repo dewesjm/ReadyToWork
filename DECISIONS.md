@@ -377,3 +377,21 @@
   date (`SystemClock`), and specs that move the date use a `TestClock` from `src/app/testing.ts`.
   A saved `demoToday` in an older browser is ignored on load. Older notes that point ahead to M7 (in
   this log and the plans) are superseded by this entry.
+- **Standard tools over custom code** (user: "in general we want to use standard tools and not
+  build things. My team may not have an AI to do all the hard parts for them"). Prefer
+  well-known libraries and tools an ordinary Angular developer knows; build custom only when no
+  standard tool fits, with the reason here. Written into CLAUDE.md's architecture rules. Existing
+  custom pieces are reviewed in plans/standard-tools.md.
+- **M8 phone and accessibility answers** (user: "your recommendations are fine"): 44px tap
+  targets on phones for the most-tapped controls and 24 minimum elsewhere; a deeper red in the
+  dark theme so white text passes; below 640px the header shows only the logo mark.
+- **Browser checks with Playwright and axe** (user: "you can implement axe"). `@playwright/test`
+  with `@axe-core/playwright`, the usual pairing, replaces the hand-written headless-Chrome
+  screenshot scripts. Runs on the installed Chrome (no browser download), phone and desktop,
+  both brand themes, WCAG 2.2 AA rules; any violation fails. axe also found what the hand check
+  missed: the items panel sat directly in the tree (now inside its row, as ARIA trees require)
+  and buttons whose spoken name left out their visible text.
+- **Muted text stays at 70% or more** of the text color. Faded context rows (60% on the whole
+  row, compounding with 70% titles) failed contrast; now only the name is muted. Table headers
+  are at 80% instead of daisyUI's default.
+

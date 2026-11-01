@@ -88,7 +88,7 @@ describe('IssuesList (list view)', () => {
     el().querySelector<HTMLButtonElement>('[data-testid="show-more"]')!.click();
     await stable();
     expect(rows().length).toBe(Math.min(total, 2 * page));
-  });
+  }, 15_000); // renders 200+ rows; slow when the whole suite runs at once
 
   it('highlights a keyword match on the person', async () => {
     const foreman = org().get(fakeOrg().scenarios.toolCrewForemanId)!;
@@ -145,7 +145,7 @@ describe('IssuesList (list view)', () => {
       .result()
       .checksByPerson.get(id)!
       .filter((c) => c.status !== 'ready').length;
-    expect(toggle.textContent!.trim()).toBe(`${issues} ${issues === 1 ? 'issue' : 'issues'}`);
+    expect(toggle.querySelector('[data-testid="items-label"]')!.textContent!.trim()).toBe(`${issues} ${issues === 1 ? 'issue' : 'issues'}`);
 
     toggle.click();
     await stable();

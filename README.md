@@ -10,6 +10,8 @@ Requires Node 22.12 or newer (Angular 21).
 - `npm install`
 - `npm start` serves the app at http://localhost:4200
 - `npm test` runs the unit tests (Vitest)
+- `npm run e2e` runs the browser checks (Playwright with axe accessibility checks; uses the
+  installed Chrome)
 - `npm run build` builds the static PWA into `dist/ready-to-work/browser`
 
 The service worker only runs in the production build. To try offline/install locally, serve

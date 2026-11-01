@@ -27,10 +27,6 @@
 - M8: below 640px wide, a tree row's Details button drops onto a line of its own; check it in
   the phone pass.
 - Demo: ask users whether they miss sorting the list by column (M5 shipped one fixed order).
-- M8: context rows are dimmed with opacity; check their contrast in the accessibility pass.
-- M8: in the dark theme, the Outage strip is white text on a light red (the theme's error
-  colors, as on the Not ready badges); check its contrast.
-- M8: inactive Admin tabs are pale grey, faint in the dark theme; check their contrast.
 - Demo: ask admins whether "Add everyone under" should be a standing rule (new people under that
   supervisor join the program) rather than a one-time add.
 - Hosting: password-protect the Vercel site with basic-auth middleware (`middleware.ts`,
@@ -39,7 +35,6 @@
   (proposed 2026-10-31, held until asked).
 - Items in place repeat the days ("Expires in 28 days · Due Nov 28, 2026 · 28 days"), as Details
   does; revise the wording with the user.
-- The list's "Show 100 more" test failed once in a full run and passed on reruns; watch it.
 - Announcements: remove the viewer's ability to close (dismiss) Info and Delayed notices (user,
   2026-10-31: probably not a good thing to have). Noted for later, not changed yet.
 
@@ -143,3 +138,4 @@
 - [x] Crews by trade: crew titles and quals follow their superintendent's trade, odd person on loan (343 tests)
 - [x] Search looks through everyone in scope, pausing Issues only (user decision)
 - [x] M7 demo controls dropped (user, 2026-11-01): persona switching in Preferences is enough
+- [x] Browser checks with Playwright and axe; contrast and screen-reader fixes (M8 step 1)

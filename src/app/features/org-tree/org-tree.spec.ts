@@ -83,7 +83,7 @@ describe('OrgTree', () => {
     expect(rows().length).toBe(query.result().rows.length);
     for (const r of own) expect(statuses.get(r.dataset['id']!)).not.toBe('ready');
     expect(context.length).toBeGreaterThan(0);
-    expect(context[0].className).toContain('opacity-60');
+    expect(context[0].querySelector('[data-testid="name"]')!.className).toContain('opacity-70');
   });
 
   it('shows the planted tool crew in red for the Foreman', async () => {

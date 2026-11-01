@@ -4,7 +4,7 @@
   [attr.aria-expanded]="open()"
   aria-haspopup="true"
   aria-controls="avatar-menu-panel"
-  [attr.aria-label]="'Account, preferences and theme for ' + (viewer.viewer()?.name ?? 'viewer')"
+  [attr.aria-label]="viewer.initials() + ': account, preferences and theme for ' + (viewer.viewer()?.name ?? 'viewer')"
   (click)="toggle()"
 >
   {{ viewer.initials() }}
@@ -33,7 +33,7 @@
     </div>
 
     <div class="space-y-2 border-b border-base-300 px-4 py-3" data-testid="preferences">
-      <div class="text-xs font-semibold uppercase opacity-60">Preferences</div>
+      <div class="text-xs font-semibold uppercase opacity-70">Preferences</div>
       <label class="flex flex-col gap-1 text-xs font-medium">
         View as (demo)
         <select
@@ -85,11 +85,11 @@
     </div>
 
     <div class="max-h-96 overflow-y-auto p-2" role="radiogroup" aria-label="Theme">
-      <div class="px-2 pt-1 pb-2 text-xs font-semibold uppercase opacity-60">Theme: brand</div>
+      <div class="px-2 pt-1 pb-2 text-xs font-semibold uppercase opacity-70">Theme: brand</div>
       @for (t of brandThemes; track t.id) {
         <ng-container *ngTemplateOutlet="option; context: { $implicit: t }" />
       }
-      <div class="px-2 pt-3 pb-2 text-xs font-semibold uppercase opacity-60">More themes</div>
+      <div class="px-2 pt-3 pb-2 text-xs font-semibold uppercase opacity-70">More themes</div>
       @for (t of builtInThemes; track t.id) {
         <ng-container *ngTemplateOutlet="option; context: { $implicit: t }" />
       }

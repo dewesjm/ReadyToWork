@@ -14,6 +14,10 @@ feedback. Read DESIGN.md first; it is the spec and the build plan.
 - Fake data only. Never add real names or real employee data.
 - Styling with Tailwind + daisyUI classes. Status is always color plus icon plus text.
 - Use only established cross-browser features.
+- Use standard, well-known tools and libraries; don't build our own. The team that keeps this
+  going may not have an AI to do the hard parts, so the code should be what an ordinary Angular
+  developer expects to find. Build something custom only when no standard tool fits, and record
+  why in DECISIONS.md.
 
 ## How we work
 - One milestone at a time (DESIGN.md section 10). Plan it, the user reviews, then build. The
@@ -38,18 +42,13 @@ feedback. Read DESIGN.md first; it is the spec and the build plan.
 - Component and service tests that need data call `loadAppState()` from `src/app/testing.ts`.
 - Fake org facts for tests come from `MockDataSource.fakeOrg()` (`scenarios`, `targets`);
   don't hard-code generated names.
-- Visual check without a browser tool: `npm run build`, serve with
-  `npx serve -s dist/ready-to-work/browser -l 4321` (background), then
-  `"/c/Program Files/Google/Chrome/Application/chrome.exe" --headless=new --disable-gpu
-  --window-size=1200,800 --virtual-time-budget=5000 --screenshot=<scratchpad>/x.png <url>`
-  and read the PNG.
-- Headless Chrome windows can't go below about 500px wide, so `--window-size=390,...` crops
-  rather than testing phone width. For a real phone viewport, start Chrome with
-  `--remote-debugging-port` and use the DevTools `Emulation.setDeviceMetricsOverride` command
-  (Node 24 has a built-in WebSocket). Run parallel screenshots with separate `--user-data-dir`s.
-- Persona and theme are saved preferences in localStorage (`rtw.settings`), not URL params. To
-  screenshot another persona, serve a copy of the build whose index.html sets that key in a
-  script before the app boots.
+- Browser checks: `npm run e2e` (Playwright with axe, in `e2e/`). It uses the installed Chrome
+  and starts the dev server if it isn't running. Each page is checked on a phone (Pixel 7) and
+  desktop, light and dark; any accessibility problem fails the run. Screenshots of every
+  checked page are in the HTML report (`npx playwright show-report`). Persona and theme are
+  saved preferences in localStorage (`rtw.settings`), so specs set them with `addInitScript`.
+- Fit a quick look into a spec rather than a one-off script: `page.screenshot()` or
+  `testInfo.attach` in a throwaway spec under `e2e/`.
 - Git warns "LF will be replaced by CRLF" on every commit; harmless.
 - Don't run Prettier over whole folders: much of the existing code isn't Prettier-formatted, so
   it rewraps untouched lines and buries the real change. Format only what you wrote.

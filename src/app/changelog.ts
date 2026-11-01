@@ -13,6 +13,16 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    date: '2026-11-01',
+    fixes: [
+      'Faint text is easier to read: managers shown for context, table headings, Admin tabs and the change log headings.',
+      'In the dark theme, red badges and the Outage notice are a deeper red so the white text is readable.',
+      'The Issues only switch is easy to see in the dark theme.',
+      'On a phone, the Admin tabs stay on one line and scroll sideways.',
+      'Screen readers read the person on each Items button.',
+    ],
+  },
+  {
     date: '2026-10-31',
     new: [
       'A change log, under the avatar menu.',
