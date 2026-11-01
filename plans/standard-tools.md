@@ -22,7 +22,7 @@ for less, since the real app replaces them.
 1. **Icons** (`src/app/shared/icon/`). Lucide icons are copied in by hand as SVG path data, with
    our own `<rtw-icon>` component. Adding an icon means finding and pasting its paths.
    **Standard: `lucide-angular`**, the Lucide project's own Angular package: import an icon by
-   name. Small change (about 40 icons, one component), real app keeps it.
+   name. Small change (28 icons, one component), real app keeps it.
 2. **CSV export** (`src/core/csv-export.ts`). Our own quoting and spreadsheet-formula guard, about
    20 lines. **Standard: Papa Parse** (`unparse`, with `escapeFormulae` for the same guard). Small
    change; the quoting rules are easy to get subtly wrong, and the real app keeps the export.
