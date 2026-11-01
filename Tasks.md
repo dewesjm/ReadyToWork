@@ -139,3 +139,4 @@
 - [x] Search looks through everyone in scope, pausing Issues only (user decision)
 - [x] M7 demo controls dropped (user, 2026-11-01): persona switching in Preferences is enough
 - [x] Browser checks with Playwright and axe; contrast and screen-reader fixes (M8 step 1)
+- [x] Phone tap targets at least 44px for the most-tapped controls (M8 step 2)

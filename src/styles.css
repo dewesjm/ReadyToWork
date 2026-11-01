@@ -76,3 +76,15 @@
   --depth: 1;
   --noise: 0;
 }
+
+/* Phones: the controls people tap most are at least 44px (2.75rem) each way. */
+@media (width < 40rem) {
+  .btn,
+  .select,
+  .input {
+    min-height: 2.75rem;
+  }
+  .btn {
+    min-width: 2.75rem;
+  }
+}

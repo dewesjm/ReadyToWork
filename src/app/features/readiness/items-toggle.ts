@@ -14,7 +14,7 @@ import { CategoryChip } from '../../shared/status/category-chip';
   template: `
     <button
       type="button"
-      class="flex flex-wrap items-center gap-1 rounded-field px-1 text-left hover:bg-base-300"
+      class="flex flex-wrap items-center gap-1 rounded-field px-1 text-left hover:bg-base-300 max-sm:min-h-11"
       data-testid="items-toggle"
       [attr.tabindex]="tabbable() ? null : -1"
       [attr.aria-expanded]="open()"

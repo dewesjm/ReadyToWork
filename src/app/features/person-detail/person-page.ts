@@ -11,7 +11,7 @@ import { PersonDetail } from './person-detail';
   selector: 'rtw-person-page',
   imports: [RouterLink, Icon, PersonDetail],
   template: `
-    <a class="link mb-4 inline-flex items-center gap-1 text-sm" data-testid="back" [routerLink]="backLink()">
+    <a class="link mb-4 inline-flex items-center gap-1 text-sm max-sm:min-h-11" data-testid="back" [routerLink]="backLink()">
       <rtw-icon name="chevron-right" class="rotate-180" />
       Back to readiness
     </a>

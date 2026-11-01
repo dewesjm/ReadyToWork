@@ -20,6 +20,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
       'The Issues only switch is easy to see in the dark theme.',
       'On a phone, the Admin tabs stay on one line and scroll sideways.',
       'Screen readers read the person on each Items button.',
+      'On a phone, buttons, links and switches are bigger and easier to tap.',
     ],
   },
   {

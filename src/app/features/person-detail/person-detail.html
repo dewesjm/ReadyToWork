@@ -9,6 +9,7 @@
                 @if (link.canOpen) {
                   @let target = personLink(link.person.id);
                   <a
+                    class="max-sm:inline-flex max-sm:min-h-11 max-sm:items-center"
                     [routerLink]="target.commands"
                     [queryParams]="target.queryParams"
                     [queryParamsHandling]="target.merge ? 'merge' : ''"
@@ -86,7 +87,7 @@
         </p>
         <rtw-rollup-badge [rollup]="r.rollup" />
         <a
-          class="link text-sm"
+          class="link text-sm max-sm:inline-flex max-sm:min-h-11 max-sm:items-center"
           data-testid="view-tree"
           [routerLink]="['/readiness']"
           [queryParams]="{ sup: v.person.id }"

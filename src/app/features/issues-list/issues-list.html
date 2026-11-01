@@ -36,7 +36,7 @@
             <td>
               <button
                 type="button"
-                class="link link-hover text-left font-medium"
+                class="link link-hover text-left font-medium max-sm:min-h-11"
                 data-testid="open-person"
               >
                 <rtw-highlight [text]="r.person.name" [keyword]="r.match ? keyword() : ''" />
@@ -97,7 +97,7 @@
         (click)="open(r.person)"
       >
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <button type="button" class="link link-hover text-left font-medium">
+          <button type="button" class="link link-hover text-left font-medium max-sm:min-h-11">
             <rtw-highlight [text]="r.person.name" [keyword]="r.match ? keyword() : ''" />
           </button>
           <rtw-status-badge [status]="r.status" [compact]="true" />

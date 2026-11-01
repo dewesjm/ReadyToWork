@@ -394,4 +394,8 @@
 - **Muted text stays at 70% or more** of the text color. Faded context rows (60% on the whole
   row, compounding with 70% titles) failed contrast; now only the name is muted. Table headers
   are at 80% instead of daisyUI's default.
+- **Phone tap targets: 44px** for the most-tapped controls (header, Readiness toolbar, tree and
+  list rows, person page links, notice close). One rule in styles.css raises daisyUI buttons,
+  selects and inputs below 640px; the rest are Tailwind `max-sm:min-h-11` classes where they're
+  used. `e2e/tap-targets.spec.ts` checks it; axe's own target-size rule (24px) covers the rest.
 
