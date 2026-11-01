@@ -38,7 +38,7 @@ describe('Dashboard layout (side panel)', () => {
     const el = () => harness.routeNativeElement as HTMLElement;
     const router = TestBed.inject(Router);
     const stable = () => harness.fixture.whenStable();
-    const row = (id: string) => el().querySelector<HTMLElement>(`[role="treeitem"][data-id="${id}"]`)!;
+    const row = (id: string) => el().querySelector<HTMLElement>(`[data-testid="tree-row"][data-id="${id}"]`)!;
     const details = (id: string) => row(id).querySelector<HTMLButtonElement>('[data-testid="details"]')!;
     const panel = () => el().querySelector<HTMLElement>('[data-testid="person-panel"]');
     const panelPerson = () => panel()?.querySelector<HTMLElement>('[data-person]')?.dataset['person'];
@@ -54,17 +54,8 @@ describe('Dashboard layout (side panel)', () => {
     expect(router.url.startsWith('/readiness')).toBe(true);
     expect(params()['person']).toBe(sapForeman());
     expect(panelPerson()).toBe(sapForeman());
-    expect(row(sapForeman()).getAttribute('aria-selected')).toBe('true');
-    expect(row(toolForeman()).getAttribute('aria-selected')).toBe('false');
-  });
-
-  it('opens with Enter and keeps focus in the tree', async () => {
-    const { row, stable, panelPerson } = await start();
-    row(toolForeman()).focus();
-    row(toolForeman()).dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-    await stable();
-    expect(panelPerson()).toBe(toolForeman());
-    expect((document.activeElement as HTMLElement).dataset['id']).toBe(toolForeman());
+    expect(row(sapForeman()).getAttribute('aria-current')).toBe('true');
+    expect(row(toolForeman()).hasAttribute('aria-current')).toBe(false);
   });
 
   it('opens straight from a link, and ignores a person the viewer cannot see', async () => {
@@ -85,13 +76,12 @@ describe('Dashboard layout (side panel)', () => {
     for (const call of navigate.mock.calls) expect(call[1]?.replaceUrl).toBe(true);
   });
 
-  it('closes with the Close button or Escape and returns focus to the row', async () => {
-    const { details, el, row, stable, panel, params } = await start(`/readiness?issues=all&person=${sapForeman()}`);
+  it('closes with the Close button or Escape', async () => {
+    const { details, el, stable, panel, params } = await start(`/readiness?issues=all&person=${sapForeman()}`);
     el().querySelector<HTMLButtonElement>('[data-testid="close-panel"]')!.click();
     await stable();
     expect(panel()).toBeNull();
     expect(params()['person']).toBeUndefined();
-    expect((document.activeElement as HTMLElement).dataset['id']).toBe(sapForeman());
 
     details(sapForeman()).click();
     await stable();
@@ -114,7 +104,7 @@ describe('Dashboard layout (side panel)', () => {
     panel()!.querySelector<HTMLElement>('[data-testid="view-tree"]')!.click();
     await stable();
     expect(params()['sup']).toBe(toolForeman());
-    expect(el().querySelector('[role="treeitem"]')!.getAttribute('data-id')).toBe(toolForeman());
+    expect(el().querySelector('[data-testid="tree-row"]')!.getAttribute('data-id')).toBe(toolForeman());
     expect(panelPerson()).toBe(toolForeman());
   });
 

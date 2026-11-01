@@ -121,17 +121,17 @@ toolbar, so filters carry over when switching.
 **Tree view**
 - Collapsible, indented reporting tree, scoped to the current viewer. Opens down to the crew
   leads (crews collapsed) unless Issues only or a search narrows it, which opens every path.
-- Keyboard: the WAI-ARIA tree pattern (arrows, Home / End, Enter opens the person, `*` opens
-  siblings). Focus returns to the same row after Back.
+- Mouse and touch only (user, 2026-11-01): no arrow keys, and no tree roles for screen readers.
+  The Items and Details buttons are ordinary buttons, so Tab reaches them, but a team can only
+  be opened or closed by clicking its row.
 - Each row: status icon, name, title, small chips for the categories with issues (lined up in
   one column), for managers a roll-up badge with counts, and a Details button.
-- Clicking a manager's row opens or closes it; only Details (or Enter) opens the person.
+- Clicking a manager's row opens or closes it; only Details opens the person.
   Clicking the row of someone with no one under them does nothing.
 - **A person's items open in place**: clicking a row's issue chips (or "Items" when there are
   none) shows that person's issues under the row, grouped by category, worst first, with status,
   reason, due date and "Required by"; "Show all N items" adds the ready ones. A manager's chips
-  open their own items, separate from opening their team. Several can be open at once. No
-  keyboard shortcut (user): Enter on a row opens Details, which lists everything.
+  open their own items, separate from opening their team. Several can be open at once.
 - **Issues only keeps the path**: managers above a person with an issue stay visible so the
   structure makes sense; everything else is hidden.
 
@@ -364,7 +364,7 @@ planted scenarios; settings round-trip through storage and export/import.
 **M3. Readiness page: toolbar and tree view.** Shared toolbar (supervisor and program pick
 lists, Tree / List switch, keyword search, Issues only, filters, state in the URL), default
 scope under Preferences in the avatar menu; tree with status icons, chips and roll-ups; issues
-only with path kept; expand/collapse; keyboard navigation.
+only with path kept; expand/collapse; keyboard navigation (removed 2026-11-01).
 Done when: the whole fake org renders, scope pickers, Issues only and keyword search behave as
 in 5.1, filters
 survive a reload via the URL, and the tree can be fully used from the keyboard.

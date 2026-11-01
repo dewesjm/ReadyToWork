@@ -2,8 +2,6 @@ import {
   Component,
   DestroyRef,
   ElementRef,
-  Injector,
-  afterNextRender,
   effect,
   inject,
   viewChild,
@@ -34,8 +32,6 @@ export class Readiness {
   private readonly navigator = inject(PersonNavigator);
   protected readonly panelId = this.navigator.panelPersonId;
 
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly injector = inject(Injector);
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
 
   constructor() {
@@ -58,14 +54,7 @@ export class Readiness {
     });
   }
 
-  /** Closes the panel and puts focus back on that person's row. */
   protected closePanel(): void {
-    const id = this.panelId();
     this.navigator.close();
-    afterNextRender(
-      () =>
-        this.host.nativeElement.querySelector<HTMLElement>(`[role="treeitem"][data-id="${id}"]`)?.focus(),
-      { injector: this.injector },
-    );
   }
 }

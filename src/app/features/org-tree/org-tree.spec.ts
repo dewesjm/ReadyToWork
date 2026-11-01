@@ -38,8 +38,8 @@ describe('OrgTree', () => {
     const el = () => harness.routeNativeElement as HTMLElement;
     const injector = harness.routeDebugElement!.injector;
     const stable = () => harness.fixture.whenStable();
-    const rows = () => [...el().querySelectorAll<HTMLElement>('[role="treeitem"]')];
-    const row = (id: string) => el().querySelector<HTMLElement>(`[role="treeitem"][data-id="${id}"]`);
+    const rows = () => [...el().querySelectorAll<HTMLElement>('[data-testid="tree-row"]')];
+    const row = (id: string) => el().querySelector<HTMLElement>(`[data-testid="tree-row"][data-id="${id}"]`);
     return {
       harness,
       el,
@@ -57,7 +57,7 @@ describe('OrgTree', () => {
     tree.expandAll();
     await stable();
     expect(rows().length).toBe(fakeOrg().people.length);
-    expect(rows()[0].getAttribute('aria-level')).toBe('1');
+    expect(rows()[0].getAttribute('data-depth')).toBe('0');
   });
 
   it('opens down to the crew leads at first, with crews collapsed', async () => {
@@ -108,7 +108,7 @@ describe('OrgTree', () => {
     const match = row(crew.id)!;
     expect(match).not.toBeNull();
     expect(match.querySelector('[data-testid="name"] mark')!.textContent).toBe(crew.name);
-    expect(el().querySelectorAll('[role="treeitem"]:not([data-context])').length).toBeGreaterThanOrEqual(1);
+    expect(el().querySelectorAll('[data-testid="tree-row"]:not([data-context])').length).toBeGreaterThanOrEqual(1);
   });
 
   it('shows the employee ID when the keyword matches it', async () => {
@@ -123,7 +123,7 @@ describe('OrgTree', () => {
     await stable();
     expect(rows().length).toBe(1);
     const rootId = rows()[0].dataset['id']!;
-    expect(rows()[0].getAttribute('aria-expanded')).toBe('false');
+    expect(rows()[0].getAttribute('data-expanded')).toBe('false');
 
     row(rootId)!.click();
     await stable();
@@ -159,7 +159,7 @@ describe('OrgTree', () => {
   it('opens a person with the Details button, without toggling the row', async () => {
     const { row, stable, router } = await open('/readiness');
     const id = fakeOrg().scenarios.sapCrewForemanId;
-    const expanded = row(id)!.getAttribute('aria-expanded');
+    const expanded = row(id)!.getAttribute('data-expanded');
     row(id)!.querySelector<HTMLButtonElement>('[data-testid="details"]')!.click();
     await stable();
     expect(router.url).toBe(`/person/${id}`);
@@ -171,7 +171,7 @@ describe('OrgTree', () => {
     const { rows, row, tree, stable, router } = await open('/readiness?issues=all');
     tree.expandAll();
     await stable();
-    const leaf = rows().find((r) => !r.hasAttribute('aria-expanded'))!.dataset['id']!;
+    const leaf = rows().find((r) => !r.hasAttribute('data-expanded'))!.dataset['id']!;
     row(leaf)!.click();
     await stable();
     expect(router.url).toBe('/readiness?issues=all'); // only the Details button opens a person
@@ -218,10 +218,10 @@ describe('OrgTree', () => {
       const manager = fakeOrg().scenarios.toolCrewForemanId;
       tree.expandAll();
       await stable();
-      const expandedBefore = row(manager)!.getAttribute('aria-expanded');
+      const expandedBefore = row(manager)!.getAttribute('data-expanded');
       row(manager)!.querySelector<HTMLButtonElement>('[data-testid="items-toggle"]')!.click();
       await stable();
-      expect(row(manager)!.getAttribute('aria-expanded')).toBe(expandedBefore);
+      expect(row(manager)!.getAttribute('data-expanded')).toBe(expandedBefore);
       expect(items(el(), manager)).not.toBeNull();
     });
   });

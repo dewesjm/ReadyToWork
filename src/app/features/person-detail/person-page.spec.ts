@@ -9,7 +9,6 @@ import { DATA_SOURCE } from '../../services/tokens';
 import { ViewerService } from '../../services/viewer-service';
 import { loadAppState } from '../../testing';
 import { Readiness } from '../readiness/readiness';
-import { TreeStateService } from '../readiness/tree-state-service';
 import { PersonPage } from './person-page';
 
 describe('PersonPage (drill-down)', () => {
@@ -44,13 +43,13 @@ describe('PersonPage (drill-down)', () => {
     return { harness, el, router, click };
   }
 
-  it('opens from the tree, and Back to readiness restores the filters, expand state and focus', async () => {
+  it('opens from the tree, and Back to readiness restores the filters and expand state', async () => {
     const sapForeman = fakeOrg().scenarios.sapCrewForemanId;
     const url = `/readiness?issues=all&q=${encodeURIComponent(org().get(sapForeman)!.name)}`;
     const { harness, el, router, click } = await start(url);
-    const rowsBefore = el().querySelectorAll('[role="treeitem"]').length;
+    const rowsBefore = el().querySelectorAll('[data-testid="tree-row"]').length;
 
-    await click(`[role="treeitem"][data-id="${sapForeman}"] [data-testid="details"]`);
+    await click(`[data-testid="tree-row"][data-id="${sapForeman}"] [data-testid="details"]`);
     expect(router.url).toBe(`/person/${sapForeman}`);
     expect(el().querySelector('[data-testid="person-name"]')!.textContent!.trim()).toBe(
       org().get(sapForeman)!.name,
@@ -59,9 +58,7 @@ describe('PersonPage (drill-down)', () => {
     await click('[data-testid="back"]');
     await harness.fixture.whenStable();
     expect(router.url).toBe(url);
-    expect(el().querySelectorAll('[role="treeitem"]').length).toBe(rowsBefore);
-    expect(TestBed.inject(TreeStateService).focusedId()).toBe(sapForeman);
-    expect((document.activeElement as HTMLElement).dataset['id']).toBe(sapForeman);
+    expect(el().querySelectorAll('[data-testid="tree-row"]').length).toBe(rowsBefore);
   });
 
   it('keeps the way back after following the manager chain', async () => {

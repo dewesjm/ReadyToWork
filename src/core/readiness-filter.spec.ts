@@ -85,8 +85,8 @@ describe('ReadinessFilter', () => {
   it('gives each row its depth, parent, children and place among siblings', () => {
     const rows = new Map(run({}).rows.map((row) => [row.person.id, row]));
     expect(rows.get('dir')).toMatchObject({ depth: 0, parentId: null, childIds: ['m1', 'm2'] });
-    expect(rows.get('c2')).toMatchObject({ depth: 3, parentId: 'f1', posInSet: 2, setSize: 2 });
-    expect(rows.get('m2')).toMatchObject({ posInSet: 2, setSize: 2, childIds: ['f3'] });
+    expect(rows.get('c2')).toMatchObject({ depth: 3, parentId: 'f1' });
+    expect(rows.get('m2')).toMatchObject({ childIds: ['f3'] });
   });
 
   it('scopes to a supervisor subtree', () => {

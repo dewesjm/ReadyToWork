@@ -1,4 +1,4 @@
-import { Component, ElementRef, afterNextRender, computed, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { ReadinessService } from '../../services/readiness-service';
 import { Highlight } from '../../shared/highlight';
 import { Icon } from '../../shared/icon/icon';
@@ -11,12 +11,11 @@ import { PersonItems } from '../readiness/person-items';
 import { ReadinessEmpty } from '../readiness/readiness-empty';
 import { ReadinessQueryService } from '../readiness/readiness-query-service';
 import { TreeModel } from '../readiness/tree-model';
-import { TreeStateService } from '../readiness/tree-state-service';
 
 /**
- * The reporting tree on the Readiness page: one flat list of rows, indented by level, following
- * the WAI-ARIA tree pattern. Which rows exist comes from the page's query; which are open
- * from the TreeModel.
+ * The reporting tree on the Readiness page: one flat list of rows, indented by level. Mouse and
+ * touch only (user decision 2026-11-01). Which rows exist comes from the page's query; which
+ * are open from the TreeModel.
  */
 @Component({
   selector: 'rtw-org-tree',
@@ -27,12 +26,10 @@ export class OrgTree {
   protected readonly query = inject(ReadinessQueryService);
   protected readonly tree = inject(TreeModel);
   protected readonly items = inject(OpenItemsService);
-  private readonly state = inject(TreeStateService);
   private readonly readiness = inject(ReadinessService);
   private readonly navigator = inject(PersonNavigator);
   /** The person open in the dashboard panel; that row is the selected one. */
   protected readonly selectedId = this.navigator.panelPersonId;
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   protected readonly keyword = computed(() => this.query.keyword().trim());
 
@@ -56,81 +53,12 @@ export class OrgTree {
     });
   });
 
-  /** The one row in the tab order: the last focused row if still visible, else the first. */
-  protected readonly focusId = computed(() => {
-    const rows = this.rows();
-    const id = this.state.focusedId();
-    return rows.some((r) => r.id === id) ? id : (rows[0]?.id ?? null);
-  });
-
-  constructor() {
-    // Coming back from a person: put focus back on the row that opened them.
-    afterNextRender(() => {
-      const id = this.state.focusedId();
-      if (id !== null && id === this.focusId()) this.focusRow(id);
-    });
-  }
-
-  protected onFocus(id: string): void {
-    this.state.focusedId.set(id);
-  }
-
   /** A row click opens or closes a manager's row; only the Details button opens a person. */
   protected onRowClick(row: { id: string; expandable: boolean }): void {
-    this.state.focusedId.set(row.id);
     if (row.expandable) this.tree.toggle(row.id);
   }
 
   protected openPerson(id: string): void {
-    this.state.focusedId.set(id);
     this.navigator.open(id);
-  }
-
-  /** WAI-ARIA tree keys. Every move lands on a row that is already rendered. */
-  protected onKeydown(event: KeyboardEvent): void {
-    const rows = this.rows();
-    const id = (event.target as HTMLElement).closest<HTMLElement>('[role="treeitem"]')?.dataset['id'];
-    const i = rows.findIndex((r) => r.id === id);
-    if (i < 0) return;
-    const row = rows[i];
-
-    switch (event.key) {
-      case 'ArrowDown':
-        if (i + 1 < rows.length) this.focusRow(rows[i + 1].id);
-        break;
-      case 'ArrowUp':
-        if (i > 0) this.focusRow(rows[i - 1].id);
-        break;
-      case 'ArrowRight':
-        if (row.expandable && !row.expanded) this.tree.setExpanded([row.id], true);
-        else if (row.expandable) this.focusRow(rows[i + 1].id);
-        break;
-      case 'ArrowLeft':
-        if (row.expandable && row.expanded) this.tree.setExpanded([row.id], false);
-        else if (row.parentId !== null) this.focusRow(row.parentId);
-        break;
-      case 'Home':
-        this.focusRow(rows[0].id);
-        break;
-      case 'End':
-        this.focusRow(rows[rows.length - 1].id);
-        break;
-      case 'Enter':
-        this.openPerson(row.id);
-        break;
-      case '*': {
-        const siblings = rows.filter((r) => r.parentId === row.parentId && r.expandable);
-        this.tree.setExpanded(siblings.map((r) => r.id), true);
-        break;
-      }
-      default:
-        return;
-    }
-    event.preventDefault();
-  }
-
-  private focusRow(id: string): void {
-    this.state.focusedId.set(id);
-    this.host.nativeElement.querySelector<HTMLElement>(`[role="treeitem"][data-id="${id}"]`)?.focus();
   }
 }

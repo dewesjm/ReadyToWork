@@ -65,9 +65,6 @@ export interface FilterRow {
   parentId: string | null;
   /** Ids of this row's children among the rows, in order. */
   childIds: string[];
-  /** 1-based position among its siblings in the rows, and how many siblings there are. */
-  posInSet: number;
-  setSize: number;
   /** Not shown in its own right: kept so the path to someone below makes sense. */
   context: boolean;
   /** Name, title or employee ID matches the keyword. Always false with no keyword. */
@@ -165,23 +162,21 @@ export class ReadinessFilter {
     }
 
     const rows: FilterRow[] = [];
-    const walk = (person: Person, depth: number, parentId: string | null, pos: number, size: number) => {
+    const walk = (person: Person, depth: number, parentId: string | null) => {
       const row: FilterRow = {
         person,
         depth,
         parentId,
         childIds: [],
-        posInSet: pos,
-        setSize: size,
         context: !shown.has(person.id),
         match: matches.has(person.id),
       };
       rows.push(row);
       const kids = org.childrenOf(person.id).filter((k) => kept.has(k.id));
       row.childIds = kids.map((k) => k.id);
-      kids.forEach((k, i) => walk(k, depth + 1, person.id, i + 1, kids.length));
+      kids.forEach((k) => walk(k, depth + 1, person.id));
     };
-    if (kept.size > 0) walk(root, 0, null, 1, 1);
+    if (kept.size > 0) walk(root, 0, null);
 
     return {
       rootId,

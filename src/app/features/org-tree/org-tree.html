@@ -1,29 +1,26 @@
 @if (rows().length === 0) {
   <rtw-readiness-empty />
 } @else {
-  <div role="tree" aria-label="Reporting tree" class="flex flex-col gap-0.5" (keydown)="onKeydown($event)">
+  <!-- Mouse and touch only (user decision 2026-11-01): no tree roles or arrow keys. -->
+  <div class="flex flex-col gap-0.5" data-testid="tree">
     @for (r of rows(); track r.id) {
       <div
-        role="treeitem"
-        class="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-field py-1.5 pr-2 pl-[calc(0.25rem+var(--depth)*0.5rem)] sm:pl-1 outline-offset-[-2px] hover:bg-base-200 focus-visible:bg-base-200 focus-visible:outline-2 focus-visible:outline-primary"
+        data-testid="tree-row"
+        class="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-field py-1.5 pr-2 pl-[calc(0.25rem+var(--depth)*0.5rem)] sm:pl-1 hover:bg-base-200"
         [style.--depth]="r.depth"
         [class.cursor-pointer]="r.expandable"
         [attr.data-id]="r.id"
         [attr.data-context]="r.context || null"
-        [attr.aria-level]="r.depth + 1"
-        [attr.aria-setsize]="r.setSize"
-        [attr.aria-posinset]="r.posInSet"
-        [attr.aria-expanded]="r.expandable ? r.expanded : null"
-        [attr.aria-selected]="selectedId() ? r.id === selectedId() : r.id === focusId()"
+        [attr.data-depth]="r.depth"
+        [attr.data-expanded]="r.expandable ? r.expanded : null"
+        [attr.aria-current]="r.id === selectedId() ? 'true' : null"
         [class]="r.id === selectedId() ? 'bg-primary/10 ring-1 ring-primary/40' : ''"
-        [attr.tabindex]="r.id === focusId() ? 0 : -1"
-        (focus)="onFocus(r.id)"
         (click)="onRowClick(r)"
       >
         <!-- Fixed width from sm up so the chips line up across rows and depths. -->
         <div class="flex min-w-0 items-center gap-2 sm:w-[22rem] sm:shrink-0 md:w-[26rem] lg:w-[30rem] xl:w-[34rem] sm:pl-[calc(var(--depth)*1.25rem)]">
           @if (r.expandable) {
-            <!-- The row click toggles; the keyboard uses Right and Left on the row. -->
+            <!-- The row click opens or closes the team. -->
             <span class="flex size-6 shrink-0 items-center justify-center" aria-hidden="true" data-testid="chevron">
               <rtw-icon [name]="r.expanded ? 'chevron-down' : 'chevron-right'" />
             </span>
@@ -47,13 +44,12 @@
           </span>
         </div>
 
-        <!-- The chips open the person's items under the row; out of the tab order like Details. -->
+        <!-- The chips open the person's items under the row. -->
         <rtw-items-toggle
           class="max-sm:ml-8"
           [name]="r.person.name"
           [open]="r.itemsOpen"
           [chips]="r.chips"
-          [tabbable]="false"
           (toggle)="items.toggle(r.id)"
         />
 
@@ -61,12 +57,10 @@
           <rtw-rollup-badge class="max-sm:ml-8 sm:ml-auto" [rollup]="r.rollup" />
         }
 
-        <!-- Out of the tab order: the row is the one tab stop, and Enter on it opens details. -->
         <button
           type="button"
           class="btn btn-ghost btn-xs max-sm:ml-auto"
           [class.ml-auto]="!r.rollup"
-          tabindex="-1"
           data-testid="details"
           [attr.aria-label]="'Details for ' + r.person.name"
           (click)="openPerson(r.id); $event.stopPropagation()"
@@ -75,7 +69,7 @@
         </button>
 
         @if (r.itemsOpen) {
-          <!-- Inside the row (a tree holds only tree items); clicks here stay out of the row. -->
+          <!-- Clicks inside the items stay out of the row. -->
           <div class="basis-full sm:pl-[calc(2rem+var(--depth)*1.25rem)]" (click)="$event.stopPropagation()">
             <div
               role="group"

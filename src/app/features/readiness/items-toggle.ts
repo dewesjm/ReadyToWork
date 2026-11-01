@@ -16,14 +16,10 @@ import { CategoryChip } from '../../shared/status/category-chip';
       type="button"
       class="flex flex-wrap items-center gap-1 rounded-field px-1 text-left hover:bg-base-300 max-sm:min-h-11"
       data-testid="items-toggle"
-      [attr.tabindex]="tabbable() ? null : -1"
       [attr.aria-expanded]="open()"
       (click)="toggle.emit(); $event.stopPropagation()"
     >
-      <!-- Tab stops say whose items they open; in the tree the row's name already does. -->
-      @if (tabbable()) {
-        <span class="sr-only">{{ open() ? 'Hide' : 'Show' }} items for {{ name() }}: </span>
-      }
+      <span class="sr-only">{{ open() ? 'Hide' : 'Show' }} items for {{ name() }}: </span>
       @if (label(); as text) {
         <span class="text-xs" data-testid="items-label">{{ text }}</span>
       } @else {
@@ -44,7 +40,5 @@ export class ItemsToggle {
   readonly chips = input<readonly CategoryIssue[]>([]);
   /** Shown instead of the chips when set. */
   readonly label = input<string | null>(null);
-  /** False in the tree, where the row is the one tab stop. */
-  readonly tabbable = input(true);
   readonly toggle = output<void>();
 }

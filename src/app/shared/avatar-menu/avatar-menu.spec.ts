@@ -154,7 +154,7 @@ describe('AvatarMenu', () => {
     expect(TestBed.inject(SettingsService).preferences().layout).toBe('drilldown');
 
     const harness = await RouterTestingHarness.create('/readiness');
-    const row = (harness.routeNativeElement as HTMLElement).querySelector<HTMLElement>('[role="treeitem"]')!;
+    const row = (harness.routeNativeElement as HTMLElement).querySelector<HTMLElement>('[data-testid="tree-row"]')!;
     row.querySelector<HTMLButtonElement>('[data-testid="details"]')!.click();
     await harness.fixture.whenStable();
     expect(TestBed.inject(Router).url).toBe(`/person/${row.dataset['id']}`);

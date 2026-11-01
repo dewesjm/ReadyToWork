@@ -13,7 +13,7 @@
   - [ ] Phone and accessibility pass (on a real phone if possible: manager rows with long counts
     still put Details on a line of their own)
 - [ ] Department per person: on hold, draft in [plans/department.md](plans/department.md)
-- [ ] Standard tools review: [plans/standard-tools.md](plans/standard-tools.md); user picks what to switch
+- [ ] Standard tools: icons and CSV done; menus to Angular CDK next ([plans/standard-tools.md](plans/standard-tools.md))
 - [ ] Devices: plan the "not issued a device" rule (user, 2026-11-01)
 
 ## Open questions (user's to decide)
@@ -142,3 +142,4 @@
 - [x] Browser checks with Playwright and axe; contrast and screen-reader fixes (M8 step 1)
 - [x] Phone tap targets at least 44px for the most-tapped controls (M8 step 2)
 - [x] Phone header and tree rows (M8 steps 3-4); phone and accessibility pass done (52 browser checks, keyboard focus included)
+- [x] Tree keyboard support removed (user decision); mouse and touch only

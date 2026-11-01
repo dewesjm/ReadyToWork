@@ -1,6 +1,7 @@
 # Review: custom code where a standard tool exists
 
-Status: **review, waiting on the user's choices** (2026-11-01). User: "in general we want to use
+Status: **answered** 2026-11-01: switch 1-3; item 4 dropped instead (the user removed the
+tree's keyboard support); item 5 stays for the real app. User: "in general we want to use
 standard tools and not build things. My team may not have an AI to do all the hard parts for
 them... evaluate existing patterns."
 

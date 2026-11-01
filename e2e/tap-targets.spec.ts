@@ -7,7 +7,7 @@ const MIN = 44;
 const PAGES = [
   {
     path: '/readiness',
-    controls: 'header a, header button, rtw-readiness-toolbar :is(button, .input, select, label:has(.toggle)), [role=treeitem] button',
+    controls: 'header a, header button, rtw-readiness-toolbar :is(button, .input, select, label:has(.toggle)), [data-testid=tree-row] button',
   },
   {
     path: '/readiness?view=list',

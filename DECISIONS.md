@@ -414,4 +414,13 @@
   calls `Papa.unparse` with `escapeFormulae` (the same apostrophe guard) and keeps the byte-order
   mark and CRLF for Excel. Papa Parse is CommonJS, so angular.json allows it, and the initial
   bundle warning moves from 500 to 600 kB (Papa Parse put it 9 kB over).
+- **Tree: mouse and touch only** (user: "I don't think we need that at all, clicking or tapping
+  is fine"; after hearing that it shuts out keyboard and screen-reader users and fails WCAG
+  2.1.1 Keyboard: "we are OK with shutting down keyboard and screen reader users"). Removed the
+  arrow keys, the roving focus, the tree roles (they promise keys that no longer exist), focus
+  return after Back or closing the panel, and the core's sibling positions that fed them.
+  Replaces the M3 keyboard decision. The Items and Details buttons are now ordinary buttons
+  (the browser's default), so Tab and Enter still reach them; opening a team needs a click.
+  The open person's row keeps `aria-current`. If the real app must meet Section 508 or WCAG,
+  this has to come back (CDK Tree is the standard way).
 
