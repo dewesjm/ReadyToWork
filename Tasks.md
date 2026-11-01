@@ -13,6 +13,7 @@
   - [ ] Phone and accessibility pass (on a real phone if possible: manager rows with long counts
     still put Details on a line of their own)
 - [ ] Department per person: on hold, draft in [plans/department.md](plans/department.md)
+- [ ] Standard tools review: [plans/standard-tools.md](plans/standard-tools.md); user picks what to switch
 - [ ] Devices: plan the "not issued a device" rule (user, 2026-11-01)
 
 ## Open questions (user's to decide)
