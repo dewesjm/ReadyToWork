@@ -1,8 +1,8 @@
 import { InjectionToken, inject } from '@angular/core';
 import {
   Clock,
+  SystemClock,
   DataSource,
-  DemoClock,
   LocalSettingsStore,
   MockDataSource,
   Settings,
@@ -39,8 +39,8 @@ export const SETTINGS_STORE = new InjectionToken<SettingsStore>('SettingsStore',
   factory: () => new LocalSettingsStore(inject(DEFAULT_SETTINGS)),
 });
 
-/** Where the real date comes from. The demo's date override lives in settings (ClockService). */
+/** Where the date comes from. */
 export const CLOCK = new InjectionToken<Clock>('Clock', {
   providedIn: 'root',
-  factory: () => new DemoClock(),
+  factory: () => new SystemClock(),
 });

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { MockDataSource } from '../../data';
+import { addDays } from '../../core';
 import { CRANE_PROGRAM_ID } from '../../data/mock/fake-catalog';
-import { loadAppState } from '../testing';
-import { ClockService } from './clock-service';
+import { TestClock, loadAppState, useTestClock } from '../testing';
 import { ReadinessService } from './readiness-service';
 import { SettingsService } from './settings-service';
 import { DATA_SOURCE } from './tokens';
@@ -11,14 +11,14 @@ import { ViewerService } from './viewer-service';
 describe('ReadinessService (wired through DI)', () => {
   let readiness: ReadinessService;
   let settings: SettingsService;
-  let clock: ClockService;
+  let clock: TestClock;
   let mock: MockDataSource;
 
   beforeEach(async () => {
+    clock = useTestClock();
     await loadAppState();
     readiness = TestBed.inject(ReadinessService);
     settings = TestBed.inject(SettingsService);
-    clock = TestBed.inject(ClockService);
     mock = TestBed.inject(DATA_SOURCE) as MockDataSource;
   });
 
@@ -35,14 +35,14 @@ describe('ReadinessService (wired through DI)', () => {
     expect(readiness.result().statusByPerson.get(id)).toBe('not-ready');
   });
 
-  it('recalculates when the demo date moves, and resets to the real date', () => {
+  it('recalculates when the date moves', () => {
     const sapForeman = mock.fakeOrg().scenarios.sapCrewForemanId;
     const crewRollup = () => readiness.result().rollups.get(sapForeman)!;
     expect(crewRollup().worst).toBe('expiring');
-    clock.advance(30);
-    expect(clock.isOverridden()).toBe(true);
+    const today = clock.date();
+    clock.date.set(addDays(today, 30));
     expect(crewRollup().worst).toBe('not-ready');
-    clock.reset();
+    clock.date.set(today);
     expect(crewRollup().worst).toBe('expiring');
   });
 
@@ -64,12 +64,10 @@ describe('ReadinessService (wired through DI)', () => {
     );
   });
 
-  it('keeps settings changes after a reload, until reset', async () => {
-    clock.set('2027-01-01');
+  it('keeps preference changes after a reload', async () => {
+    settings.updatePreferences({ layout: 'drilldown' });
     TestBed.resetTestingModule();
     await TestBed.inject(SettingsService).load();
-    expect(TestBed.inject(ClockService).today()).toBe('2027-01-01');
-    await TestBed.inject(SettingsService).reset();
-    expect(TestBed.inject(ClockService).isOverridden()).toBe(false);
+    expect(TestBed.inject(SettingsService).preferences().layout).toBe('drilldown');
   });
 });

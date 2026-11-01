@@ -14,8 +14,8 @@ import { SettingsService } from './settings-service';
 import { DATA_SOURCE } from './tokens';
 
 /**
- * The org and everyone's readiness, recalculated whenever the data, settings (programs,
- * assignments, warning windows) or demo date change.
+ * The org and everyone's readiness, recalculated whenever the data or settings (programs,
+ * assignments, warning windows) change.
  */
 @Injectable({ providedIn: 'root' })
 export class ReadinessService {

@@ -1,14 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { Announcement, createAnnouncement, updateAnnouncement } from '../../../core';
 import { MockDataSource } from '../../../data';
-import { ClockService } from '../../services/clock-service';
 import { SettingsService } from '../../services/settings-service';
 import { DATA_SOURCE } from '../../services/tokens';
-import { loadAppState, reloadAppState } from '../../testing';
+import { TestClock, loadAppState, reloadAppState, useTestClock } from '../../testing';
 import { AnnouncementBanner } from './announcement-banner';
 
 describe('AnnouncementBanner', () => {
-  beforeEach(loadAppState);
+  let clock: TestClock;
+  beforeEach(async () => {
+    clock = useTestClock();
+    await loadAppState();
+  });
 
   const settings = () => TestBed.inject(SettingsService);
   const sample = () => (TestBed.inject(DATA_SOURCE) as MockDataSource).fakeOrg().announcements[0];
@@ -53,14 +56,14 @@ describe('AnnouncementBanner', () => {
 
   it('shows a dated notice only from its start day through its end day', async () => {
     const { types, stable } = await render();
-    const today = TestBed.inject(ClockService).today();
+    const today = clock.date();
     post({ startsOn: '2099-01-02', endsOn: '2099-01-03' });
     await stable();
     expect(types()).toEqual(['delayed']);
-    TestBed.inject(ClockService).set('2099-01-02');
+    clock.date.set('2099-01-02');
     await stable();
     expect(types()).toEqual(['outage', 'delayed']);
-    TestBed.inject(ClockService).set('2099-01-04');
+    clock.date.set('2099-01-04');
     await stable();
     expect(types()).toEqual(['delayed']);
     expect(today < '2099-01-02').toBe(true);

@@ -1,25 +1,7 @@
-import { DemoClock, localToday } from './clock';
+import { localToday } from './clock';
 import { SeededRandom } from './random';
 
-describe('DemoClock', () => {
-  it('follows the real date until moved', () => {
-    const clock = new DemoClock(() => '2026-10-30');
-    expect(clock.today()).toBe('2026-10-30');
-    expect(clock.isOverridden).toBe(false);
-  });
-
-  it('can be set, advanced and reset', () => {
-    const clock = new DemoClock(() => '2026-10-30');
-    clock.advance(7);
-    expect(clock.today()).toBe('2026-11-06');
-    clock.advance(30);
-    expect(clock.today()).toBe('2026-12-06');
-    clock.set('2027-01-15');
-    expect(clock.today()).toBe('2027-01-15');
-    clock.reset();
-    expect(clock.today()).toBe('2026-10-30');
-  });
-
+describe('localToday', () => {
   it('reads the local calendar date', () => {
     expect(localToday(new Date(2026, 0, 5, 23, 59))).toBe('2026-01-05');
   });

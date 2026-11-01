@@ -194,7 +194,7 @@ for the admin persona; anyone else opening `/admin` is told it is for admins.
   message never shows.
 - **Settings file**: export the admin settings (programs, assignments, warning windows,
   announcements) as JSON, import a JSON file, reset them to defaults. Each viewer's own preferences (theme, layout,
-  default scope, persona, demo date) stay out of the file and are kept on import and reset.
+  default scope, persona) stay out of the file and are kept on import and reset.
 
 ### 5.4 Two layouts (both shown in the demo)
 
@@ -231,7 +231,7 @@ core/ (plain TS)  model · status engine · roll-ups · program rules · filter 
      │
 data/             DataSource interface      → MockDataSource (seeded fake org)
                   SettingsStore interface   → LocalSettingsStore (browser storage)
-                  Clock                     → DemoClock (adjustable "today")
+                  Clock                     → SystemClock (the real date)
 ```
 
 - **`src/core/` is plain TypeScript with no Angular imports.** It holds the types, the status
@@ -246,8 +246,8 @@ data/             DataSource interface      → MockDataSource (seeded fake org)
 - **Wiring**: `DATA_SOURCE`, `SETTINGS_STORE` and `CLOCK` are Angular injection tokens in
   `src/app/services/tokens.ts` that default to the mock implementations. App services
   (`SettingsService`, `ClockService`, `ReadinessService`, `ViewerService`, `ThemeService`) expose
-  everything as signals; `ReadinessService.result` recalculates whenever data, settings or the
-  demo date change. Data and settings load before the first screen renders.
+  everything as signals; `ReadinessService.result` recalculates whenever data or settings
+  change. Data and settings load before the first screen renders.
 - **Settings live in each viewer's own browser.** Someone opening the link sees the shipped
   defaults, not the presenter's edits. That is what export/import is for. Saved settings carry
   a schema version; when a release changes the sample programs, the version goes up and older
@@ -353,7 +353,7 @@ Done when: unit tests cover every status rule, window edge (exactly on the bound
 no data), roll-up counts and program requirement outcomes.
 
 **M2. Fake data and storage.** Seeded org generator, MockDataSource, LocalSettingsStore with
-schema version, DemoClock.
+schema version, Clock.
 Done when: the same seed always produces the same org with the target status mix and the
 planted scenarios; settings round-trip through storage and export/import.
 

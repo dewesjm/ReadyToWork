@@ -3,7 +3,6 @@ import {
   Announcement,
   CategoryId,
   DEFAULT_CONFIG,
-  IsoDate,
   Program,
   ProgramSetup,
   ReadinessConfig,
@@ -11,7 +10,6 @@ import {
   announcementProblems,
   countText,
   isAnnouncementType,
-  isIsoDate,
   pruneAssignments,
 } from '../core';
 
@@ -19,7 +17,7 @@ export const SETTINGS_SCHEMA_VERSION = 3;
 
 export type Layout = 'dashboard' | 'drilldown';
 
-/** Per-viewer choices: theme, demo controls, default scope. */
+/** Per-viewer choices: theme, persona, layout, default scope. */
 export interface Preferences {
   theme: string;
   /** Demo "View as" persona; null means the first persona. */
@@ -29,8 +27,6 @@ export interface Preferences {
   /** Default program filter; null means all programs. */
   defaultProgramId: string | null;
   layout: Layout;
-  /** Demo date override; null means the real date. */
-  demoToday: IsoDate | null;
   /** Notices this viewer closed, as `dismissKey`s. An edited notice has a new key. */
   dismissedAnnouncements: string[];
 }
@@ -54,7 +50,6 @@ export const DEFAULT_PREFERENCES: Preferences = {
   defaultSupervisorId: null,
   defaultProgramId: null,
   layout: 'dashboard',
-  demoToday: null,
   dismissedAnnouncements: [],
 };
 
@@ -349,17 +344,12 @@ function preferences(raw: Record<string, unknown>, defaults: Preferences): Prefe
   if (layout !== 'dashboard' && layout !== 'drilldown') {
     throw new SettingsError('preferences.layout must be "dashboard" or "drilldown".');
   }
-  const demoToday = optional('demoToday');
-  if (demoToday !== null && !isIsoDate(demoToday)) {
-    throw new SettingsError('preferences.demoToday must be a date like 2026-10-30.');
-  }
   return {
     theme: raw['theme'] === undefined ? defaults.theme : str(raw['theme'], 'preferences.theme'),
     personaId: optional('personaId'),
     defaultSupervisorId: optional('defaultSupervisorId'),
     defaultProgramId: optional('defaultProgramId'),
     layout,
-    demoToday,
     dismissedAnnouncements: stringList(
       raw['dismissedAnnouncements'] ?? defaults.dismissedAnnouncements,
       'preferences.dismissedAnnouncements',

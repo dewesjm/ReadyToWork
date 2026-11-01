@@ -1,4 +1,8 @@
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { IsoDate } from '../core';
+import { Clock, localToday } from '../data';
+import { CLOCK } from './services/tokens';
 import { ReadinessService } from './services/readiness-service';
 import { SettingsService } from './services/settings-service';
 
@@ -40,4 +44,19 @@ export function stubDialogs(): void {
       dialog.close((button as HTMLButtonElement).value);
     }
   });
+}
+
+/** Test helper: a clock the spec can move. Starts on the real date, like the fake org. */
+export class TestClock implements Clock {
+  readonly date = signal<IsoDate>(localToday());
+  today(): IsoDate {
+    return this.date();
+  }
+}
+
+/** Test helper: give the app a TestClock. Call before anything is injected. */
+export function useTestClock(): TestClock {
+  const clock = new TestClock();
+  TestBed.configureTestingModule({ providers: [{ provide: CLOCK, useValue: clock }] });
+  return clock;
 }

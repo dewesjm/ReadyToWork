@@ -30,7 +30,7 @@ function edited(): Settings {
   s.announcements.unshift({
     id: 'a2', type: 'outage', message: 'SAP down', startsOn: '2026-11-07', endsOn: '2026-11-07', on: true, revision: 3,
   });
-  s.preferences = { ...s.preferences, theme: 'dracula', layout: 'drilldown', demoToday: '2026-12-01' };
+  s.preferences = { ...s.preferences, theme: 'dracula', layout: 'drilldown' };
   return s;
 }
 
@@ -195,7 +195,6 @@ describe('saved preferences', () => {
         new SettingsError(message),
       );
     bad({ layout: 'sideways' }, 'preferences.layout must be "dashboard" or "drilldown".');
-    bad({ demoToday: 'next week' }, 'preferences.demoToday must be a date like 2026-10-30.');
     bad({ dismissedAnnouncements: 'a1#1' }, 'preferences.dismissedAnnouncements must be a list.');
   });
 });

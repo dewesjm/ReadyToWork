@@ -30,11 +30,6 @@ export class SettingsService {
     this.update((s) => ({ ...s, preferences: { ...s.preferences, ...change } }));
   }
 
-  /** Everything back to defaults, preferences included. */
-  async reset(): Promise<void> {
-    this.current.set(await this.store.reset());
-  }
-
   /** Programs, assignments, warning windows and announcements back to defaults; preferences are kept. */
   resetAdmin(): void {
     this.update((s) => resetAdminSettings(s, this.defaults()));
