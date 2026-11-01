@@ -12,17 +12,14 @@
   - [ ] An export opened in Excel
 - [ ] Department per person: on hold, draft in [plans/department.md](plans/department.md)
 - [ ] M7 plan: demo controls
+- [ ] Devices: plan the "not issued a device" rule (user, 2026-11-01)
 
 ## Open questions (user's to decide)
 - Roughly how big is the real org, and how deep? (Mockup assumes about 200 people, 5 levels.)
-- Will the demo be presented live, or sent as a link for users to try alone? (A link needs
-  more on-screen guidance.)
-- Devices: what makes a device "not ready" for your users (access expiring, not checked in,
-  compliance)? Mockup assumes access expiry plus last check-in (14 days yellow, 30 red).
+- Devices: does "not issued a device" replace the expiry and check-in checks, or join them?
 - Access and roles: is the concern only missing or expiring roles, or also people holding
   roles they shouldn't (excess access)?
-- Tools: assigned to individuals, crews, or both?
-- License: MIT for the repo? Check the employer's policy on licensing work code first.
+- Tools: assigned to individuals, crews, or both? (They come from a separate system.)
 
 ## Follow-ups
 - M8: the "Ready to Work" brand wraps onto two lines in the header at phone width.

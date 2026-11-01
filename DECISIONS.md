@@ -359,3 +359,15 @@
   replaced decisions above are marked.
 - **Dismissing announcements is probably a mistake** (user, for later): viewers can close Info
   and Delayed notices today; the user expects to remove that. Noted in Tasks.md; not changed.
+
+## 2026-11-01
+
+- **The demo is shown live** (user). A presenter walks users through it, so the mockup doesn't
+  need extra on-screen guidance for people trying it alone.
+- **Devices: "not ready" means no device issued** (user). The mockup now judges devices by
+  access expiry and last check-in; the user's rule is closer to "the person hasn't been issued a
+  device". Not changed yet; how it fits with the current checks is still to be planned.
+- **Tools come from a separate system** (user). The real app reads them from their own system
+  through the `DataSource`, like the other categories. Whether they're assigned to people,
+  crews or both isn't settled.
+- **License: MIT** (user). Added on GitHub (`bbd6105`).
