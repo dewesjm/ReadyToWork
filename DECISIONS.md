@@ -441,3 +441,6 @@
   Now the pair wraps together. On phones the group spans the line (counts left, Details right).
   `e2e/layout.spec.ts` (was phone-layout) checks Details' position on desktop too.
 
+- **No Items button for people with no issues** (user decision, all three places: tree, list
+  table, phone cards). For a ready person it opened only "No issues" and a "Show all" button,
+  which repeats Details. Details still has their full list.
