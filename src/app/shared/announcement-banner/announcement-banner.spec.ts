@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Announcement, createAnnouncement, updateAnnouncement } from '../../../core';
+import { Announcement, createAnnouncement, dismissKey } from '../../../core';
 import { MockDataSource } from '../../../data';
 import { SettingsService } from '../../services/settings-service';
 import { DATA_SOURCE } from '../../services/tokens';
@@ -69,32 +69,21 @@ describe('AnnouncementBanner', () => {
     expect(today < '2099-01-02').toBe(true);
   });
 
-  it('lets the viewer close a Delayed notice, remembers it, and shows it again after an edit', async () => {
-    const { el, notices, stable } = await render();
-    el.querySelector<HTMLButtonElement>('[data-testid="dismiss"]')!.click();
-    await stable();
-    expect(notices().length).toBe(0);
-
-    await reloadAppState();
-    await stable();
-    expect(notices().length).toBe(0);
-
-    settings().update((s) => ({
-      ...s,
-      announcements: updateAnnouncement(s.announcements, sample().id, { ...sample(), message: 'Now 3 days behind.' }),
-    }));
-    await stable();
-    expect(notices().length).toBe(1);
-    expect(notices()[0].textContent).toContain('Now 3 days behind.');
-  });
-
-  it('has no close button on an outage', async () => {
+  it('has no close button on any notice', async () => {
     const { notices, stable } = await render();
     post({ type: 'outage' });
+    post({ type: 'info', message: 'New badge readers next week' });
     await stable();
-    const outage = notices().find((n) => n.dataset['type'] === 'outage')!;
-    expect(outage.querySelector('[data-testid="dismiss"]')).toBeNull();
-    expect(notices().find((n) => n.dataset['type'] === 'delayed')!.querySelector('[data-testid="dismiss"]')).not.toBeNull();
+    expect(notices().length).toBe(3);
+    expect(notices().every((n) => !n.querySelector('[data-testid="dismiss"]'))).toBe(true);
+  });
+
+  it('shows a notice the viewer closed back when closing was allowed', async () => {
+    settings().updatePreferences({ dismissedAnnouncements: [dismissKey(sample())] });
+    await reloadAppState();
+    const { notices } = await render();
+    expect(notices().length).toBe(1);
+    expect(notices()[0].textContent).toContain(sample().message);
   });
 
   it('hides notices that are turned off', async () => {

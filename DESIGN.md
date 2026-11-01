@@ -215,8 +215,8 @@ Close button; Escape also closes it.
   Info blue. Outages show first, then delays, then info.
 - A notice shows while it is on and from its first day through its last day (both optional,
   dates only; times go in the message). It hides by itself after the last day.
-- Viewers can close Info and Delayed notices; their browser remembers it, and the notice comes
-  back if an admin publishes an edit. Outages can't be closed.
+- Viewers can't close notices (user decision 2026-11-01); an admin turns one off or lets it end.
+  A per-type `dismissible` switch in `ANNOUNCEMENT_CONFIG` can bring closing back.
 - The demo starts with one live Delayed notice about training records.
 - In the mockup, notices live in the admin's browser like the other settings (the settings
   file shares them). The real app would store them on a server so everyone sees them.

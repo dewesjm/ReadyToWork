@@ -20,7 +20,7 @@ import { AdminService } from './admin-service';
     <div class="mb-4 flex flex-wrap items-start justify-between gap-3">
       <p class="max-w-prose text-sm opacity-80">
         Notices show in a banner at the top of every page while they are on and within their
-        dates. Use them for outages and delays. Outages can't be closed by viewers.
+        dates. Use them for outages and delays. Viewers can't close them.
       </p>
       <a routerLink="new" class="btn btn-sm btn-primary" data-testid="new-announcement">
         <rtw-icon name="plus" /> New announcement

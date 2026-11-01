@@ -37,8 +37,8 @@ export const ANNOUNCEMENT_CONFIG = {
   maxMessageLength: 300,
   types: {
     outage: { label: 'Outage', icon: 'octagon-x', color: 'error', rank: 2, dismissible: false },
-    delayed: { label: 'Delayed', icon: 'clock', color: 'warning', rank: 1, dismissible: true },
-    info: { label: 'Info', icon: 'info', color: 'info', rank: 0, dismissible: true },
+    delayed: { label: 'Delayed', icon: 'clock', color: 'warning', rank: 1, dismissible: false },
+    info: { label: 'Info', icon: 'info', color: 'info', rank: 0, dismissible: false },
   } satisfies Record<AnnouncementType, AnnouncementTypeMeta>,
   /** Order in the admin's type picker. */
   typeOrder: ['outage', 'delayed', 'info'] as AnnouncementType[],

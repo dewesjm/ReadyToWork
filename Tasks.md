@@ -32,8 +32,6 @@
   (proposed 2026-10-31, held until asked).
 - Items in place repeat the days ("Expires in 28 days · Due Nov 28, 2026 · 28 days"), as Details
   does; revise the wording with the user.
-- Announcements: remove the viewer's ability to close (dismiss) Info and Delayed notices (user,
-  2026-10-31: probably not a good thing to have). Noted for later, not changed yet.
 
 
 - When moving to Angular 22 (needs a newer Node): remove the glob and minimatch `overrides` from

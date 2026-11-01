@@ -446,3 +446,8 @@
   which repeats Details. Details still has their full list.
 - **Legend button is icon only** (user decision). The info icon stays; the button's name for
   screen readers and its hover tip is "What the statuses mean".
+- **Viewers can't close notices** (user: "they shouldn't really be dismissable"; noted as a
+  follow-up 2026-10-31). Done by setting `dismissible: false` on Delayed and Info in
+  `ANNOUNCEMENT_CONFIG`, like Outage already was. Notices a viewer closed before show again,
+  because closed keys are only honoured for closable types. The dismiss code and the saved
+  `dismissedAnnouncements` preference stay so the switch can be turned back on per type.
