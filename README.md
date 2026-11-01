@@ -42,5 +42,5 @@ Vercel, as a static site. `vercel.json` sets the build output folder, rewrites e
 
 ## Credits
 
-Icons are from [Lucide](https://lucide.dev) (ISC License), copied as data into
-`src/app/shared/icon/icons.ts`.
+Icons are from [Lucide](https://lucide.dev) (ISC License), through the `lucide-angular` package;
+the ones in use are listed in `src/app/shared/icon/icons.ts`.

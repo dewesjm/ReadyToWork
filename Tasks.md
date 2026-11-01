@@ -36,6 +36,9 @@
 - Announcements: remove the viewer's ability to close (dismiss) Info and Delayed notices (user,
   2026-10-31: probably not a good thing to have). Noted for later, not changed yet.
 
+- Desktop tree: on a row with a wide roll-up (the director's), Details wraps to the start of
+  the next line instead of the right edge (seen 2026-11-01).
+
 ## Later (real app, not this mockup)
 - Real data integrations (HR, AD/Entra, SAP, learning system, asset management, Yubikeys)
 - Where real program assignments come from (likely by who you work for: "you work for X, so you

@@ -404,4 +404,10 @@
   `e2e/phone-layout.spec.ts` checks the width, the header and Details' position.
 - **Keyboard focus check**: `e2e/keyboard-focus.spec.ts` tabs through each page in both themes
   and fails if a stop shows no focus ring. Every stop already had one; no app change needed.
+- **Standard tools review answered** (user: "go ahead and switch the recommendations"): icons to
+  `lucide-angular`, CSV to Papa Parse, dropdown menus to Angular CDK; the tree's keys and the
+  settings checks stay for the real app.
+- **Icons through `lucide-angular`** (replaces "Icons are inline SVG copied from Lucide" above).
+  `<rtw-icon name>` stays as a thin wrapper, because the config tables in `src/core/` name icons
+  as plain strings; `icons.ts` maps those names to Lucide's icon imports.
 
