@@ -82,7 +82,11 @@ describe('status pieces', () => {
   it('opens the legend with all three statuses and closes it on Escape', async () => {
     const fixture = TestBed.createComponent(Legend);
     await fixture.whenStable();
-    (fixture.nativeElement as HTMLElement).querySelector('button')!.click();
+    const button = (fixture.nativeElement as HTMLElement).querySelector('button')!;
+    // Icon only: the name comes from aria-label.
+    expect(button.textContent!.trim()).toBe('');
+    expect(button.getAttribute('aria-label')).toBe('What the statuses mean');
+    button.click();
     await fixture.whenStable();
     // The panel opens in the CDK overlay container at the end of the page.
     expect(document.querySelectorAll('#status-legend dt rtw-status-badge').length).toBe(3);

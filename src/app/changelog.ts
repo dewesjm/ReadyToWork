@@ -17,6 +17,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     changes: [
       'The tree no longer moves with the arrow keys. Click or tap a row to open a team; Tab reaches the Items and Details buttons.',
       'People with no issues no longer have an Items button; Details still shows their full list.',
+      'The Legend button is now just its info icon.',
     ],
     fixes: [
       'Faint text is easier to read: managers shown for context, table headings, Admin tabs and the change log headings.',

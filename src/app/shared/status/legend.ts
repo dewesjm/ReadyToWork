@@ -5,22 +5,23 @@ import { Icon } from '../icon/icon';
 import { StatusBadge } from './status-badge';
 import { STATUS_MEANING } from './status-classes';
 
-/** "Legend" button that opens a small panel explaining the three statuses. */
+/** Info icon button that opens a small panel explaining the three statuses. */
 @Component({
   selector: 'rtw-legend',
   imports: [Icon, StatusBadge, CdkOverlayOrigin, CdkConnectedOverlay],
   template: `
     <button
       type="button"
-      class="btn btn-ghost btn-sm gap-1"
+      class="btn btn-ghost btn-sm btn-square"
       cdkOverlayOrigin
       #trigger="cdkOverlayOrigin"
+      aria-label="What the statuses mean"
+      title="What the statuses mean"
       [attr.aria-expanded]="open()"
       aria-controls="status-legend"
       (click)="open.set(!open())"
     >
       <rtw-icon name="info" />
-      Legend
     </button>
     <!-- Angular CDK overlay: positions the panel; a click outside or Escape closes it. -->
     <ng-template

@@ -444,3 +444,5 @@
 - **No Items button for people with no issues** (user decision, all three places: tree, list
   table, phone cards). For a ready person it opened only "No issues" and a "Show all" button,
   which repeats Details. Details still has their full list.
+- **Legend button is icon only** (user decision). The info icon stays; the button's name for
+  screen readers and its hover tip is "What the statuses mean".
