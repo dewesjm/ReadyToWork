@@ -156,4 +156,16 @@ describe('IssuesList (list view)', () => {
     // Item rows aren't people: the people rows still match the list.
     expect(rows().filter((r) => r.dataset['key']).length).toBe(query.listResult().rows.length);
   });
+
+  it('has no items toggle for people with no issues, in the table or the cards', async () => {
+    const { rows, el } = await open('/readiness?view=list&issues=all');
+    const { checksByPerson } = TestBed.inject(ReadinessService).result();
+    const hasIssues = (id: string) => (checksByPerson.get(id) ?? []).some((c) => c.status !== 'ready');
+    const cards = [...el().querySelectorAll<HTMLElement>('[data-testid="person-list-cards"] li')];
+    const people = [...rows(), ...cards];
+    expect(people.some((r) => !hasIssues(r.dataset['key']!))).toBe(true);
+    for (const r of people) {
+      expect(!!r.querySelector('[data-testid="items-toggle"]')).toBe(hasIssues(r.dataset['key']!));
+    }
+  });
 });

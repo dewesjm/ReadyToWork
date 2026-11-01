@@ -215,7 +215,12 @@ describe('OrgTree', () => {
 
     it("opens a manager's own items without opening or closing their team", async () => {
       const { el, row, tree, stable } = await open('/readiness?issues=all');
-      const manager = fakeOrg().scenarios.toolCrewForemanId;
+      const { checksByPerson } = readiness();
+      const manager = fakeOrg().people.find(
+        (p) =>
+          readiness().org.childrenOf(p.id).length > 0 &&
+          (checksByPerson.get(p.id) ?? []).some((c) => c.status !== 'ready'),
+      )!.id;
       tree.expandAll();
       await stable();
       const expandedBefore = row(manager)!.getAttribute('data-expanded');
@@ -223,6 +228,19 @@ describe('OrgTree', () => {
       await stable();
       expect(row(manager)!.getAttribute('data-expanded')).toBe(expandedBefore);
       expect(items(el(), manager)).not.toBeNull();
+    });
+
+    it('has no items toggle for people with no issues', async () => {
+      const { el, tree, stable } = await open('/readiness?issues=all');
+      tree.expandAll();
+      await stable();
+      const { checksByPerson } = readiness();
+      const hasIssues = (id: string) => (checksByPerson.get(id) ?? []).some((c) => c.status !== 'ready');
+      const rows = [...el().querySelectorAll<HTMLElement>('[data-testid="tree-row"]')];
+      expect(rows.some((r) => !hasIssues(r.dataset['id']!))).toBe(true);
+      for (const r of rows) {
+        expect(!!r.querySelector('[data-testid="items-toggle"]')).toBe(hasIssues(r.dataset['id']!));
+      }
     });
   });
 });

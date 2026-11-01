@@ -16,6 +16,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     date: '2026-11-01',
     changes: [
       'The tree no longer moves with the arrow keys. Click or tap a row to open a team; Tab reaches the Items and Details buttons.',
+      'People with no issues no longer have an Items button; Details still shows their full list.',
     ],
     fixes: [
       'Faint text is easier to read: managers shown for context, table headings, Admin tabs and the change log headings.',

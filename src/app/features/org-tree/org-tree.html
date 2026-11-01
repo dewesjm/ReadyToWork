@@ -44,14 +44,17 @@
           </span>
         </div>
 
-        <!-- The chips open the person's items under the row. -->
-        <rtw-items-toggle
-          class="max-sm:ml-8"
-          [name]="r.person.name"
-          [open]="r.itemsOpen"
-          [chips]="r.chips"
-          (toggle)="items.toggle(r.id)"
-        />
+        <!-- The chips open the person's items under the row. No issues, no toggle: Details has
+             the full list. -->
+        @if (r.chips.length > 0) {
+          <rtw-items-toggle
+            class="max-sm:ml-8"
+            [name]="r.person.name"
+            [open]="r.itemsOpen"
+            [chips]="r.chips"
+            (toggle)="items.toggle(r.id)"
+          />
+        }
 
         <!-- Roll-up and Details move as one, so Details always ends up at the right edge. -->
         <div

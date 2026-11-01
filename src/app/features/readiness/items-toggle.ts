@@ -6,7 +6,7 @@ import { CategoryChip } from '../../shared/status/category-chip';
 /**
  * The button that opens a person's items under their row: their issue chips (or a label such
  * as "2 issues", or "Items" when there is nothing to show) and a chevron. Used by the tree, the
- * list table and the phone cards; a click never reaches the row.
+ * list table and the phone cards, only for people with issues; a click never reaches the row.
  */
 @Component({
   selector: 'rtw-items-toggle',
