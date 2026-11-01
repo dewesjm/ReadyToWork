@@ -401,7 +401,7 @@
 - **Phone header and tree rows**: below 640px the header shows the logo mark only ("Ready to
   Work" stays as screen-reader text, so the link keeps its name). Tree rows indent 0.5rem per
   level instead of 0.75 and Details always sits at the right edge, sharing a line when it fits.
-  `e2e/phone-layout.spec.ts` checks the width, the header and Details' position.
+  `e2e/layout.spec.ts` checks the width, the header and Details' position.
 - **Keyboard focus check**: `e2e/keyboard-focus.spec.ts` tabs through each page in both themes
   and fails if a stop shows no focus ring. Every stop already had one; no app change needed.
 - **Standard tools review answered** (user: "go ahead and switch the recommendations"): icons to
@@ -436,4 +436,8 @@
   package.json pins glob ^14.0.3 and minimatch ^11.0.3 (one major past what the tooling asks
   for; they're only used by `ng add` / `ng update`). Build, unit tests, browser checks and
   `ng update`'s listing all work. Remove the overrides when moving to Angular 22.
+- **Tree: roll-up and Details in one group** at the row's right edge. On the director's row the
+  chips and roll-up didn't fit beside the name, and Details wrapped to the left of the next line.
+  Now the pair wraps together. On phones the group spans the line (counts left, Details right).
+  `e2e/layout.spec.ts` (was phone-layout) checks Details' position on desktop too.
 

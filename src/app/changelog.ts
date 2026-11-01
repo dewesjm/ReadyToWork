@@ -25,6 +25,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
       'Screen readers read the person on each Items button.',
       'On a phone, buttons, links and switches are bigger and easier to tap.',
       'On a phone, the top bar fits on one line, and tree rows are tidier, with Details always at the right.',
+      'In the tree, Details no longer drops to the left on rows with a long list of counts.',
     ],
   },
   {

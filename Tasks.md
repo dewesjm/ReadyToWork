@@ -35,8 +35,6 @@
 - Announcements: remove the viewer's ability to close (dismiss) Info and Delayed notices (user,
   2026-10-31: probably not a good thing to have). Noted for later, not changed yet.
 
-- Desktop tree: on a row with a wide roll-up (the director's), Details wraps to the start of
-  the next line instead of the right edge (seen 2026-11-01).
 
 - When moving to Angular 22 (needs a newer Node): remove the glob and minimatch `overrides` from
   package.json (DECISIONS.md 2026-11-01).
@@ -146,3 +144,4 @@
 - [x] Phone header and tree rows (M8 steps 3-4); phone and accessibility pass done (52 browser checks, keyboard focus included)
 - [x] Tree keyboard support removed (user decision); mouse and touch only
 - [x] Standard tools: icons (lucide-angular), CSV (Papa Parse), dropdowns (Angular CDK Overlay)
+- [x] Tree: roll-up and Details move as one, so Details stays at the right edge (desktop fix)

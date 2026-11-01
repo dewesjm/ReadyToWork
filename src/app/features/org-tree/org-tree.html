@@ -53,20 +53,24 @@
           (toggle)="items.toggle(r.id)"
         />
 
-        @if (r.rollup) {
-          <rtw-rollup-badge class="max-sm:ml-8 sm:ml-auto" [rollup]="r.rollup" />
-        }
-
-        <button
-          type="button"
-          class="btn btn-ghost btn-xs max-sm:ml-auto"
-          [class.ml-auto]="!r.rollup"
-          data-testid="details"
-          [attr.aria-label]="'Details for ' + r.person.name"
-          (click)="openPerson(r.id); $event.stopPropagation()"
+        <!-- Roll-up and Details move as one, so Details always ends up at the right edge. -->
+        <div
+          class="ml-auto flex items-center gap-3"
+          [class]="r.rollup ? 'max-sm:w-full max-sm:justify-between max-sm:pl-8' : ''"
         >
-          Details
-        </button>
+          @if (r.rollup) {
+            <rtw-rollup-badge [rollup]="r.rollup" />
+          }
+          <button
+            type="button"
+            class="btn btn-ghost btn-xs"
+            data-testid="details"
+            [attr.aria-label]="'Details for ' + r.person.name"
+            (click)="openPerson(r.id); $event.stopPropagation()"
+          >
+            Details
+          </button>
+        </div>
 
         @if (r.itemsOpen) {
           <!-- Clicks inside the items stay out of the row. -->

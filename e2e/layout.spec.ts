@@ -17,12 +17,14 @@ test.describe('phone layout', () => {
       expect(brand!.height).toBeLessThanOrEqual(44);
     });
   }
+});
 
-  test('tree rows put Details in the same place on every row', async ({ page }) => {
-    await page.goto('/readiness');
-    await expect(page.getByTestId('details').first()).toBeVisible();
-    const rights = await page.getByTestId('details').evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().right)));
-    expect(rights.length).toBeGreaterThan(10);
-    expect(new Set(rights).size).toBe(1);
-  });
+// Phone and desktop: the director's row has the widest chips and roll-up.
+test('tree rows put Details in the same place on every row', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('rtw.settings', JSON.stringify({ schemaVersion: 3, preferences: { personaId: 'admin' } })));
+  await page.goto('/readiness');
+  await expect(page.getByTestId('details').first()).toBeVisible();
+  const rights = await page.getByTestId('details').evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().right)));
+  expect(rights.length).toBeGreaterThan(10);
+  expect(new Set(rights).size).toBe(1);
 });
