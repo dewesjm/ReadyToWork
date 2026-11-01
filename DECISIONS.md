@@ -402,4 +402,6 @@
   Work" stays as screen-reader text, so the link keeps its name). Tree rows indent 0.5rem per
   level instead of 0.75 and Details always sits at the right edge, sharing a line when it fits.
   `e2e/phone-layout.spec.ts` checks the width, the header and Details' position.
+- **Keyboard focus check**: `e2e/keyboard-focus.spec.ts` tabs through each page in both themes
+  and fails if a stop shows no focus ring. Every stop already had one; no app change needed.
 
