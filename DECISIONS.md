@@ -423,4 +423,10 @@
   (the browser's default), so Tab and Enter still reach them; opening a team needs a click.
   The open person's row keeps `aria-current`. If the real app must meet Section 508 or WCAG,
   this has to come back (CDK Tree is the standard way).
+- **Dropdowns through Angular CDK Overlay** (avatar menu, category filter, legend). They hold
+  form controls and text, not commands, so `cdkConnectedOverlay` (the popup engine behind
+  Angular Material) rather than `cdkMenu`. CDK now handles positioning, Escape and clicks
+  outside (a transparent backdrop); our own document-click and Escape listeners are gone. The
+  overlay stylesheet is in angular.json's styles. Panels render at the end of the page, so the
+  avatar menu caps its height and scrolls, and tests look for panels in the whole document.
 

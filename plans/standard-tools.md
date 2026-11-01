@@ -27,7 +27,8 @@ for less, since the real app replaces them.
 2. **CSV export** (`src/core/csv-export.ts`). Our own quoting and spreadsheet-formula guard, about
    20 lines. **Standard: Papa Parse** (`unparse`, with `escapeFormulae` for the same guard). Small
    change; the quoting rules are easy to get subtly wrong, and the real app keeps the export.
-3. **Dropdown menus** (avatar menu, category filter, legend). Each handles its own open and
+3. **Dropdown menus** (avatar menu, category filter, legend). *Done with CDK Overlay; they hold
+   form controls, so not `cdkMenu`.* Each handles its own open and
    close, Escape, outside clicks and ARIA attributes. **Standard: Angular CDK** (`@angular/cdk`,
    from the Angular team): `cdkMenu` for menus, Overlay for popups. It handles keyboard,
    focus and screen readers the same way everywhere. Medium change, real app keeps it.

@@ -82,12 +82,13 @@ describe('status pieces', () => {
   it('opens the legend with all three statuses and closes it on Escape', async () => {
     const fixture = TestBed.createComponent(Legend);
     await fixture.whenStable();
-    const el = fixture.nativeElement as HTMLElement;
-    el.querySelector('button')!.click();
+    (fixture.nativeElement as HTMLElement).querySelector('button')!.click();
     await fixture.whenStable();
-    expect(el.querySelectorAll('dt rtw-status-badge').length).toBe(3);
-    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    // The panel opens in the CDK overlay container at the end of the page.
+    expect(document.querySelectorAll('#status-legend dt rtw-status-badge').length).toBe(3);
+    // CDK reads keyCode, as real key presses set it.
+    document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', keyCode: 27, bubbles: true }));
     await fixture.whenStable();
-    expect(el.querySelector('#status-legend')).toBeNull();
+    expect(document.querySelector('#status-legend')).toBeNull();
   });
 });

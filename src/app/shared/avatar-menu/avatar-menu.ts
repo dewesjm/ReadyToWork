@@ -1,5 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, ElementRef, computed, inject, signal } from '@angular/core';
+import { CdkConnectedOverlay, CdkOverlayOrigin, ConnectedPosition } from '@angular/cdk/overlay';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { supervisorOptions } from '../../../core';
 import { Layout } from '../../../data';
@@ -17,13 +18,8 @@ import { BRAND_THEMES, BUILT_IN_THEMES } from '../themes';
  */
 @Component({
   selector: 'rtw-avatar-menu',
-  imports: [NgTemplateOutlet, RouterLink, Icon],
+  imports: [NgTemplateOutlet, RouterLink, Icon, CdkOverlayOrigin, CdkConnectedOverlay],
   templateUrl: './avatar-menu.html',
-  host: {
-    class: 'relative',
-    '(document:click)': 'onDocumentClick($event)',
-    '(keydown.escape)': 'close()',
-  },
 })
 export class AvatarMenu {
   protected readonly themes = inject(ThemeService);
@@ -31,6 +27,10 @@ export class AvatarMenu {
   protected readonly brandThemes = BRAND_THEMES;
   protected readonly builtInThemes = BUILT_IN_THEMES;
   protected readonly open = signal(false);
+  /** Below the button, right edges lined up. */
+  protected readonly positions: ConnectedPosition[] = [
+    { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top' },
+  ];
 
   private readonly settings = inject(SettingsService);
   private readonly readiness = inject(ReadinessService);
@@ -52,8 +52,6 @@ export class AvatarMenu {
     const saved = this.settings.preferences().defaultProgramId;
     return this.programs().some((p) => p.id === saved) ? saved : null;
   });
-
-  private readonly host = inject(ElementRef<HTMLElement>);
 
   toggle(): void {
     this.open.update((o) => !o);
@@ -83,9 +81,5 @@ export class AvatarMenu {
 
   setDefaultProgram(id: string): void {
     this.settings.updatePreferences({ defaultProgramId: id || null });
-  }
-
-  protected onDocumentClick(event: MouseEvent): void {
-    if (!this.host.nativeElement.contains(event.target as Node)) this.close();
   }
 }

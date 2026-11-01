@@ -1,6 +1,8 @@
 <button
   type="button"
   class="btn btn-circle btn-accent font-semibold"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
   [attr.aria-expanded]="open()"
   aria-haspopup="true"
   aria-controls="avatar-menu-panel"
@@ -10,10 +12,20 @@
   {{ viewer.initials() }}
 </button>
 
-@if (open()) {
+<!-- Angular CDK overlay: positions the panel; a click outside or Escape closes it. -->
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="open()"
+  [cdkConnectedOverlayPositions]="positions"
+  cdkConnectedOverlayHasBackdrop
+  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  (backdropClick)="close()"
+  (detach)="close()"
+>
   <div
     id="avatar-menu-panel"
-    class="absolute right-0 z-50 mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-box border border-base-300 bg-base-100 text-base-content shadow-lg"
+    class="mt-2 max-h-[calc(100dvh-5rem)] w-80 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-box border border-base-300 bg-base-100 text-base-content shadow-lg"
   >
     <div class="border-b border-base-300 px-4 py-3">
       <div class="font-semibold">{{ viewer.viewer()?.name }}</div>
@@ -95,7 +107,7 @@
       }
     </div>
   </div>
-}
+</ng-template>
 
 <ng-template #option let-t>
   <button

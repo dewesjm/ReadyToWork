@@ -30,8 +30,9 @@ describe('AvatarMenu', () => {
   async function setup() {
     const fixture = TestBed.createComponent(AvatarMenu);
     await fixture.whenStable();
-    const el = fixture.nativeElement as HTMLElement;
-    const toggle = el.querySelector('button')!;
+    const toggle = (fixture.nativeElement as HTMLElement).querySelector('button')!;
+    // The panel opens in the CDK overlay container at the end of the page.
+    const el = document.body;
     return { fixture, el, toggle };
   }
 
@@ -67,7 +68,7 @@ describe('AvatarMenu', () => {
     toggle.click();
     await fixture.whenStable();
 
-    document.body.click();
+    document.querySelector<HTMLElement>('.cdk-overlay-backdrop')!.click();
     await fixture.whenStable();
     expect(el.querySelector('[role="radiogroup"]')).toBeNull();
   });
