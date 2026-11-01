@@ -11,6 +11,8 @@
   - [ ] Items in place (and revise the wording)
   - [ ] An export opened in Excel
 - [ ] Department per person: on hold, draft in [plans/department.md](plans/department.md)
+- [ ] M8 phone and accessibility: plan written, [plans/M8-phone-accessibility.md](plans/M8-phone-accessibility.md);
+  user answers the 3 questions at the end
 - [ ] Devices: plan the "not issued a device" rule (user, 2026-11-01)
 
 ## Open questions (user's to decide)
