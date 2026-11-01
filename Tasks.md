@@ -10,9 +10,9 @@
   - [ ] Typed requirements
   - [ ] Items in place (and revise the wording)
   - [ ] An export opened in Excel
+  - [ ] Phone and accessibility pass (on a real phone if possible: manager rows with long counts
+    still put Details on a line of their own)
 - [ ] Department per person: on hold, draft in [plans/department.md](plans/department.md)
-- [ ] M8 phone and accessibility: plan written, [plans/M8-phone-accessibility.md](plans/M8-phone-accessibility.md);
-  user answers the 3 questions at the end
 - [ ] Devices: plan the "not issued a device" rule (user, 2026-11-01)
 
 ## Open questions (user's to decide)
@@ -23,9 +23,6 @@
 - Tools: assigned to individuals, crews, or both? (They come from a separate system.)
 
 ## Follow-ups
-- M8: the "Ready to Work" brand wraps onto two lines in the header at phone width.
-- M8: below 640px wide, a tree row's Details button drops onto a line of its own; check it in
-  the phone pass.
 - Demo: ask users whether they miss sorting the list by column (M5 shipped one fixed order).
 - Demo: ask admins whether "Add everyone under" should be a standing rule (new people under that
   supervisor join the program) rather than a one-time add.
@@ -140,3 +137,4 @@
 - [x] M7 demo controls dropped (user, 2026-11-01): persona switching in Preferences is enough
 - [x] Browser checks with Playwright and axe; contrast and screen-reader fixes (M8 step 1)
 - [x] Phone tap targets at least 44px for the most-tapped controls (M8 step 2)
+- [x] Phone header and tree rows (M8 steps 3-4); phone and accessibility pass done (32 browser checks)

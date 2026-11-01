@@ -398,4 +398,8 @@
   list rows, person page links, notice close). One rule in styles.css raises daisyUI buttons,
   selects and inputs below 640px; the rest are Tailwind `max-sm:min-h-11` classes where they're
   used. `e2e/tap-targets.spec.ts` checks it; axe's own target-size rule (24px) covers the rest.
+- **Phone header and tree rows**: below 640px the header shows the logo mark only ("Ready to
+  Work" stays as screen-reader text, so the link keeps its name). Tree rows indent 0.5rem per
+  level instead of 0.75 and Details always sits at the right edge, sharing a line when it fits.
+  `e2e/phone-layout.spec.ts` checks the width, the header and Details' position.
 

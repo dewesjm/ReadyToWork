@@ -1,6 +1,7 @@
 # Plan: Phone and accessibility pass
 
-Status: **plan, waiting on the user's answers** (2026-11-01). User request: "phone accessibility
+Status: **done** 2026-11-01 (answers: the recommended options). Checked by `npm run e2e`
+(Playwright with axe) rather than the hand-written script described below. User request: "phone accessibility
 does seem like a good one to tackle." This is the phone and accessibility part of M8; the rest
 of M8 (offline/installed check, written demo script) is left for later.
 

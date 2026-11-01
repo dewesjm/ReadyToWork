@@ -295,6 +295,10 @@ src/
   app checks for a new build every 15 minutes while open and when its tab comes back into view.
 - **Tests**: Angular's default Vitest runner. The core logic has unit tests; screens have
   component tests through the router (no browser needed).
+- **Browser checks**: Playwright with axe (`npm run e2e`): every page on a phone and desktop, in
+  both brand themes, must pass WCAG 2.2 AA. On phones the most-tapped controls are at least
+  44px, the header shows only the logo mark, and nothing scrolls sideways; tree rows indent
+  less and keep Details at the right edge.
 - No backend, no external calls at runtime.
 
 ## 7. Fake data plan
