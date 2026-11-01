@@ -11,7 +11,6 @@
   - [ ] Items in place (and revise the wording)
   - [ ] An export opened in Excel
 - [ ] Department per person: on hold, draft in [plans/department.md](plans/department.md)
-- [ ] M7 plan: demo controls
 - [ ] Devices: plan the "not issued a device" rule (user, 2026-11-01)
 
 ## Open questions (user's to decide)
@@ -141,3 +140,4 @@
 - [x] Export to CSV from both views, per plans/export-csv.md (339 tests)
 - [x] Crews by trade: crew titles and quals follow their superintendent's trade, odd person on loan (343 tests)
 - [x] Search looks through everyone in scope, pausing Issues only (user decision)
+- [x] M7 demo controls dropped (user, 2026-11-01): persona switching in Preferences is enough

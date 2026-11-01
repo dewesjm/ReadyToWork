@@ -371,3 +371,8 @@
   through the `DataSource`, like the other categories. Whether they're assigned to people,
   crews or both isn't settled.
 - **License: MIT** (user). Added on GitHub (`bbd6105`).
+- **M7 demo controls dropped** (user: "I can already switch personas, which is really all I
+  need"). No presenter panel, no date control, no full demo reset. View as and Layout stay in
+  Preferences. The saved `demoToday` setting and the clock that honors it stay in the code
+  (tested, harmless) but nothing in the app sets it. Older notes that point ahead to M7 (in
+  this log and the plans) are superseded by this entry.

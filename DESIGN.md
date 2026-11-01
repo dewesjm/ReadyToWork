@@ -204,7 +204,7 @@ for the admin persona; anyone else opening `/admin` is told it is for admins.
 - **Drill-down**: the readiness page on its own; clicking a person opens their own detail page
   (Back returns to the same view with its filters kept).
 
-Switched under Preferences in the avatar menu (and later the demo controls), so users can say
+Switched under Preferences in the avatar menu, so users can say
 which they prefer. Same components, arranged differently. The panel has Open full page and a
 Close button; Escape also closes it.
 
@@ -224,7 +224,7 @@ Close button; Escape also closes it.
 ## 6. Architecture
 
 ```
-Angular views     readiness (tree, list) · person detail · admin · demo controls
+Angular views     readiness (tree, list) · person detail · admin · change log
      │  read through Angular services (dependency injection)
 core/ (plain TS)  model · status engine · roll-ups · program rules · filter · requirements ·
                   person detail · CSV export · default config
@@ -273,8 +273,6 @@ src/
     changelog.ts the change log's entries
 ```
 
-Demo controls (M7) are not built yet.
-
 ### Stack
 
 - **Angular 21**, standalone components, zoneless, signals for state. (Angular 22 needs a
@@ -322,17 +320,13 @@ Demo controls (M7) are not built yet.
 - 6 sample programs (three single ships, three whole classes) with requirements, and default
   assignments. The crane candidate turns red when added to Ridgeline R-01.
 
-## 8. Demo controls
+## 8. Presenter tools
 
-A small panel (toggle with a button or keyboard shortcut) for the presenter:
-
-- **Today**: date picker plus "+1 week / +1 month" buttons. Statuses update live.
-- **View as**: switch between a sample foreman, general foreman, superintendent, director and
-  admin. Shows subtree scoping and the admin screens without a real login. Also under Preferences in the
-  avatar menu (from M6).
-- **Layout**: Dashboard or Drill-down.
-- **Theme**: lives in the avatar menu at the top right (see section 6, Stack), not here.
-- **Reset**: restores default settings and the default date.
+The demo is shown live. The presenter uses Preferences in the avatar menu: **View as** switches
+between the sample foreman, general foreman, superintendent, director and admin (showing each
+one's part of the org and the Admin screens without a real login), and **Layout** switches
+between Dashboard and Drill-down. There is no separate demo panel (dropped 2026-11-01, see
+section 10).
 
 ## 9. Out of scope for the mockup
 
@@ -385,9 +379,8 @@ switching between Tree and List keeps the filters.
 Done when: adding a requirement to a program turns the right people red immediately, and the
 settings survive a reload and an export/import round trip.
 
-**M7. Demo controls.** Today, view-as, layout, reset.
-Done when: moving the date forward turns statuses yellow then red as expected, and each
-persona sees only their own subtree.
+**M7. Demo controls.** Dropped (user, 2026-11-01): View as and Layout in Preferences are all
+the live demo needs. No date control or full reset.
 
 **M8. Polish and demo script.** Visual pass, accessibility pass (contrast, labels, focus),
 offline/installed check, short written demo script built on the planted scenarios.
