@@ -451,3 +451,11 @@
   `ANNOUNCEMENT_CONFIG`, like Outage already was. Notices a viewer closed before show again,
   because closed keys are only honoured for closable types. The dismiss code and the saved
   `dismissedAnnouncements` preference stay so the switch can be turned back on per type.
+
+## 2026-11-02
+
+- **The demo opens as the Superintendent** (user). New viewers, and anyone who never picked a
+  persona in "View as", see the app as the Superintendent (Tyler Mitchell in the generated org)
+  instead of the Foreman. Set by `DEFAULT_PERSONA_ID` in `src/data/settings.ts`; it applies when
+  the saved persona is empty, so browsers that already opened the demo get it too without a
+  settings migration. A persona someone chose is kept.

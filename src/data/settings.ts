@@ -20,7 +20,7 @@ export type Layout = 'dashboard' | 'drilldown';
 /** Per-viewer choices: theme, persona, layout, default scope. */
 export interface Preferences {
   theme: string;
-  /** Demo "View as" persona; null means the first persona. */
+  /** Demo "View as" persona; null means DEFAULT_PERSONA_ID. */
   personaId: string | null;
   /** Default scope on the Readiness page; null means the viewer themselves. */
   defaultSupervisorId: string | null;
@@ -43,6 +43,9 @@ export interface Settings {
   announcements: Announcement[];
   preferences: Preferences;
 }
+
+/** The persona a viewer sees until they pick one with "View as". */
+export const DEFAULT_PERSONA_ID = 'superintendent';
 
 export const DEFAULT_PREFERENCES: Preferences = {
   theme: 'navy',

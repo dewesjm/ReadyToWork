@@ -1,6 +1,6 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { initials } from '../../core';
-import { Persona } from '../../data';
+import { DEFAULT_PERSONA_ID, Persona } from '../../data';
 import { ReadinessService } from './readiness-service';
 import { SettingsService } from './settings-service';
 
@@ -11,7 +11,7 @@ export interface Viewer {
   isAdmin: boolean;
 }
 
-/** Who is "logged in": the demo persona chosen with "View as" (the first one by default). */
+/** Who is "logged in": the demo persona chosen with "View as" (the superintendent by default). */
 @Injectable({ providedIn: 'root' })
 export class ViewerService {
   private readonly readiness = inject(ReadinessService);
@@ -19,7 +19,7 @@ export class ViewerService {
 
   readonly persona = computed<Persona | null>(() => {
     const personas = this.readiness.personas();
-    const id = this.settings.preferences().personaId;
+    const id = this.settings.preferences().personaId ?? DEFAULT_PERSONA_ID;
     return personas.find((p) => p.id === id) ?? personas[0] ?? null;
   });
 

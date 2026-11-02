@@ -55,7 +55,7 @@ describe('ReadinessService (wired through DI)', () => {
 
   it('shows the chosen persona as the viewer', () => {
     const viewer = TestBed.inject(ViewerService);
-    expect(viewer.persona()?.id).toBe('foreman');
+    expect(viewer.persona()?.id).toBe('superintendent');
     viewer.setPersona('director');
     const director = mock.fakeOrg().people[0];
     expect(viewer.viewer()?.name).toBe(director.name);

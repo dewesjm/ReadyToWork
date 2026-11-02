@@ -79,7 +79,7 @@ describe('AvatarMenu', () => {
     await fixture.whenStable();
     const select = el.querySelector<HTMLSelectElement>('[data-testid="persona"]')!;
     const personas = TestBed.inject(ViewerService);
-    expect(select.value).toBe('foreman');
+    expect(select.value).toBe('superintendent');
     expect([...select.options].map((o) => o.value)).toEqual(['foreman', 'general-foreman', 'superintendent', 'director', 'admin']);
 
     select.value = 'admin';
