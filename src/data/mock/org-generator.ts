@@ -21,6 +21,7 @@ import {
   FIRST_NAMES,
   GENERAL_QUALS,
   LAST_NAMES,
+  MIDDLE_INITIALS,
   NETWORK_ACCOUNT,
   QUALIFICATIONS,
   ROLES,
@@ -90,9 +91,12 @@ export function generateOrg(
 
 class OrgGenerator {
   private readonly rng: SeededRandom;
+  /** For user IDs only, so adding them left the main sequence (and every name) unchanged. */
+  private readonly idRng: SeededRandom;
   private readonly nodes: Node[] = [];
   private readonly crews = new Map<string, Node[]>();
   private readonly usedNames = new Set<string>();
+  private readonly usedIds = new Set<string>();
   private serial = 40000;
 
   constructor(
@@ -101,6 +105,7 @@ class OrgGenerator {
     private readonly readiness: ReadinessConfig,
   ) {
     this.rng = new SeededRandom(config.seed);
+    this.idRng = new SeededRandom(config.seed + 1);
   }
 
   build(): FakeOrg {
@@ -156,11 +161,14 @@ class OrgGenerator {
 
   private addPerson(level: Level, manager: Node | null, title: string): Node {
     const index = this.nodes.length + 1;
+    const employeeId = this.employeeId();
+    const name = this.uniqueName();
     const node: Node = {
       person: {
         id: `p${String(index).padStart(3, '0')}`,
-        employeeId: `E${10000 + index * 7 + this.rng.int(0, 6)}`,
-        name: this.uniqueName(),
+        employeeId,
+        userId: this.userId(name),
+        name,
         title,
         managerId: manager?.person.id ?? null,
       },
@@ -169,6 +177,26 @@ class OrgGenerator {
     };
     this.nodes.push(node);
     return node;
+  }
+
+  /** Up to 6 digits. One draw from the main sequence, as before; a clash takes the next free number. */
+  private employeeId(): string {
+    let n = this.rng.int(1, 999999);
+    while (this.usedIds.has(String(n))) n = (n % 999999) + 1;
+    this.usedIds.add(String(n));
+    return String(n);
+  }
+
+  /** First, middle and last initials plus 2 digits, e.g. TJM07. */
+  private userId(name: string): string {
+    const [first, last] = name.split(' ');
+    for (;;) {
+      const id = `${first[0]}${this.idRng.pick([...MIDDLE_INITIALS])}${last[0]}${String(this.idRng.int(0, 99)).padStart(2, '0')}`;
+      if (!this.usedIds.has(id)) {
+        this.usedIds.add(id);
+        return id;
+      }
+    }
   }
 
   private uniqueName(): string {

@@ -8,6 +8,7 @@ const person = (id: string, name: string, title: string): Person => ({
   name,
   title,
   employeeId: `E-${id}`,
+  userId: `U-${id}`,
   managerId: null,
 });
 
@@ -37,9 +38,9 @@ describe('csv export', () => {
       ],
     };
     expect(readinessExportRows(result, DEFAULT_CONFIG.categories)).toEqual([
-      ['Name', 'Employee ID', 'Title', 'Reports to', 'Overall', 'Training', 'Training: days left', 'Tools', 'Tools: days left'],
-      ['Ana Ruiz', 'E-a', 'Welder', 'Pat Boss', 'Not ready', 'Expiring', '12 days', 'Not ready', '3 days overdue'],
-      ['Pat Boss', 'E-b', 'Foreman', '', 'Ready', 'Ready', '', '', ''],
+      ['Name', 'Employee ID', 'User ID', 'Title', 'Reports to', 'Overall', 'Training', 'Training: days left', 'Tools', 'Tools: days left'],
+      ['Ana Ruiz', 'E-a', 'U-a', 'Welder', 'Pat Boss', 'Not ready', 'Expiring', '12 days', 'Not ready', '3 days overdue'],
+      ['Pat Boss', 'E-b', 'U-b', 'Foreman', '', 'Ready', 'Ready', '', '', ''],
     ]);
   });
 });

@@ -67,7 +67,7 @@ export interface FilterRow {
   childIds: string[];
   /** Not shown in its own right: kept so the path to someone below makes sense. */
   context: boolean;
-  /** Name, title or employee ID matches the keyword. Always false with no keyword. */
+  /** Name, title, employee ID or user ID matches the keyword. Always false with no keyword. */
   match: boolean;
 }
 
@@ -296,11 +296,11 @@ export function opensByDefault(org: OrgIndex, id: string): boolean {
   return org.childrenOf(id).some((k) => org.childrenOf(k.id).length > 0);
 }
 
-/** Case-insensitive match on name, title and employee ID. */
+/** Case-insensitive match on name, title, employee ID and user ID. */
 export function matchesKeyword(person: Person, keyword: string): boolean {
   const k = keyword.trim().toLowerCase();
   if (!k) return true;
-  return [person.name, person.title, person.employeeId].some((f) => f.toLowerCase().includes(k));
+  return [person.name, person.title, person.employeeId, person.userId].some((f) => f.toLowerCase().includes(k));
 }
 
 /** Splits text around case-insensitive matches of the keyword, for highlighting. */

@@ -131,7 +131,8 @@
   URL): it survives opening a person and pressing Back, and a new filter starts from the
   default open state.
 - **Context rows** (managers kept only to show the path) are dimmed and say "shown for
-  context" to screen readers. A matched employee ID is shown on the row only while searching.
+  context" to screen readers. A matched employee ID is shown on the row only while searching. ~~(Superseded 2026-11-02:
+  both IDs show on every row.)~~
 - **M4: the Layout switch lives in the avatar menu's Preferences** (user) from M4, next to the
   default scope. M7's presenter panel will reuse it.
 - **M4: the Dashboard acts like Drill-down on narrow screens** (user): tapping a person opens
@@ -459,3 +460,10 @@
   instead of the Foreman. Set by `DEFAULT_PERSONA_ID` in `src/data/settings.ts`; it applies when
   the saved persona is empty, so browsers that already opened the demo get it too without a
   settings migration. A persona someone chose is kept.
+- **Employee ID and user ID on every row** (user). Employee ID is now a plain number of up to 6
+  digits; the new user ID is first, middle and last initials plus 2 digits (e.g. TJM07). Both
+  show after the title in the tree, the list, Details, the Admin people picker and the export,
+  smaller and fainter than the name, and keyword search matches both. The fake people have no
+  middle names, so the middle initial is drawn from `MIDDLE_INITIALS`. User IDs come from their
+  own seeded random sequence, and the employee ID still takes one draw from the main one, so the
+  generated names (Tyler Mitchell as the Superintendent) did not change.

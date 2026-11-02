@@ -19,14 +19,14 @@ import { TEST_ORG } from './test-org';
  *   ├─ m1
  *   │  ├─ f1
  *   │  │  ├─ c1   SAP password expiring          "Ana Ruiz", Electrician
- *   │  │  └─ c2   tool not ready                  employee ID E-90210
+ *   │  │  └─ c2   tool not ready                  employee ID E-90210, user ID ZQX42
  *   │  └─ f2      training overdue, data out of date
  *   └─ m2
  *      └─ f3      no checks at all (not ready)    "Crane Foreman"
  */
 const PEOPLE: Person[] = TEST_ORG.map((p) => {
   if (p.id === 'c1') return { ...p, name: 'Ana Ruiz', title: 'Electrician' };
-  if (p.id === 'c2') return { ...p, employeeId: 'E-90210' };
+  if (p.id === 'c2') return { ...p, employeeId: 'E-90210', userId: 'ZQX42' };
   if (p.id === 'f3') return { ...p, title: 'Crane Foreman' };
   return p;
 });
@@ -147,12 +147,13 @@ describe('ReadinessFilter', () => {
     expect(run({ categories: ['tool'], statuses: ['not-ready'] }).shownCount).toBe(8);
   });
 
-  it('matches the keyword on name, title and employee ID, case-insensitively', () => {
+  it('matches the keyword on name, title, employee ID and user ID, case-insensitively', () => {
     const byName = run({ keyword: 'ana r' });
     expect(ids(byName)).toEqual(['dir', 'm1', 'f1', 'c1']);
     expect(byName.rows.filter((r) => r.match).map((r) => r.person.id)).toEqual(['c1']);
     expect(ids(run({ keyword: 'CRANE' }))).toEqual(['dir', 'm2', 'f3']);
     expect(ids(run({ keyword: '90210' }))).toEqual(['dir', 'm1', 'f1', 'c2']);
+    expect(ids(run({ keyword: 'zqx4' }))).toEqual(['dir', 'm1', 'f1', 'c2']);
     expect(run({ keyword: '  ' }).narrowed).toBe(false);
   });
 

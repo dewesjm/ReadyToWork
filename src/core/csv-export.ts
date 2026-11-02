@@ -21,11 +21,11 @@ export function readinessExportRows(
   categories: readonly CategoryConfig[],
 ): string[][] {
   const label = (id: string) => categoryConfig(id, categories)?.label ?? id;
-  const header = ['Name', 'Employee ID', 'Title', 'Reports to', 'Overall'];
+  const header = ['Name', 'Employee ID', 'User ID', 'Title', 'Reports to', 'Overall'];
   for (const id of result.columns) header.push(label(id), `${label(id)}: days left`);
 
   const rows = result.rows.map((r) => {
-    const row = [r.person.name, r.person.employeeId, r.person.title, r.manager?.name ?? '', STATUS_META[r.status].label];
+    const row = [r.person.name, r.person.employeeId, r.person.userId, r.person.title, r.manager?.name ?? '', STATUS_META[r.status].label];
     for (const cell of r.cells) {
       const days = cell && cell.status !== 'ready' && cell.daysRemaining !== undefined ? describeDays(cell.daysRemaining) : '';
       row.push(cell ? STATUS_META[cell.status].label : '', days);

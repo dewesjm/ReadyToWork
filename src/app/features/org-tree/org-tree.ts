@@ -35,7 +35,6 @@ export class OrgTree {
 
   protected readonly rows = computed(() => {
     const { statusByPerson, checksByPerson, rollups } = this.readiness.result();
-    const keyword = this.keyword();
     return this.tree.visibleRows().map((row) => {
       const p = row.person;
       return {
@@ -47,8 +46,6 @@ export class OrgTree {
         expandable: row.childIds.length > 0,
         expanded: this.tree.isExpanded(p.id),
         itemsOpen: this.items.isOpen(p.id),
-        /** The employee ID is shown only when the keyword matches it. */
-        showEmployeeId: keyword !== '' && p.employeeId.toLowerCase().includes(keyword.toLowerCase()),
       };
     });
   });

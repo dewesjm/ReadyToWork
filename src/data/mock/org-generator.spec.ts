@@ -82,6 +82,16 @@ describe('generateOrg', () => {
     expect(other.people.map((p) => p.name)).not.toEqual(org.people.map((p) => p.name));
   });
 
+  it('gives everyone a unique employee ID of up to 6 digits and a unique user ID from their initials', () => {
+    for (const p of org.people) {
+      expect(p.employeeId).toMatch(/^[1-9]\d{0,5}$/);
+      const [first, last] = p.name.split(' ');
+      expect(p.userId).toMatch(new RegExp(`^${first[0]}[A-Z]${last[0]}\\d{2}$`));
+    }
+    expect(new Set(org.people.map((p) => p.employeeId)).size).toBe(org.people.length);
+    expect(new Set(org.people.map((p) => p.userId)).size).toBe(org.people.length);
+  });
+
   it('builds about 200 people, 5 levels deep, under one director', () => {
     expect(org.people.length).toBeGreaterThanOrEqual(150);
     expect(org.people.length).toBeLessThanOrEqual(260);

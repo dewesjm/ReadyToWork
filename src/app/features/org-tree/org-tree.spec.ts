@@ -111,10 +111,11 @@ describe('OrgTree', () => {
     expect(el().querySelectorAll('[data-testid="tree-row"]:not([data-context])').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('shows the employee ID when the keyword matches it', async () => {
+  it('shows employee and user IDs on every row, and highlights a matching one', async () => {
     const crew = fakeOrg().people.at(-1)!;
-    const { row } = await open(`/readiness?issues=all&q=${crew.employeeId}`);
-    expect(row(crew.id)!.querySelector('[data-testid="employee-id"] mark')!.textContent).toBe(crew.employeeId);
+    const { row } = await open(`/readiness?issues=all&q=${crew.userId}`);
+    expect(row(crew.id)!.querySelector('[data-testid="employee-id"]')!.textContent).toContain(crew.employeeId);
+    expect(row(crew.id)!.querySelector('[data-testid="user-id"] mark')!.textContent).toBe(crew.userId);
   });
 
   it('expands and collapses all, and toggles a row when it is clicked', async () => {

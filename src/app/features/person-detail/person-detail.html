@@ -39,7 +39,7 @@
         </div>
         <rtw-status-badge [status]="v.status" />
       </div>
-      <div class="text-sm opacity-80">{{ v.person.title }} · {{ v.person.employeeId }}</div>
+      <div class="text-sm opacity-80">{{ v.person.title }} · {{ v.person.employeeId }} · {{ v.person.userId }}</div>
 
       @if (v.programs.length > 0) {
         <ul class="flex flex-wrap gap-1" aria-label="Programs">

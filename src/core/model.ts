@@ -11,7 +11,10 @@ export type SourceId = string;
 
 export interface Person {
   id: string;
+  /** Payroll number, up to 6 digits. */
   employeeId: string;
+  /** Login: first, middle and last initials plus 2 digits, e.g. TJM07. */
+  userId: string;
   name: string;
   title: string;
   /** Null for the top of the org. */

@@ -24,5 +24,5 @@ export const TEST_ORG: Person[] = [
 ];
 
 function person(id: string, managerId: string | null): Person {
-  return { id, employeeId: `E-${id}`, name: `Person ${id}`, title: 'Test', managerId };
+  return { id, employeeId: `E-${id}`, userId: `U-${id}`, name: `Person ${id}`, title: 'Test', managerId };
 }

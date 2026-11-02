@@ -107,7 +107,10 @@ toolbar, so filters carry over when switching.
 - **Toolbar (shared)**: Tree / List switch, **keyword search**, **Issues only** toggle switch,
   category filter (show only SAP issues, for example), status filter, direct reports vs whole
   subtree, legend. Tree view adds expand/collapse all.
-- **Keyword search** filters as you type: person name, title and employee ID. It looks
+- Every row in the tree and the list shows the person's employee ID (up to 6 digits) and user
+  ID (first, middle and last initials plus 2 digits, e.g. TJM07) after the title, smaller and
+  fainter than the name.
+- **Keyword search** filters as you type: person name, title, employee ID and user ID. It looks
   through everyone in scope: while there is a keyword, Issues only and its category and status
   filters pause, so a ready person can be found by name. The switch stays on and says "(paused:
   searching everyone)"; clearing the search brings the filter back. In the tree, matches keep
@@ -156,13 +159,13 @@ toolbar, so filters carry over when switching.
 **Export** (both views)
 - An Export button next to Tree / List downloads `readiness-<date>.csv` for Excel: one row per
   person the page shows (the same people in both views, context managers left out), with name,
-  employee ID, title, reports to, overall status, then a status column and a days-left column
+  employee ID, user ID, title, reports to, overall status, then a status column and a days-left column
   per category shown. UTF-8 with a byte-order mark so Excel reads it correctly; cells that
   would start a formula get an apostrophe.
 
 ### 5.2 Person detail
 
-- Header: name, title, employee ID, status, manager chain (breadcrumb; managers above the
+- Header: name, title, employee ID, user ID, status, manager chain (breadcrumb; managers above the
   viewer are plain text), programs as badges with their own status ("Ridgeline R-01 (supply
   ship): Not ready").
 - Summary strip: one tile per category with its status; "Nothing tracked" tiles are greyed out.

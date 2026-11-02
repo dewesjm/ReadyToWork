@@ -46,6 +46,10 @@
               </button>
               <div class="text-xs opacity-70">
                 <rtw-highlight [text]="r.person.title" [keyword]="r.match ? keyword() : ''" />
+                <span class="whitespace-nowrap" data-testid="person-ids">
+                  · <rtw-highlight [text]="r.person.employeeId" [keyword]="r.match ? keyword() : ''" />
+                  · <rtw-highlight [text]="r.person.userId" [keyword]="r.match ? keyword() : ''" />
+                </span>
                 @if (r.manager) {
                   <span class="ml-1" [class.2xl:hidden]="!compact()" data-testid="under-manager">· under {{ r.manager.name }}</span>
                 }
@@ -107,6 +111,10 @@
         </div>
         <div class="mt-1 text-xs opacity-70">
           <rtw-highlight [text]="r.person.title" [keyword]="r.match ? keyword() : ''" />
+          <span class="whitespace-nowrap" data-testid="person-ids">
+            · <rtw-highlight [text]="r.person.employeeId" [keyword]="r.match ? keyword() : ''" />
+            · <rtw-highlight [text]="r.person.userId" [keyword]="r.match ? keyword() : ''" />
+          </span>
           @if (r.manager) {
             · under {{ r.manager.name }}
           }

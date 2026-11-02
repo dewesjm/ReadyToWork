@@ -33,11 +33,10 @@
             <span class="text-sm opacity-70">
               · <rtw-highlight [text]="r.person.title" [keyword]="keyword()" />
             </span>
-            @if (r.showEmployeeId) {
-              <span class="text-sm opacity-70" data-testid="employee-id">
-                · <rtw-highlight [text]="r.person.employeeId" [keyword]="keyword()" />
-              </span>
-            }
+            <span class="text-xs whitespace-nowrap opacity-70" data-testid="person-ids">
+              · <rtw-highlight data-testid="employee-id" [text]="r.person.employeeId" [keyword]="keyword()" />
+              · <rtw-highlight data-testid="user-id" [text]="r.person.userId" [keyword]="keyword()" />
+            </span>
             @if (r.context) {
               <span class="sr-only">(shown for context)</span>
             }

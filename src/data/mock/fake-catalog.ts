@@ -13,6 +13,9 @@ export const FIRST_NAMES = [
   'Nicole', 'Katie', 'Brittany', 'Danielle', 'Kelly', 'Christina', 'Rose', 'Hannah', 'Lauren',
 ];
 
+/** The fake people have no middle names, so their user IDs get a middle initial from here. */
+export const MIDDLE_INITIALS = 'ABCDEFGHJKLMNPRSTW';
+
 export const LAST_NAMES = [
   'Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Wilson', 'Anderson',
   'Taylor', 'Thomas', 'Moore', 'Martin', 'Jackson', 'Thompson', 'White', 'Harris', 'Clark',

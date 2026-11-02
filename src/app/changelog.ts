@@ -17,6 +17,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     changes: [
       'The demo now opens as the Superintendent, Tyler Mitchell. View as still switches to anyone else.',
       'Helpers and trade apprentices (Welder Helper, Pipefitting Apprentice and so on) are now all just Apprentice.',
+      "Each person's employee ID and user ID show next to their title in the tree and the list, and search finds either.",
     ],
   },
   {

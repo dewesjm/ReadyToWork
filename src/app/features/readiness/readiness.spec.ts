@@ -221,7 +221,7 @@ describe('Readiness page and toolbar', () => {
       const { name, blob } = saved.at(-1)!;
       expect(name).toMatch(/^readiness-\d{4}-\d{2}-\d{2}\.csv$/);
       const lines = splitCsv(await blob.text());
-      expect(lines[0]).toMatch(/^Name,Employee ID,Title,Reports to,Overall,Network access,/);
+      expect(lines[0]).toMatch(/^Name,Employee ID,User ID,Title,Reports to,Overall,Network access,/);
       expect(lines.length - 1).toBe(query.result().shownCount);
       expect(lines[1]).toContain(query.listResult().rows[0].person.employeeId);
     }

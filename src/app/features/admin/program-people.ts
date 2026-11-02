@@ -40,7 +40,7 @@ export const PEOPLE_SEARCH_LIMIT = 8;
             <input
               id="people-search"
               type="search"
-              placeholder="Name, title or employee ID"
+              placeholder="Name, title, employee or user ID"
               data-testid="people-search"
               [value]="search()"
               (input)="search.set($any($event.target).value)"
@@ -54,7 +54,8 @@ export const PEOPLE_SEARCH_LIMIT = 8;
                     <rtw-highlight [text]="p.name" [keyword]="search()" />
                     <span class="block text-xs opacity-70">
                       <rtw-highlight [text]="p.title" [keyword]="search()" /> ·
-                      <rtw-highlight [text]="p.employeeId" [keyword]="search()" />
+                      <rtw-highlight [text]="p.employeeId" [keyword]="search()" /> ·
+                      <rtw-highlight [text]="p.userId" [keyword]="search()" />
                     </span>
                   </span>
                   <button type="button" class="btn btn-outline btn-xs" [attr.aria-label]="'Add ' + p.name" (click)="add(p)">
@@ -109,7 +110,7 @@ export const PEOPLE_SEARCH_LIMIT = 8;
             <li class="flex items-center gap-2 px-3 py-2 sm:gap-3" [attr.data-person]="row.person.id">
               <span class="min-w-0 grow">
                 <a class="link link-hover font-medium" [routerLink]="['/person', row.person.id]">{{ row.person.name }}</a>
-                <span class="block truncate text-xs opacity-70">{{ row.person.title }} · {{ row.person.employeeId }}</span>
+                <span class="block truncate text-xs opacity-70">{{ row.person.title }} · {{ row.person.employeeId }} · {{ row.person.userId }}</span>
               </span>
               <rtw-status-badge class="shrink-0" [status]="row.status" [compact]="true" />
               <button
