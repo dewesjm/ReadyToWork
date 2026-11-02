@@ -38,6 +38,8 @@ describe('generateOrg', () => {
     const crewUnder = (managerId: string) =>
       index.subtree(managerId).filter((p) => index.childrenOf(p.id).length === 0);
     const tradeOf = (title: string) => TRADES.find((t) => t.titles.includes(title));
+    // Apprentice is shared by every trade, so only the journeyman titles show someone's trade.
+    const journeymenUnder = (managerId: string) => crewUnder(managerId).filter((p) => p.title !== 'Apprentice');
 
     it('keeps foreman and above on their usual titles', () => {
       for (const m of managers) {
@@ -48,19 +50,25 @@ describe('generateOrg', () => {
       }
     });
 
+    it('calls every helper and apprentice just Apprentice', () => {
+      const titles = new Set(managers.flatMap((m) => crewUnder(m.id)).map((p) => p.title));
+      expect(titles).toContain('Apprentice');
+      expect([...titles].some((t) => /Helper|\w Apprentice/.test(t))).toBe(false);
+    });
+
     it("gives each superintendent's crews their trade, with the odd person on loan", () => {
       managers.forEach((m, i) => {
-        const crew = crewUnder(m.id);
+        expect(crewUnder(m.id).every((p) => tradeOf(p.title))).toBe(true);
+        const crew = journeymenUnder(m.id);
         const own = crew.filter((p) => tradeOf(p.title) === TRADES[i % TRADES.length]);
-        expect(crew.every((p) => tradeOf(p.title))).toBe(true);
         expect(own.length / crew.length).toBeGreaterThan(0.85);
       });
-      const loans = managers.flatMap((m, i) => crewUnder(m.id).filter((p) => tradeOf(p.title) !== TRADES[i % TRADES.length]));
+      const loans = managers.flatMap((m, i) => journeymenUnder(m.id).filter((p) => tradeOf(p.title) !== TRADES[i % TRADES.length]));
       expect(loans.length).toBeGreaterThan(0);
     });
 
     it("mostly gives crew members their own trade's qualifications", () => {
-      const crew = managers.flatMap((m) => crewUnder(m.id));
+      const crew = managers.flatMap((m) => journeymenUnder(m.id));
       const holdsTradeQual = crew.filter((p) => {
         const quals = org.records.filter((r) => r.personId === p.id && r.category === 'qualification');
         return quals.some((q) => tradeOf(p.title)!.quals.includes(q.itemId));

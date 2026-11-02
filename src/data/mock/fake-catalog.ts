@@ -48,25 +48,25 @@ export const TRADES: Trade[] = [
   {
     id: 'welding',
     name: 'Welding',
-    titles: ['Welder', 'Welder', 'Welder', 'Welder Helper', 'Welding Apprentice'],
+    titles: ['Welder', 'Welder', 'Welder', 'Apprentice', 'Apprentice'],
     quals: ['QL-WLD-01', 'QL-PWL-01'],
   },
   {
     id: 'electrical',
     name: 'Electrical',
-    titles: ['Marine Electrician', 'Marine Electrician', 'Marine Electrician', 'Electrician Helper', 'Electrical Apprentice'],
+    titles: ['Marine Electrician', 'Marine Electrician', 'Marine Electrician', 'Apprentice', 'Apprentice'],
     quals: ['QL-MEL-01'],
   },
   {
     id: 'pipefitting',
     name: 'Pipefitting',
-    titles: ['Pipefitter', 'Pipefitter', 'Pipefitter', 'Pipefitter Helper', 'Pipefitting Apprentice'],
+    titles: ['Pipefitter', 'Pipefitter', 'Pipefitter', 'Apprentice', 'Apprentice'],
     quals: ['QL-PFT-01'],
   },
   {
     id: 'shipfitting',
     name: 'Shipfitting',
-    titles: ['Shipfitter', 'Shipfitter', 'Shipfitter', 'Shipfitter Helper', 'Shipfitting Apprentice'],
+    titles: ['Shipfitter', 'Shipfitter', 'Shipfitter', 'Apprentice', 'Apprentice'],
     quals: ['QL-SFT-01'],
   },
 ];

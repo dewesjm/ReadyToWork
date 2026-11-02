@@ -313,7 +313,7 @@ src/
   Programs are invented ships and classes. No real ship, class, hull number or company name.
 - **Crews by trade** (2026-10-31): each superintendent has one trade (Welding, Electrical,
   Pipefitting, Shipfitting) and every crew member under them has a title from it (Welder,
-  Welder Helper, Welding Apprentice), except the odd person on loan from another trade.
+  Apprentice), except the odd person on loan from another trade.
   Foreman and above keep their usual titles. Crew members generally hold their own trade's
   qualification. The trades, loan rate and qualification rate are tables in the mock data.
 - Default mix: about 73% ready, 18% expiring, 9% not ready, spread unevenly so

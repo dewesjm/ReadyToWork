@@ -14,7 +14,10 @@ export interface ChangelogEntry {
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
     date: '2026-11-02',
-    changes: ['The demo now opens as the Superintendent, Tyler Mitchell. View as still switches to anyone else.'],
+    changes: [
+      'The demo now opens as the Superintendent, Tyler Mitchell. View as still switches to anyone else.',
+      'Helpers and trade apprentices (Welder Helper, Pipefitting Apprentice and so on) are now all just Apprentice.',
+    ],
   },
   {
     date: '2026-11-01',
