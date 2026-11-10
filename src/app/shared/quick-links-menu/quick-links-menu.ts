@@ -4,7 +4,8 @@ import { RouterLink } from '@angular/router';
 import { Icon } from '../icon/icon';
 
 /**
- * Top-bar Quick Links menu, styled like the one in Compass. Holds the Change log for now. Uses
+ * Top-bar Quick Links menu, styled like the one in Compass but shown as just the icon (the
+ * name is for screen readers). Holds the Change log for now. Uses
  * the CDK overlay like the avatar menu, so both menus behave the same.
  */
 @Component({
@@ -13,7 +14,7 @@ import { Icon } from '../icon/icon';
   template: `
     <button
       type="button"
-      class="btn btn-ghost gap-1 px-2 font-medium text-primary-content hover:bg-primary-content/10"
+      class="btn btn-ghost btn-square font-medium text-primary-content hover:bg-primary-content/10"
       cdkOverlayOrigin
       #trigger="cdkOverlayOrigin"
       [attr.aria-expanded]="open()"
@@ -22,8 +23,7 @@ import { Icon } from '../icon/icon';
       (click)="toggle()"
     >
       <rtw-icon name="external-link" />
-      <span class="max-sm:sr-only">Quick Links</span>
-      <rtw-icon name="chevron-down" class="max-sm:hidden" />
+      <span class="sr-only">Quick Links</span>
     </button>
 
     <!-- Angular CDK overlay: positions the panel; a click outside or Escape closes it. -->

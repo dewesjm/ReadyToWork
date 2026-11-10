@@ -287,7 +287,7 @@ src/
   opens a menu to pick the brand themes or any of daisyUI's built-in themes. The choice is
   saved in the browser. Brand gold is kept clearly different from the yellow/amber "Expiring"
   status color.
-- **Change log**: a Change log row in the Quick Links menu (top bar, left of the avatar) opens
+- **Change log**: a Change log row in the Quick Links menu (link icon in the top bar, left of the avatar) opens
   its own page (`/changelog`). One card per day, newest first, with short plain-language lines
   under New, Changes and Fixes, each shown as a colored label. Menu and page are styled like
   the Compass project's. Kept by hand in `src/app/changelog.ts`, started 2026-10-31.
