@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 /** Tab through each page; every stop must show a focus ring (outline or ring shadow). */
-for (const [path, persona] of [['/readiness', 'admin'], ['/readiness?view=list', 'admin'], ['/person/p002', 'admin'], ['/admin', 'admin'], ['/changelog', 'admin']]) {
+for (const [path, persona] of [['/readiness?view=tree', 'admin'], ['/readiness?view=list', 'admin'], ['/person/p002', 'admin'], ['/admin', 'admin'], ['/changelog', 'admin']]) {
   for (const theme of ['navy', 'navy-dark']) {
     test(`${path} in ${theme} shows where keyboard focus is`, async ({ page }) => {
       await page.addInitScript((s) => localStorage.setItem('rtw.settings', s), JSON.stringify({ schemaVersion: 3, preferences: { theme, personaId: persona } }));

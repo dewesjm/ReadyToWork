@@ -143,3 +143,4 @@
 - [x] Tree keyboard support removed (user decision); mouse and touch only
 - [x] Standard tools: icons (lucide-angular), CSV (Papa Parse), dropdowns (Angular CDK Overlay)
 - [x] Tree: roll-up and Details move as one, so Details stays at the right edge (desktop fix)
+- [x] List view is the default; switching to List no longer jumps down the page (2026-11-10)

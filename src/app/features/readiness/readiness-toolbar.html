@@ -34,20 +34,20 @@
       <button
         type="button"
         class="btn join-item btn-sm"
-        [class.btn-primary]="query.view() === 'tree'"
-        [attr.aria-pressed]="query.view() === 'tree'"
-        (click)="query.setView('tree')"
-      >
-        Tree
-      </button>
-      <button
-        type="button"
-        class="btn join-item btn-sm"
         [class.btn-primary]="query.view() === 'list'"
         [attr.aria-pressed]="query.view() === 'list'"
         (click)="query.setView('list')"
       >
         List
+      </button>
+      <button
+        type="button"
+        class="btn join-item btn-sm"
+        [class.btn-primary]="query.view() === 'tree'"
+        [attr.aria-pressed]="query.view() === 'tree'"
+        (click)="query.setView('tree')"
+      >
+        Tree
       </button>
     </div>
 

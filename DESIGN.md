@@ -104,7 +104,7 @@ toolbar, so filters carry over when switching.
   - **Program**: "All programs" or one program, narrowing to people on that program.
   - Defaults (You, All programs) are set under **Preferences** in the avatar menu (above the
     themes) and remembered in the browser. Trial design: the user will judge it once it can be clicked.
-- **Toolbar (shared)**: Tree / List switch, **keyword search**, **Issues only** toggle switch,
+- **Toolbar (shared)**: List / Tree switch (List is the default; user, 2026-11-10), **keyword search**, **Issues only** toggle switch,
   category filter (show only SAP issues, for example), status filter, direct reports vs whole
   subtree, legend. Tree view adds expand/collapse all.
 - Every row in the tree and the list shows the person's employee ID (up to 6 digits) and user
@@ -118,7 +118,7 @@ toolbar, so filters carry over when switching.
 - **Issues only** is on by default. Off shows everyone in scope. The category and status
   filters only apply while it is on: they define what counts as an issue.
 - Manager roll-ups always count everyone below them, whatever is filtered.
-- The chosen view and filters are kept in the URL (`/readiness?view=list&...`), so a view can
+- The chosen view and filters are kept in the URL (`/readiness?view=tree&...`; no `view` means List), so a view can
   be bookmarked or shared, and Back returns to it.
 
 **Tree view**

@@ -45,7 +45,7 @@ describe('PersonPage (drill-down)', () => {
 
   it('opens from the tree, and Back to readiness restores the filters and expand state', async () => {
     const sapForeman = fakeOrg().scenarios.sapCrewForemanId;
-    const url = `/readiness?issues=all&q=${encodeURIComponent(org().get(sapForeman)!.name)}`;
+    const url = `/readiness?view=tree&issues=all&q=${encodeURIComponent(org().get(sapForeman)!.name)}`;
     const { harness, el, router, click } = await start(url);
     const rowsBefore = el().querySelectorAll('[data-testid="tree-row"]').length;
 

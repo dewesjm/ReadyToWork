@@ -39,21 +39,21 @@ describe('Readiness page and toolbar', () => {
     return { harness, el, query, router, stable, button, byTestId, params };
   }
 
-  it('defaults to the tree view with Issues only on, scoped to the viewer', async () => {
+  it('defaults to the list view with Issues only on, scoped to the viewer', async () => {
     const { el, button, byTestId, query } = await open('/readiness');
-    expect(el.querySelector('rtw-org-tree')).not.toBeNull();
-    expect(button('Tree').getAttribute('aria-pressed')).toBe('true');
+    expect(el.querySelector('rtw-issues-list')).not.toBeNull();
+    expect(button('List').getAttribute('aria-pressed')).toBe('true');
     expect(byTestId<HTMLInputElement>('issues-only').checked).toBe(true);
     expect(query.supervisorId()).toBe(director().id);
     expect(query.programId()).toBeNull();
   });
 
-  it('switches to the list view and keeps Issues only off in the URL', async () => {
+  it('switches to the tree view and keeps Issues only off in the URL', async () => {
     const { el, button, stable, router } = await open('/readiness?issues=all');
-    button('List').click();
+    button('Tree').click();
     await stable();
-    expect(router.url).toBe('/readiness?issues=all&view=list');
-    expect(el.querySelector('rtw-issues-list')).not.toBeNull();
+    expect(router.url).toBe('/readiness?issues=all&view=tree');
+    expect(el.querySelector('rtw-org-tree')).not.toBeNull();
   });
 
   it('reads every parameter from the URL', async () => {
@@ -148,7 +148,7 @@ describe('Readiness page and toolbar', () => {
     expect(query.programId()).toBeNull();
     expect(query.categories()).toEqual(['tool']);
     expect(query.statuses()).toEqual(['expiring']);
-    expect(query.view()).toBe('tree');
+    expect(query.view()).toBe('list');
   });
 
   it('lists the viewer first and the managers below, indented', async () => {
@@ -214,7 +214,7 @@ describe('Readiness page and toolbar', () => {
     });
 
     const { harness, byTestId, query, stable } = await open('/readiness');
-    for (const url of ['/readiness', '/readiness?view=list']) {
+    for (const url of ['/readiness?view=tree', '/readiness']) {
       await harness.navigateByUrl(url);
       await stable();
       byTestId('export').click();
@@ -240,10 +240,10 @@ describe('Readiness page and toolbar', () => {
     const url = `/readiness?issues=all&sup=${sup}&prog=${CRANE_PROGRAM_ID}&cat=tool&status=expiring&direct=1&q=a`;
     const { button, stable, params } = await open(url);
     const before = params();
-    button('List').click();
-    await stable();
-    expect(params()).toEqual({ ...before, view: 'list' });
     button('Tree').click();
+    await stable();
+    expect(params()).toEqual({ ...before, view: 'tree' });
+    button('List').click();
     await stable();
     expect(params()).toEqual(before);
   });

@@ -6,7 +6,7 @@ const MIN = 44;
 /** Pages, and the controls on them that people tap most. */
 const PAGES = [
   {
-    path: '/readiness',
+    path: '/readiness?view=tree',
     controls: 'header a, header button, rtw-readiness-toolbar :is(button, .input, select, label:has(.toggle)), [data-testid=tree-row] button',
   },
   {

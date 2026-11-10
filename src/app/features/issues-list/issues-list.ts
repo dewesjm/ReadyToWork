@@ -85,6 +85,8 @@ export class IssuesList {
     afterNextRender(() => {
       const key = this.state.focusedPersonId();
       if (!key) return;
+      // Only once: switching views later must not jump back down to this row.
+      this.state.focusedPersonId.set(null);
       // The table and the cards are both in the page; focus whichever one is displayed.
       const buttons = [...this.host.nativeElement.querySelectorAll<HTMLElement>(`[data-key="${key}"] button`)];
       (buttons.find((b) => b.getClientRects().length > 0) ?? buttons[0])?.focus();
@@ -92,7 +94,8 @@ export class IssuesList {
   }
 
   protected open(person: Person): void {
-    this.state.focusedPersonId.set(person.id);
+    // The panel keeps the list on screen, so there is nothing to come back to.
+    if (!this.navigator.usePanel()) this.state.focusedPersonId.set(person.id);
     this.navigator.open(person.id);
   }
 

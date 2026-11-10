@@ -53,7 +53,7 @@ describe('OrgTree', () => {
   }
 
   it('renders the whole fake org with Issues only off and everything expanded', async () => {
-    const { rows, tree, stable } = await open('/readiness?issues=all');
+    const { rows, tree, stable } = await open('/readiness?view=tree&issues=all');
     tree.expandAll();
     await stable();
     expect(rows().length).toBe(fakeOrg().people.length);
@@ -61,7 +61,7 @@ describe('OrgTree', () => {
   });
 
   it('opens down to the crew leads at first, with crews collapsed', async () => {
-    const { rows } = await open('/readiness?issues=all');
+    const { rows } = await open('/readiness?view=tree&issues=all');
     const org = readiness().org;
     const shown = rows().map((r) => r.dataset['id']!);
     const leads = fakeOrg().people.filter(
@@ -75,7 +75,7 @@ describe('OrgTree', () => {
   });
 
   it('shows only people with issues plus their manager path, all open', async () => {
-    const { rows, query } = await open('/readiness');
+    const { rows, query } = await open('/readiness?view=tree');
     const statuses = readiness().statusByPerson;
     const own = rows().filter((r) => !r.dataset['context']);
     const context = rows().filter((r) => r.dataset['context']);
@@ -87,7 +87,7 @@ describe('OrgTree', () => {
   });
 
   it('shows the planted tool crew in red for the Foreman', async () => {
-    const { row, rows } = await open('/readiness', 'foreman');
+    const { row, rows } = await open('/readiness?view=tree', 'foreman');
     const foremanId = fakeOrg().scenarios.toolCrewForemanId;
     expect(rows()[0].dataset['id']).toBe(foremanId);
     expect(row(foremanId)!.querySelector('rtw-rollup-badge [data-status="not-ready"]')).not.toBeNull();
@@ -95,7 +95,7 @@ describe('OrgTree', () => {
   });
 
   it('shows the SAP crew yellow for the director', async () => {
-    const { row } = await open('/readiness?issues=all');
+    const { row } = await open('/readiness?view=tree&issues=all');
     const { sapCrewForemanId } = fakeOrg().scenarios;
     const rollups = readiness().rollups;
     expect(rollups.get(sapCrewForemanId)!.worst).toBe('expiring');
@@ -104,7 +104,7 @@ describe('OrgTree', () => {
 
   it('expands the path to a keyword match and highlights it', async () => {
     const crew = fakeOrg().people.at(-1)!;
-    const { row, el } = await open(`/readiness?issues=all&q=${encodeURIComponent(crew.name)}`);
+    const { row, el } = await open(`/readiness?view=tree&issues=all&q=${encodeURIComponent(crew.name)}`);
     const match = row(crew.id)!;
     expect(match).not.toBeNull();
     expect(match.querySelector('[data-testid="name"] mark')!.textContent).toBe(crew.name);
@@ -113,13 +113,13 @@ describe('OrgTree', () => {
 
   it('shows employee and user IDs on every row, and highlights a matching one', async () => {
     const crew = fakeOrg().people.at(-1)!;
-    const { row } = await open(`/readiness?issues=all&q=${crew.userId}`);
+    const { row } = await open(`/readiness?view=tree&issues=all&q=${crew.userId}`);
     expect(row(crew.id)!.querySelector('[data-testid="employee-id"]')!.textContent).toContain(crew.employeeId);
     expect(row(crew.id)!.querySelector('[data-testid="user-id"] mark')!.textContent).toBe(crew.userId);
   });
 
   it('expands and collapses all, and toggles a row when it is clicked', async () => {
-    const { rows, tree, stable, row, router } = await open('/readiness?issues=all');
+    const { rows, tree, stable, row, router } = await open('/readiness?view=tree&issues=all');
     tree.collapseAll();
     await stable();
     expect(rows().length).toBe(1);
@@ -129,7 +129,7 @@ describe('OrgTree', () => {
     row(rootId)!.click();
     await stable();
     expect(rows().length).toBe(1 + readiness().org.childrenOf(rootId).length);
-    expect(router.url).toBe('/readiness?issues=all'); // the row click doesn't open the person
+    expect(router.url).toBe('/readiness?view=tree&issues=all'); // the row click doesn't open the person
 
     row(rootId)!.click();
     await stable();
@@ -141,7 +141,7 @@ describe('OrgTree', () => {
   });
 
   it('shows true roll-up counts for managers', async () => {
-    const { row } = await open('/readiness?issues=all');
+    const { row } = await open('/readiness?view=tree&issues=all');
     const directorId = fakeOrg().people[0].id;
     const rollup = readiness().rollups.get(directorId)!;
     const text = row(directorId)!.querySelector('rtw-rollup-badge')!.textContent!.replace(/\s+/g, ' ');
@@ -150,7 +150,7 @@ describe('OrgTree', () => {
   });
 
   it('shows an empty state with Clear filters when nothing matches', async () => {
-    const { el, stable, rows } = await open('/readiness?q=zzzz-nobody');
+    const { el, stable, rows } = await open('/readiness?view=tree&q=zzzz-nobody');
     expect(el().querySelector('[data-testid="empty"]')!.textContent).toContain('No one matches these filters');
     [...el().querySelectorAll('button')].find((b) => b.textContent?.trim() === 'Clear filters' && b.closest('[data-testid="empty"]'))!.click();
     await stable();
@@ -158,7 +158,7 @@ describe('OrgTree', () => {
   });
 
   it('opens a person with the Details button, without toggling the row', async () => {
-    const { row, stable, router } = await open('/readiness');
+    const { row, stable, router } = await open('/readiness?view=tree');
     const id = fakeOrg().scenarios.sapCrewForemanId;
     const expanded = row(id)!.getAttribute('data-expanded');
     row(id)!.querySelector<HTMLButtonElement>('[data-testid="details"]')!.click();
@@ -169,13 +169,13 @@ describe('OrgTree', () => {
   });
 
   it('does not open a person with no one under them when their row is clicked', async () => {
-    const { rows, row, tree, stable, router } = await open('/readiness?issues=all');
+    const { rows, row, tree, stable, router } = await open('/readiness?view=tree&issues=all');
     tree.expandAll();
     await stable();
     const leaf = rows().find((r) => !r.hasAttribute('data-expanded'))!.dataset['id']!;
     row(leaf)!.click();
     await stable();
-    expect(router.url).toBe('/readiness?issues=all'); // only the Details button opens a person
+    expect(router.url).toBe('/readiness?view=tree&issues=all'); // only the Details button opens a person
   });
 
   describe("a person's items in place", () => {
@@ -183,7 +183,7 @@ describe('OrgTree', () => {
       el.querySelector<HTMLElement>(`[data-testid="person-items"][data-person="${id}"]`);
 
     it('opens issues under the row from the chips, shows all on request, and closes again', async () => {
-      const { el, row, tree, stable, router } = await open('/readiness?issues=all');
+      const { el, row, tree, stable, router } = await open('/readiness?view=tree&issues=all');
       tree.expandAll();
       await stable();
       const { checksByPerson } = readiness();
@@ -199,7 +199,7 @@ describe('OrgTree', () => {
 
       toggle().click();
       await stable();
-      expect(router.url).toBe('/readiness?issues=all'); // it doesn't open the person
+      expect(router.url).toBe('/readiness?view=tree&issues=all'); // it doesn't open the person
       expect(toggle().getAttribute('aria-expanded')).toBe('true');
       const shown = () => [...items(el(), id)!.querySelectorAll('[data-item]')];
       expect(shown().length).toBe(checks.filter((c) => c.status !== 'ready').length);
@@ -215,7 +215,7 @@ describe('OrgTree', () => {
     });
 
     it("opens a manager's own items without opening or closing their team", async () => {
-      const { el, row, tree, stable } = await open('/readiness?issues=all');
+      const { el, row, tree, stable } = await open('/readiness?view=tree&issues=all');
       const { checksByPerson } = readiness();
       const manager = fakeOrg().people.find(
         (p) =>
@@ -232,7 +232,7 @@ describe('OrgTree', () => {
     });
 
     it('has no items toggle for people with no issues', async () => {
-      const { el, tree, stable } = await open('/readiness?issues=all');
+      const { el, tree, stable } = await open('/readiness?view=tree&issues=all');
       tree.expandAll();
       await stable();
       const { checksByPerson } = readiness();

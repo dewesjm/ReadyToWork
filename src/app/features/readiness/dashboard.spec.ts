@@ -33,7 +33,7 @@ describe('Dashboard layout (side panel)', () => {
   const sapForeman = () => fakeOrg().scenarios.sapCrewForemanId;
   const toolForeman = () => fakeOrg().scenarios.toolCrewForemanId;
 
-  async function start(url = '/readiness?issues=all') {
+  async function start(url = '/readiness?view=tree&issues=all') {
     const harness = await RouterTestingHarness.create(url);
     const el = () => harness.routeNativeElement as HTMLElement;
     const router = TestBed.inject(Router);
@@ -51,7 +51,7 @@ describe('Dashboard layout (side panel)', () => {
     expect(panel()).toBeNull();
     details(sapForeman()).click();
     await stable();
-    expect(router.url.startsWith('/readiness')).toBe(true);
+    expect(router.url.startsWith('/readiness?view=tree')).toBe(true);
     expect(params()['person']).toBe(sapForeman());
     expect(panelPerson()).toBe(sapForeman());
     expect(row(sapForeman()).getAttribute('aria-current')).toBe('true');
@@ -59,9 +59,9 @@ describe('Dashboard layout (side panel)', () => {
   });
 
   it('opens straight from a link, and ignores a person the viewer cannot see', async () => {
-    const { panelPerson, harness, panel } = await start(`/readiness?issues=all&person=${toolForeman()}`);
+    const { panelPerson, harness, panel } = await start(`/readiness?view=tree&issues=all&person=${toolForeman()}`);
     expect(panelPerson()).toBe(toolForeman());
-    await harness.navigateByUrl('/readiness?issues=all&person=nobody');
+    await harness.navigateByUrl('/readiness?view=tree&issues=all&person=nobody');
     expect(panel()).toBeNull();
   });
 
@@ -77,7 +77,7 @@ describe('Dashboard layout (side panel)', () => {
   });
 
   it('closes with the Close button or Escape', async () => {
-    const { details, el, stable, panel, params } = await start(`/readiness?issues=all&person=${sapForeman()}`);
+    const { details, el, stable, panel, params } = await start(`/readiness?view=tree&issues=all&person=${sapForeman()}`);
     el().querySelector<HTMLButtonElement>('[data-testid="close-panel"]')!.click();
     await stable();
     expect(panel()).toBeNull();
@@ -93,14 +93,14 @@ describe('Dashboard layout (side panel)', () => {
 
   it('follows the manager chain inside the panel', async () => {
     const crew = org().childrenOf(toolForeman())[0];
-    const { panel, panelPerson, stable } = await start(`/readiness?issues=all&person=${crew.id}`);
+    const { panel, panelPerson, stable } = await start(`/readiness?view=tree&issues=all&person=${crew.id}`);
     panel()!.querySelector<HTMLElement>(`a[data-chain="${toolForeman()}"]`)!.click();
     await stable();
     expect(panelPerson()).toBe(toolForeman());
   });
 
   it('scopes the tree with "View the tree from" and keeps the panel open', async () => {
-    const { panel, panelPerson, stable, params, el } = await start(`/readiness?issues=all&person=${toolForeman()}`);
+    const { panel, panelPerson, stable, params, el } = await start(`/readiness?view=tree&issues=all&person=${toolForeman()}`);
     panel()!.querySelector<HTMLElement>('[data-testid="view-tree"]')!.click();
     await stable();
     expect(params()['sup']).toBe(toolForeman());
@@ -109,20 +109,20 @@ describe('Dashboard layout (side panel)', () => {
   });
 
   it('keeps the panel through Clear filters', async () => {
-    const { el, stable, panelPerson } = await start(`/readiness?issues=all&q=a&person=${toolForeman()}`);
+    const { el, stable, panelPerson } = await start(`/readiness?view=tree&issues=all&q=a&person=${toolForeman()}`);
     el().querySelector<HTMLButtonElement>('[data-testid="clear-filters"]')!.click();
     await stable();
     expect(panelPerson()).toBe(toolForeman());
   });
 
   it('has a link to the full page', async () => {
-    const { panel } = await start(`/readiness?issues=all&person=${toolForeman()}`);
+    const { panel } = await start(`/readiness?view=tree&issues=all&person=${toolForeman()}`);
     expect(panel()!.querySelector('[data-testid="open-full-page"]')!.getAttribute('href')).toBe(`/person/${toolForeman()}`);
   });
 
   it('opens the full page on a narrow screen', async () => {
     TestBed.inject(ScreenService).wide.set(false);
-    const { details, stable, router, panel } = await start(`/readiness?issues=all&person=${toolForeman()}`);
+    const { details, stable, router, panel } = await start(`/readiness?view=tree&issues=all&person=${toolForeman()}`);
     expect(panel()).toBeNull();
     details(sapForeman()).click();
     await stable();
@@ -131,7 +131,7 @@ describe('Dashboard layout (side panel)', () => {
 
   it('never shows the panel in the drill-down layout', async () => {
     TestBed.inject(SettingsService).updatePreferences({ layout: 'drilldown' });
-    const { details, stable, router, panel } = await start(`/readiness?issues=all&person=${toolForeman()}`);
+    const { details, stable, router, panel } = await start(`/readiness?view=tree&issues=all&person=${toolForeman()}`);
     expect(panel()).toBeNull();
     details(sapForeman()).click();
     await stable();

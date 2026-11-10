@@ -47,7 +47,7 @@ export class ReadinessQueryService {
     return this.params().get(name);
   }
 
-  readonly view = computed<ReadinessView>(() => (this.param('view') === 'list' ? 'list' : 'tree'));
+  readonly view = computed<ReadinessView>(() => (this.param('view') === 'tree' ? 'tree' : 'list'));
   /** On unless the URL says `issues=all`. */
   readonly issuesOnly = computed(() => this.param('issues') !== 'all');
   /** Issues only is on but paused because there is a search. */
@@ -172,7 +172,7 @@ export class ReadinessQueryService {
   }
 
   setView(view: ReadinessView): void {
-    this.navigate({ view: view === 'tree' ? null : view });
+    this.navigate({ view: view === 'list' ? null : view });
   }
 
   setIssuesOnly(on: boolean): void {

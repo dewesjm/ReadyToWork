@@ -6,7 +6,7 @@ const THEMES = ['navy', 'navy-dark'];
 
 /** Each page with the persona that can see it. */
 const PAGES = [
-  { name: 'tree', path: '/readiness', persona: 'director' },
+  { name: 'tree', path: '/readiness?view=tree', persona: 'director' },
   { name: 'list', path: '/readiness?view=list', persona: 'director' },
   { name: 'person', path: '/person/p001', persona: 'director' },
   { name: 'admin', path: '/admin', persona: 'admin' },
@@ -41,7 +41,7 @@ for (const theme of THEMES) {
   test(`open avatar menu and items in ${theme} have no accessibility problems`, async ({ page: tab }) => {
     const settings = { schemaVersion: 3, preferences: { theme, personaId: 'director' } };
     await tab.addInitScript((saved) => localStorage.setItem('rtw.settings', saved), JSON.stringify(settings));
-    await tab.goto('/readiness');
+    await tab.goto('/readiness?view=tree');
     await tab.getByTestId('items-toggle').first().click();
     await tab.getByRole('button', { name: /account, preferences and theme/ }).click();
     const results = await new AxeBuilder({ page: tab })

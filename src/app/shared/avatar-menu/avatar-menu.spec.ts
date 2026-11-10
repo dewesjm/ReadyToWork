@@ -154,7 +154,7 @@ describe('AvatarMenu', () => {
     await choose('layout', 'drilldown');
     expect(TestBed.inject(SettingsService).preferences().layout).toBe('drilldown');
 
-    const harness = await RouterTestingHarness.create('/readiness');
+    const harness = await RouterTestingHarness.create('/readiness?view=tree');
     const row = (harness.routeNativeElement as HTMLElement).querySelector<HTMLElement>('[data-testid="tree-row"]')!;
     row.querySelector<HTMLButtonElement>('[data-testid="details"]')!.click();
     await harness.fixture.whenStable();

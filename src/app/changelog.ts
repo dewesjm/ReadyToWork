@@ -13,6 +13,11 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    date: '2026-11-10',
+    changes: ['The Readiness page opens in the list view. The List button now comes before Tree.'],
+    fixes: ['Switching to the list no longer jumps you down the page after you have opened someone from it.'],
+  },
+  {
     date: '2026-11-02',
     changes: [
       'The demo now opens as the Superintendent, Tyler Mitchell. View as still switches to anyone else.',

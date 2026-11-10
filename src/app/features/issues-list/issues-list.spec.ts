@@ -115,6 +115,14 @@ describe('IssuesList (list view)', () => {
     await harness.navigateByUrl('/readiness?view=list');
     await stable();
     expect((document.activeElement as HTMLElement).closest('tr')?.dataset['key']).toBe(key);
+
+    // Only once: switching to Tree and back to List leaves focus (and the scroll) alone.
+    (document.activeElement as HTMLElement).blur();
+    await harness.navigateByUrl('/readiness?view=tree');
+    await stable();
+    await harness.navigateByUrl('/readiness?view=list');
+    await stable();
+    expect((document.activeElement as HTMLElement).closest('tr')).toBeNull();
   });
 
   it('opens the side panel in the dashboard, highlights that person and shows icons only', async () => {

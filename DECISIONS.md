@@ -467,3 +467,13 @@
   middle names, so the middle initial is drawn from `MIDDLE_INITIALS`. User IDs come from their
   own seeded random sequence, and the employee ID still takes one draw from the main one, so the
   generated names (Tyler Mitchell as the Superintendent) did not change.
+
+## 2026-11-10
+
+- **List is the default view** (user: "we'd like the default to be list view instead of
+  tree"). `/readiness` with no `view` shows the list; the tree is `?view=tree`. The switch
+  reads List / Tree. Old `?view=list` links still work.
+- **Focus goes back to a list row once** (fix). The list remembered the last row opened so it
+  could refocus it after Back, but never forgot it, so every later switch to List scrolled down
+  to that row. It is now cleared once used, and not set at all when the person opens in the
+  side panel (the list never leaves the screen then).
