@@ -5,6 +5,7 @@
   - [ ] M5 list view and M6 Admin
   - [ ] Announcements
   - [ ] Change log
+  - [ ] Quick Links menu and change log in the Compass style
   - [ ] List by person
   - [ ] Shipyard data and crews by trade
   - [ ] Typed requirements

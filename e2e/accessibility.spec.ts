@@ -50,3 +50,16 @@ for (const theme of THEMES) {
     expect(results.violations.map((v) => `${v.id} (${v.nodes.length}) ${v.nodes[0].target.join(' ')}`)).toEqual([]);
   });
 }
+
+for (const theme of THEMES) {
+  test(`open Quick Links menu in ${theme} has no accessibility problems`, async ({ page: tab }) => {
+    const settings = { schemaVersion: 3, preferences: { theme, personaId: 'director' } };
+    await tab.addInitScript((saved) => localStorage.setItem('rtw.settings', saved), JSON.stringify(settings));
+    await tab.goto('/readiness?view=tree');
+    await tab.getByRole('button', { name: 'Quick Links' }).click();
+    const results = await new AxeBuilder({ page: tab })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(results.violations.map((v) => `${v.id} (${v.nodes.length}) ${v.nodes[0].target.join(' ')}`)).toEqual([]);
+  });
+}

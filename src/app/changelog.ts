@@ -14,7 +14,11 @@ export interface ChangelogEntry {
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
     date: '2026-11-10',
-    changes: ['The Readiness page opens in the list view. The List button now comes before Tree.'],
+    new: ['A Quick Links menu in the top bar. The Change log has moved there from your avatar menu.'],
+    changes: [
+      'The Readiness page opens in the list view. The List button now comes before Tree.',
+      'The Change log shows each day as a card, with New, Changes and Fixes as colored labels.',
+    ],
     fixes: ['Switching to the list no longer jumps you down the page after you have opened someone from it.'],
   },
   {

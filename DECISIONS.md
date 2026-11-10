@@ -477,3 +477,9 @@
   could refocus it after Back, but never forgot it, so every later switch to List scrolled down
   to that row. It is now cleared once used, and not set at all when the person opens in the
   side panel (the list never leaves the screen then).
+- **Quick Links menu and change log styled like Compass** (user: "bring in the quick links and
+  change log style of that. just the style"). A Quick Links button in the top bar, same look
+  and CDK overlay as Compass's, now holds the Change log row (moved out of the avatar menu).
+  Only the style came over: no admin-managed links, so the menu has just Change log for now.
+  The change log page shows each day as a card with New, Changes and Fixes as colored daisyUI
+  badges (green, blue, amber), as Compass does.

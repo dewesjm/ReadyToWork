@@ -14,6 +14,7 @@ import {
   CircleX,
   Clock,
   Download,
+  ExternalLink,
   Funnel,
   GraduationCap,
   History,
@@ -53,6 +54,7 @@ export const ICONS: Record<string, LucideIconData> = {
   // Controls and notices
   'chevron-right': ChevronRight,
   'chevron-down': ChevronDown,
+  'external-link': ExternalLink,
   'chevrons-up-down': ChevronsUpDown,
   'chevrons-down-up': ChevronsDownUp,
   search: Search,

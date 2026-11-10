@@ -34,7 +34,7 @@ Vercel, as a static site. `vercel.json` sets the build output folder, rewrites e
 - `src/app/features/`: screens (readiness page with tree and list views, person detail, admin,
   change log); `readiness/` holds the URL-backed query, the toolbar, the tree's expand state and
   the items shown in place; `admin/` holds the admin tabs and their child routes
-- `src/app/shared/`: app shell, avatar menu, theme list, shared UI pieces and the file download
+- `src/app/shared/`: app shell, Quick Links menu, avatar menu, theme list, shared UI pieces and the file download
 - `src/app/changelog.ts`: the change log shown at `/changelog`; add a line for any change users
   would notice
 - `src/app/services/`: Angular services wrapping core and data; `tokens.ts` is where the mock

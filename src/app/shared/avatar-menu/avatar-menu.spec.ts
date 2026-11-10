@@ -166,17 +166,4 @@ describe('AvatarMenu', () => {
     expect(TestBed.inject(SettingsService).preferences().layout).toBe('drilldown');
   });
 
-  it('links to the change log and closes', async () => {
-    const { fixture, el, toggle } = await setup();
-    toggle.click();
-    await fixture.whenStable();
-    const link = el.querySelector<HTMLAnchorElement>('[data-testid="changelog-link"]')!;
-    expect(link.getAttribute('href')).toBe('/changelog');
-    expect(link.querySelector('[data-icon="history"]')).not.toBeNull();
-
-    link.click();
-    await fixture.whenStable();
-    expect(TestBed.inject(Router).url).toBe('/changelog');
-    expect(toggle.getAttribute('aria-expanded')).toBe('false');
-  });
 });

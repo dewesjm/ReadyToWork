@@ -270,7 +270,7 @@ src/
   app/
     features/    readiness (page, toolbar, query in the URL, items in place), org-tree,
                  issues-list, person-detail, admin, changelog, not-found
-    shared/      app shell, avatar menu, status badge, category chip, roll-up badge, icons,
+    shared/      app shell, Quick Links menu, avatar menu, status badge, category chip, roll-up badge, icons,
                  announcement banner, update prompt, download
     services/    Angular wrappers that provide data/ implementations and computed state
     changelog.ts the change log's entries
@@ -287,9 +287,10 @@ src/
   opens a menu to pick the brand themes or any of daisyUI's built-in themes. The choice is
   saved in the browser. Brand gold is kept clearly different from the yellow/amber "Expiring"
   status color.
-- **Change log**: a Change log row near the top of the avatar menu opens its own page
-  (`/changelog`). One entry per day, newest first, with short plain-language lines under New,
-  Changes and Fixes. Kept by hand in `src/app/changelog.ts`, started 2026-10-31.
+- **Change log**: a Change log row in the Quick Links menu (top bar, left of the avatar) opens
+  its own page (`/changelog`). One card per day, newest first, with short plain-language lines
+  under New, Changes and Fixes, each shown as a colored label. Menu and page are styled like
+  the Compass project's. Kept by hand in `src/app/changelog.ts`, started 2026-10-31.
 - **Hosting**: Vercel, as a static site. Clean URLs, with a `vercel.json` rewrite sending every
   path to `index.html` so deep links and refreshes work.
 - **PWA**: `@angular/pwa` (service worker plus manifest). The app is fully static, so it works
