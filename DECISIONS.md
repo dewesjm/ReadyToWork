@@ -490,3 +490,5 @@
   screens as Admin and can also run calls under Admin > Services. Keep the operation list
   beside the tester and call the existing Admin service, so the tester and Thresholds save
   through the same rules and browser store.
+- **Service design follow-up.** Keep the proposed calls and open questions in DESIGN.md.
+  Use warning windows as the reference when defining the other Admin writes.

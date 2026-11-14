@@ -24,6 +24,9 @@ To try the app's service calls, open the avatar menu, choose **Developer** under
 its response. The warning-window write changes the same settings as Admin > Thresholds in
 this browser; leave days blank to restore the category default.
 
+See [Service candidates for review](DESIGN.md#service-candidates-for-review) for the draft
+call boundaries and the questions to settle before adding more to the tester.
+
 ## Deploying
 
 Vercel, as a static site. `vercel.json` sets the build output folder, rewrites every path to

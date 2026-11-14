@@ -264,6 +264,26 @@ data/             DataSource interface      → MockDataSource (seeded fake org)
 - **The fake people and checks are generated, not stored**: the same seed always gives the
   same org, so demos are repeatable. Only settings are saved.
 
+### Service candidates for review
+
+These are draft boundaries for the mockup. A useful call takes named inputs such as a program
+ID and a new name, applies the app's rules, and returns enough information for both the screen
+and Admin > Services to show the outcome. Start with the Admin writes. Use `setWarningWindow`
+as the existing example of a call shared by a screen and the tester.
+
+| Candidate | Where it lives today | What to define |
+|---|---|---|
+| Programs and requirements | The program list and editor assemble changes through `AdminService.editPrograms` using functions in `core/program-edits.ts`. | Name the create, rename, delete, add-requirement and remove-requirement calls. Define what each returns and how it reports a missing program, a duplicate name or an invalid requirement. |
+| Program assignments | The people pane resolves the selected people or supervisor's team and passes person IDs through the same generic edit call. | Define assign, bulk assign and unassign. Decide whether bulk assign takes explicit person IDs or a supervisor ID. Specify what it reports for people already assigned and whether future reports should be added automatically. |
+| Announcements | The editor and list use `editAnnouncements` with core functions for publishing, toggling and deleting. | Define publish or update, turn on or off, and delete. Specify how a call reports invalid dates or an unknown ID. Keep draft editing and the live form preview in the screen. |
+| Settings transfer | `SettingsService` already exports JSON and validates imports. `AdminService` already replaces and resets settings. The Settings file screen coordinates the steps. | Decide how to expose export, preview import, apply import and reset in Services. Define the preview and validation response. Preserve viewer preferences when applying an import or reset, and keep confirmation before either write. |
+| Readiness search and person detail | `ReadinessService` calculates readiness. `ReadinessQueryService` combines URL state with filtering and scope, and the shared person-detail view builds its result from core logic. | Consider named reads once a caller needs results outside those screens. Define the viewer and scope inputs, the tree and list results, and what person detail returns for an unknown or out-of-scope ID. |
+| Readiness CSV | The toolbar combines the filtered list with the core CSV helpers and starts the browser download. | Consider a call that returns CSV content and a suggested filename if Services or another screen needs to run the same export. Define which rows and columns it returns for the same filters. |
+
+Keep core rules as pure functions. Services can call them while coordinating data reads, writes
+and validation. Keep URL updates, form state, confirmation dialogs, downloads and layout in
+the UI. These candidates can live on existing services until there is a reason to split them.
+
 ### Folder layout
 
 ```

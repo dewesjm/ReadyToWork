@@ -24,6 +24,8 @@
 - Tools: assigned to individuals, crews, or both? (They come from a separate system.)
 
 ## Follow-ups
+- Review the [draft service candidates](DESIGN.md#service-candidates-for-review), starting with
+  Admin writes. Define the inputs, responses and validation before implementing them.
 - Demo: ask users whether they miss sorting the list by column (M5 shipped one fixed order).
 - Demo: ask admins whether "Add everyone under" should be a standing rule (new people under that
   supervisor join the program) rather than a one-time add.
