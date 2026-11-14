@@ -10,6 +10,7 @@ const PAGES = [
   { name: 'list', path: '/readiness?view=list', persona: 'director' },
   { name: 'person', path: '/person/p001', persona: 'director' },
   { name: 'admin', path: '/admin', persona: 'admin' },
+  { name: 'services', path: '/admin/services', persona: 'developer' },
   { name: 'changelog', path: '/changelog', persona: 'director' },
 ];
 
@@ -21,6 +22,11 @@ for (const theme of THEMES) {
       await tab.addInitScript((saved) => localStorage.setItem('rtw.settings', saved), JSON.stringify(settings));
       await tab.goto(page.path);
       await expect(tab.getByRole('heading', { level: 1 })).toBeVisible();
+      if (page.name === 'services') {
+        await tab.getByLabel('Service call').selectOption({ label: 'AdminService.setWarningWindow' });
+        await tab.getByRole('button', { name: 'Run call' }).click();
+        await expect(tab.getByRole('heading', { name: 'Response' })).toBeVisible();
+      }
 
       await testInfo.attach('screenshot', { body: await tab.screenshot({ fullPage: true }), contentType: 'image/png' });
       const results = await new AxeBuilder({ page: tab })

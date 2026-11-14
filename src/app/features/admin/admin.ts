@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ViewerService } from '../../services/viewer-service';
 import { Icon } from '../../shared/icon/icon';
@@ -6,7 +6,7 @@ import { AdminService } from './admin-service';
 
 /**
  * Admin page: section tabs around the routed section, and the "Saved" note after each edit.
- * Only the admin persona gets past the notice.
+ * Admin and Developer get past the notice.
  */
 @Component({
   selector: 'rtw-admin',
@@ -22,7 +22,7 @@ import { AdminService } from './admin-service';
     </div>
     @if (viewer.isAdmin()) {
       <nav class="tabs tabs-border mt-3 mb-5 flex-nowrap overflow-x-auto" aria-label="Admin sections">
-        @for (s of sections; track s.path) {
+        @for (s of sections(); track s.path) {
           <a
             class="tab shrink-0 text-base-content/80"
             [routerLink]="s.path"
@@ -46,10 +46,11 @@ import { AdminService } from './admin-service';
 export class Admin {
   protected readonly viewer = inject(ViewerService);
   protected readonly admin = inject(AdminService);
-  protected readonly sections = [
+  protected readonly sections = computed(() => [
     { path: 'programs', label: 'Programs' },
     { path: 'thresholds', label: 'Thresholds' },
     { path: 'announcements', label: 'Announcements' },
     { path: 'file', label: 'Settings file' },
-  ];
+    ...(this.viewer.canRunServices() ? [{ path: 'services', label: 'Services' }] : []),
+  ]);
 }

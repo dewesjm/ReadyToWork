@@ -33,6 +33,11 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./announcement-editor').then((m) => m.AnnouncementEditor),
       },
       {
+        path: 'services',
+        title: 'Services · Admin · Ready to Work',
+        loadComponent: () => import('./services/services').then((m) => m.Services),
+      },
+      {
         path: 'file',
         title: 'Settings file · Admin · Ready to Work',
         loadComponent: () => import('./settings-file').then((m) => m.SettingsFile),

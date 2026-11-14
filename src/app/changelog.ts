@@ -13,6 +13,10 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    date: '2026-11-14',
+    new: ['Choose Developer in the avatar menu to try demo reads and writes in Admin > Services.'],
+  },
+  {
     date: '2026-11-10',
     new: ['A Quick Links menu (the link icon in the top bar). The Change log has moved there from your avatar menu.'],
     changes: [

@@ -47,6 +47,7 @@
 - Trade-specific qualifications within a program (a program may need different quals per trade)
 
 ## Done
+- [x] Add Developer to View as and share Admin service calls between Thresholds and the Services tester.
 - [x] User reviews DESIGN.md
 - [x] M0 Setup (scaffold, brand themes + avatar menu, shell and routes, PWA, Vercel config)
 - [x] User checks M0 in the browser; colors approved

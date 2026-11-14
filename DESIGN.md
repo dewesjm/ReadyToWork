@@ -175,12 +175,17 @@ toolbar, so filters carry over when switching.
 - **Responsible for**: if they manage people, the roll-up of their subtree and a link to view
   the tree from them.
 
-### 5.3 Admin (admin view only)
+### 5.3 Admin (Admin and Developer views)
 
 Four tabs, each its own URL: Programs (`/admin/programs`, each program at
 `/admin/programs/:id`), Thresholds, Announcements (`/admin/announcements`, each notice at
-`/admin/announcements/:id`, a new one at `new`) and Settings file. The Admin link shows only
-for the admin persona; anyone else opening `/admin` is told it is for admins.
+`/admin/announcements/:id`, a new one at `new`) and Settings file. The Admin link shows for
+Admin and Developer. Anyone else opening `/admin` sees an access notice.
+
+- **Services** (`/admin/services`, Developer only): pick a sample read or write, review its
+  description and full call, run it, and see the response. The tester uses the same
+  `AdminService` as the admin screens. Warning-window writes persist in the current browser.
+  The persona is a demo control.
 
 - **Programs**: create, rename, delete programs; add requirements by typing one or more IDs
   (type plus ID per row, "any one will do" for several, optional name) and remove them. Each

@@ -483,3 +483,10 @@
   Only the style came over: no admin-managed links, so the menu has just Change log for now.
   The change log page shows each day as a card with New, Changes and Fixes as colored daisyUI
   badges (green, blue, amber), as Compass does.
+
+## 2026-11-14
+
+- **Developer service tester.** Follow PrimeNGDemo's split: Developer gets the same Admin
+  screens as Admin and can also run calls under Admin > Services. Keep the operation list
+  beside the tester and call the existing Admin service, so the tester and Thresholds save
+  through the same rules and browser store.

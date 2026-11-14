@@ -18,7 +18,7 @@ import { UpdatePrompt } from '../update-prompt/update-prompt';
 })
 export class AppShell {
   private readonly viewer = inject(ViewerService);
-  /** Admin shows only for the admin persona. */
+  /** Admin shows for the Admin and Developer personas. */
   protected readonly links = computed(() => [
     { path: '/readiness', label: 'Readiness' },
     ...(this.viewer.isAdmin() ? [{ path: '/admin', label: 'Admin' }] : []),

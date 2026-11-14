@@ -185,14 +185,16 @@ describe('generateOrg', () => {
     expect(missing).toEqual([]);
   });
 
-  it('offers five personas, including an admin', () => {
-    expect(org.personas.map((p) => p.id)).toEqual(['foreman', 'general-foreman', 'superintendent', 'director', 'admin']);
+  it('offers Admin and Developer alongside the reporting personas', () => {
+    expect(org.personas.map((p) => p.id)).toEqual([
+      'foreman', 'general-foreman', 'superintendent', 'director', 'admin', 'developer',
+    ]);
     expect(org.personas.find((p) => p.id === 'foreman')?.personId).toBe(org.scenarios.toolCrewForemanId);
     // The general foreman is the tool crew foreman's own manager, with the General Foreman title.
     const gf = org.people.find((p) => p.id === org.personas.find((x) => x.id === 'general-foreman')?.personId)!;
     expect(gf.id).toBe(org.people.find((p) => p.id === org.scenarios.toolCrewForemanId)!.managerId);
     expect(gf.title).toBe('General Foreman');
-    expect(org.personas.filter((p) => p.isAdmin)).toHaveLength(1);
+    expect(org.personas.filter((p) => p.isAdmin).map((p) => p.id)).toEqual(['admin', 'developer']);
   });
 
   it('looks the same on any anchor date', () => {

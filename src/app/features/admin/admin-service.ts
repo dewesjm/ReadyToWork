@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { Announcement, ProgramSetup, ProgramSummary, programSummary } from '../../../core';
-import { Settings, withProgramSetup } from '../../../data';
+import { Announcement, DEFAULT_CONFIG, ProgramSetup, ProgramSummary, programSummary } from '../../../core';
+import { Settings, clearWarningDays, setWarningDays, warningDaysProblem, withProgramSetup } from '../../../data';
 import { ReadinessService } from '../../services/readiness-service';
 import { SettingsService } from '../../services/settings-service';
 
@@ -25,6 +25,28 @@ export class AdminService {
   readonly announcements = computed(() => this.settings.settings().announcements);
   readonly itemNames = this.readiness.itemNames;
   readonly saved = signal(false);
+  readonly warningWindows = computed(() => {
+    const overrides = this.settings.settings().warningDays;
+    return DEFAULT_CONFIG.categories.map((category) => ({
+      category,
+      days: overrides[category.id] ?? category.warningDays,
+      overridden: overrides[category.id] !== undefined,
+    }));
+  });
+
+  /** Saves an override; null or the shipped value restores the category default. */
+  setWarningWindow(categoryId: string, days: number | null): number {
+    const category = DEFAULT_CONFIG.categories.find((entry) => entry.id === categoryId);
+    if (!category) throw new Error(`Unknown category: ${categoryId}`);
+    const problem = days === null ? null : warningDaysProblem(days);
+    if (problem) throw new Error(problem);
+    this.edit((settings) =>
+      days === null || days === category.warningDays
+        ? clearWarningDays(settings, categoryId)
+        : setWarningDays(settings, categoryId, days),
+    );
+    return days ?? category.warningDays;
+  }
 
   /** People on each program and their readiness for it, by program id. */
   readonly summaries = computed(() => {

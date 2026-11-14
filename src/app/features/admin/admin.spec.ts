@@ -44,4 +44,57 @@ describe('Admin', () => {
       expect(el.querySelector('rtw-thresholds')).toBeNull();
     }
   });
+
+  it('only lets Developer see and run the services, including after switching personas', async () => {
+    const viewer = TestBed.inject(ViewerService);
+    viewer.setPersona('admin');
+    const harness = await RouterTestingHarness.create('/admin/services');
+    const el = harness.routeNativeElement as HTMLElement;
+    expect(el.textContent).toContain('Choose Developer');
+    expect(el.querySelector('a[href="/admin/services"]')).toBeNull();
+    expect(el.querySelector('rtw-services button')).toBeNull();
+
+    viewer.setPersona('developer');
+    await harness.fixture.whenStable();
+    expect(el.querySelector('a[href="/admin/services"]')).not.toBeNull();
+    expect(el.querySelector('rtw-services code')?.textContent).toBe('AdminService.warningWindows()');
+    el.querySelector<HTMLButtonElement>('rtw-services button')!.click();
+    await harness.fixture.whenStable();
+    expect(el.querySelector('rtw-services [role="status"]')?.textContent).toContain('overridden');
+
+    viewer.setPersona('admin');
+    await harness.fixture.whenStable();
+    expect(el.querySelector('rtw-services [role="status"]')).toBeNull();
+  });
+
+  it('runs the displayed write and shows the saved value in Thresholds', async () => {
+    TestBed.inject(ViewerService).setPersona('developer');
+    const harness = await RouterTestingHarness.create('/admin/services');
+    const el = harness.routeNativeElement as HTMLElement;
+    const operation = el.querySelector<HTMLSelectElement>('rtw-services select')!;
+    operation.selectedIndex = [...operation.options].findIndex((o) => o.text === 'AdminService.setWarningWindow');
+    operation.dispatchEvent(new Event('change'));
+    await harness.fixture.whenStable();
+
+    const category = el.querySelectorAll<HTMLSelectElement>('rtw-services select')[1].value;
+    const days = el.querySelector<HTMLInputElement>('rtw-services input')!;
+    const run = el.querySelector<HTMLButtonElement>('rtw-services button')!;
+    days.value = '-1';
+    days.dispatchEvent(new Event('input'));
+    await harness.fixture.whenStable();
+    expect(run.disabled).toBe(true);
+
+    days.value = '17';
+    days.dispatchEvent(new Event('input'));
+    await harness.fixture.whenStable();
+    expect(el.querySelector('rtw-services code')?.textContent).toBe(
+      `AdminService.setWarningWindow(${JSON.stringify(category)}, 17)`,
+    );
+    run.click();
+    await harness.fixture.whenStable();
+    expect(el.querySelector('rtw-services [role="status"] pre')?.textContent).toBe('17');
+
+    await harness.navigateByUrl('/admin/thresholds');
+    expect(el.querySelector<HTMLInputElement>(`#warn-${category}`)?.value).toBe('17');
+  });
 });

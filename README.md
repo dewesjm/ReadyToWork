@@ -19,6 +19,11 @@ the build with an SPA fallback, for example `npx serve -s dist/ready-to-work/bro
 After a new deploy, open copies of the app show a "new version is available" notice; Refresh
 loads it.
 
+To try the app's service calls, open the avatar menu, choose **Developer** under **View as
+(demo)**, and open **Admin > Services**. Each example shows what it does, its full call and
+its response. The warning-window write changes the same settings as Admin > Thresholds in
+this browser; leave days blank to restore the category default.
+
 ## Deploying
 
 Vercel, as a static site. `vercel.json` sets the build output folder, rewrites every path to
@@ -33,7 +38,8 @@ Vercel, as a static site. `vercel.json` sets the build output folder, rewrites e
   org (people, trades, items, programs) is in `src/data/mock/`
 - `src/app/features/`: screens (readiness page with tree and list views, person detail, admin,
   change log); `readiness/` holds the URL-backed query, the toolbar, the tree's expand state and
-  the items shown in place; `admin/` holds the admin tabs and their child routes
+  the items shown in place; `admin/` holds the admin tabs, their shared `AdminService`, and the
+  service tester's operation list in `admin/services/`
 - `src/app/shared/`: app shell, Quick Links menu, avatar menu, theme list, shared UI pieces and the file download
 - `src/app/changelog.ts`: the change log shown at `/changelog`; add a line for any change users
   would notice

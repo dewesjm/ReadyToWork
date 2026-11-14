@@ -31,6 +31,7 @@ export class ViewerService {
   });
 
   readonly isAdmin = computed(() => this.viewer()?.isAdmin ?? false);
+  readonly canRunServices = computed(() => this.persona()?.id === 'developer' && this.isAdmin());
 
   readonly initials = computed(() => {
     const v = this.viewer();

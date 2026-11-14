@@ -465,6 +465,7 @@ class OrgGenerator {
       { id: 'superintendent', label: `Superintendent: ${superintendent.name}`, personId: superintendent.id, isAdmin: false },
       { id: 'director', label: `Director: ${director.name}`, personId: director.id, isAdmin: false },
       { id: 'admin', label: `Admin: ${director.name}`, personId: director.id, isAdmin: true },
+      { id: 'developer', label: 'Developer', personId: director.id, isAdmin: true },
     ];
   }
 }

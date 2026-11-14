@@ -1,7 +1,6 @@
-import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
-import { CategoryConfig, DEFAULT_CONFIG } from '../../../core';
-import { MAX_WARNING_DAYS, clearWarningDays, setWarningDays, warningDaysProblem } from '../../../data';
-import { SettingsService } from '../../services/settings-service';
+import { Component, OnDestroy, inject, signal } from '@angular/core';
+import { CategoryConfig } from '../../../core';
+import { MAX_WARNING_DAYS, warningDaysProblem } from '../../../data';
 import { Icon } from '../../shared/icon/icon';
 import { AdminService } from './admin-service';
 
@@ -66,19 +65,11 @@ export const THRESHOLD_APPLY_MS = 400;
 })
 export class Thresholds implements OnDestroy {
   private readonly admin = inject(AdminService);
-  private readonly settings = inject(SettingsService);
   private readonly timers = new Map<string, { timer: ReturnType<typeof setTimeout>; apply: () => void }>();
   protected readonly max = MAX_WARNING_DAYS;
   protected readonly problems = signal<Record<string, string | null>>({});
 
-  protected readonly rows = computed(() => {
-    const overrides = this.settings.settings().warningDays;
-    return DEFAULT_CONFIG.categories.map((category) => ({
-      category,
-      days: overrides[category.id] ?? category.warningDays,
-      overridden: overrides[category.id] !== undefined,
-    }));
-  });
+  protected readonly rows = this.admin.warningWindows;
 
   protected typed(category: CategoryConfig, text: string): void {
     const days = text.trim() === '' ? NaN : Number(text);
@@ -88,9 +79,7 @@ export class Thresholds implements OnDestroy {
     if (problem) return;
     const apply = () => {
       this.timers.delete(category.id);
-      this.admin.edit((s) =>
-        days === category.warningDays ? clearWarningDays(s, category.id) : setWarningDays(s, category.id, days),
-      );
+      this.admin.setWarningWindow(category.id, days);
     };
     this.timers.set(category.id, { timer: setTimeout(apply, THRESHOLD_APPLY_MS), apply });
   }
@@ -106,7 +95,7 @@ export class Thresholds implements OnDestroy {
   protected useDefault(category: CategoryConfig): void {
     this.cancel(category.id);
     this.problems.update((p) => ({ ...p, [category.id]: null }));
-    this.admin.edit((s) => clearWarningDays(s, category.id));
+    this.admin.setWarningWindow(category.id, null);
   }
 
   ngOnDestroy(): void {
